@@ -1,0 +1,17 @@
+Table 'global'
+main: () => i64
+makeCounter: () => () => i64
+
+  Table 'makeCounter'
+  counter: i64
+  inc: () => i64
+  plus1: (i64) => i64
+
+    Table 'anonymous0'
+    x: i64
+
+    Table 'anonymous1'
+
+  Table 'main'
+  x: () => i64
+

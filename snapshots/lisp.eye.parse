@@ -1,0 +1,129 @@
+SourceFile
+├─ FunctionDeclaration(cons)
+│  ├─ Parameter(a)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ Parameter(b)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ returnType: FunctionType
+│  │              ├─ Parameter(f)
+│  │              │  └─ FunctionType
+│  │              │     ├─ Parameter(a)
+│  │              │     │  └─ TypeReference
+│  │              │     │     └─ Identifier(i64)
+│  │              │     ├─ Parameter(b)
+│  │              │     │  └─ TypeReference
+│  │              │     │     └─ Identifier(i64)
+│  │              │     └─ returnType: TypeReference
+│  │              │                    └─ Identifier(i64)
+│  │              └─ returnType: TypeReference
+│  │                             └─ Identifier(i64)
+│  └─ Block
+│     ├─ LetStatement(inner)
+│     │  └─ expression: ArrowFunction
+│     │                 ├─ Parameter(f)
+│     │                 │  └─ FunctionType
+│     │                 │     ├─ Parameter(a)
+│     │                 │     │  └─ TypeReference
+│     │                 │     │     └─ Identifier(i64)
+│     │                 │     ├─ Parameter(b)
+│     │                 │     │  └─ TypeReference
+│     │                 │     │     └─ Identifier(i64)
+│     │                 │     └─ returnType: TypeReference
+│     │                 │                    └─ Identifier(i64)
+│     │                 ├─ returnType: TypeReference
+│     │                 │              └─ Identifier(i64)
+│     │                 └─ Block
+│     │                    └─ ReturnStatement
+│     │                       └─ expression: CallExpression(f)
+│     │                                      ├─ Identifier(a)
+│     │                                      └─ Identifier(b)
+│     └─ ReturnStatement
+│        └─ expression: Identifier(inner)
+├─ FunctionDeclaration(car)
+│  ├─ Parameter(p)
+│  │  └─ FunctionType
+│  │     ├─ Parameter(f)
+│  │     │  └─ FunctionType
+│  │     │     ├─ Parameter(a)
+│  │     │     │  └─ TypeReference
+│  │     │     │     └─ Identifier(i64)
+│  │     │     ├─ Parameter(b)
+│  │     │     │  └─ TypeReference
+│  │     │     │     └─ Identifier(i64)
+│  │     │     └─ returnType: TypeReference
+│  │     │                    └─ Identifier(i64)
+│  │     └─ returnType: TypeReference
+│  │                    └─ Identifier(i64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     ├─ LetStatement(first)
+│     │  └─ expression: ArrowFunction
+│     │                 ├─ Parameter(a)
+│     │                 │  └─ TypeReference
+│     │                 │     └─ Identifier(i64)
+│     │                 ├─ Parameter(b)
+│     │                 │  └─ TypeReference
+│     │                 │     └─ Identifier(i64)
+│     │                 ├─ returnType: TypeReference
+│     │                 │              └─ Identifier(i64)
+│     │                 └─ Block
+│     │                    └─ ReturnStatement
+│     │                       └─ expression: Identifier(a)
+│     └─ ReturnStatement
+│        └─ expression: CallExpression(p)
+│                       └─ Identifier(first)
+├─ FunctionDeclaration(cdr)
+│  ├─ Parameter(p)
+│  │  └─ FunctionType
+│  │     ├─ Parameter(f)
+│  │     │  └─ FunctionType
+│  │     │     ├─ Parameter(a)
+│  │     │     │  └─ TypeReference
+│  │     │     │     └─ Identifier(i64)
+│  │     │     ├─ Parameter(b)
+│  │     │     │  └─ TypeReference
+│  │     │     │     └─ Identifier(i64)
+│  │     │     └─ returnType: TypeReference
+│  │     │                    └─ Identifier(i64)
+│  │     └─ returnType: TypeReference
+│  │                    └─ Identifier(i64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     ├─ LetStatement(second)
+│     │  └─ expression: ArrowFunction
+│     │                 ├─ Parameter(a)
+│     │                 │  └─ TypeReference
+│     │                 │     └─ Identifier(i64)
+│     │                 ├─ Parameter(b)
+│     │                 │  └─ TypeReference
+│     │                 │     └─ Identifier(i64)
+│     │                 ├─ returnType: TypeReference
+│     │                 │              └─ Identifier(i64)
+│     │                 └─ Block
+│     │                    └─ ReturnStatement
+│     │                       └─ expression: Identifier(b)
+│     └─ ReturnStatement
+│        └─ expression: CallExpression(p)
+│                       └─ Identifier(second)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(pair)
+      │  └─ expression: CallExpression(cons)
+      │                 ├─ NumericLiteral(3)
+      │                 └─ NumericLiteral(4)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(car)
+      │                    └─ Identifier(pair)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(cdr)
+      │                    └─ Identifier(pair)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

@@ -1,0 +1,83 @@
+SourceFile
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(f0)
+      │  └─ expression: ArrowFunction
+      │                 ├─ returnType: TypeReference
+      │                 │              └─ Identifier(i64)
+      │                 └─ Block
+      │                    └─ ReturnStatement
+      │                       └─ expression: NumericLiteral(666)
+      ├─ LetStatement(f1)
+      │  └─ expression: ArrowFunction
+      │                 ├─ Parameter(a)
+      │                 │  └─ TypeReference
+      │                 │     └─ Identifier(i64)
+      │                 ├─ returnType: TypeReference
+      │                 │              └─ Identifier(i64)
+      │                 └─ Block
+      │                    └─ ReturnStatement
+      │                       └─ expression: BinaryExpression(Plus)
+      │                                      ├─ lhs: NumericLiteral(666)
+      │                                      └─ rhs: Identifier(a)
+      ├─ LetStatement(f2)
+      │  └─ expression: ArrowFunction
+      │                 ├─ Parameter(a)
+      │                 │  └─ TypeReference
+      │                 │     └─ Identifier(i64)
+      │                 ├─ Parameter(b)
+      │                 │  └─ TypeReference
+      │                 │     └─ Identifier(i64)
+      │                 ├─ returnType: TypeReference
+      │                 │              └─ Identifier(i64)
+      │                 └─ Block
+      │                    └─ ReturnStatement
+      │                       └─ expression: BinaryExpression(Plus)
+      │                                      ├─ lhs: BinaryExpression(Plus)
+      │                                      │       ├─ lhs: NumericLiteral(666)
+      │                                      │       └─ rhs: Identifier(a)
+      │                                      └─ rhs: Identifier(b)
+      ├─ LetStatement(f3)
+      │  └─ expression: ArrowFunction
+      │                 ├─ Parameter(a)
+      │                 │  └─ TypeReference
+      │                 │     └─ Identifier(i64)
+      │                 ├─ Parameter(b)
+      │                 │  └─ TypeReference
+      │                 │     └─ Identifier(i64)
+      │                 ├─ Parameter(c)
+      │                 │  └─ TypeReference
+      │                 │     └─ Identifier(i64)
+      │                 ├─ returnType: TypeReference
+      │                 │              └─ Identifier(i64)
+      │                 └─ Block
+      │                    └─ ReturnStatement
+      │                       └─ expression: BinaryExpression(Plus)
+      │                                      ├─ lhs: BinaryExpression(Plus)
+      │                                      │       ├─ lhs: BinaryExpression(Plus)
+      │                                      │       │       ├─ lhs: NumericLiteral(666)
+      │                                      │       │       └─ rhs: Identifier(a)
+      │                                      │       └─ rhs: Identifier(b)
+      │                                      └─ rhs: Identifier(c)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(f0)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(f1)
+      │                    └─ NumericLiteral(1)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(f2)
+      │                    ├─ NumericLiteral(1)
+      │                    └─ NumericLiteral(2)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(f3)
+      │                    ├─ NumericLiteral(1)
+      │                    ├─ NumericLiteral(2)
+      │                    └─ NumericLiteral(3)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

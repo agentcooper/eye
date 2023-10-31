@@ -1,0 +1,23 @@
+Table 'global'
+main: () => i64
+
+  Table 'main'
+  f0: () => i64
+  f1: (i64) => i64
+  f2: (i64, i64) => i64
+  f3: (i64, i64, i64) => i64
+
+    Table 'anonymous0'
+
+    Table 'anonymous1'
+    a: i64
+
+    Table 'anonymous2'
+    a: i64
+    b: i64
+
+    Table 'anonymous3'
+    a: i64
+    b: i64
+    c: i64
+

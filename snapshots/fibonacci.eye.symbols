@@ -1,0 +1,9 @@
+Table 'global'
+fib: (i64) => i64
+main: () => i64
+
+  Table 'fib'
+  n: i64
+
+  Table 'main'
+

@@ -1,0 +1,10 @@
+Table 'global'
+boo: (i64) => i64
+main: () => i64
+
+  Table 'boo'
+  x: i64
+
+  Table 'main'
+  a: i64
+

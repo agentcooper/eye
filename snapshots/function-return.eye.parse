@@ -1,0 +1,63 @@
+SourceFile
+├─ FunctionDeclaration(plus1)
+│  ├─ Parameter(x)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: BinaryExpression(Plus)
+│                       ├─ lhs: Identifier(x)
+│                       └─ rhs: NumericLiteral(1)
+├─ FunctionDeclaration(minus1)
+│  ├─ Parameter(x)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: BinaryExpression(Minus)
+│                       ├─ lhs: Identifier(x)
+│                       └─ rhs: NumericLiteral(1)
+├─ FunctionDeclaration(choose)
+│  ├─ Parameter(f)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ returnType: FunctionType
+│  │              ├─ Parameter(x)
+│  │              │  └─ TypeReference
+│  │              │     └─ Identifier(i64)
+│  │              └─ returnType: TypeReference
+│  │                             └─ Identifier(i64)
+│  └─ Block
+│     ├─ IfStatement
+│     │  ├─ condition: BinaryExpression(DoubleEquals)
+│     │  │             ├─ lhs: Identifier(f)
+│     │  │             └─ rhs: NumericLiteral(1)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: Identifier(plus1)
+│     └─ ReturnStatement
+│        └─ expression: Identifier(minus1)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(a)
+      │  └─ expression: CallExpression(choose)
+      │                 └─ NumericLiteral(0)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(a)
+      │                    └─ NumericLiteral(10)
+      ├─ LetStatement(b)
+      │  └─ expression: CallExpression(choose)
+      │                 └─ NumericLiteral(1)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(b)
+      │                    └─ NumericLiteral(10)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

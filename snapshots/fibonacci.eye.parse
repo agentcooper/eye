@@ -1,0 +1,42 @@
+SourceFile
+├─ FunctionDeclaration(fib)
+│  ├─ Parameter(n)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     ├─ IfStatement
+│     │  ├─ condition: BinaryExpression(DoubleEquals)
+│     │  │             ├─ lhs: Identifier(n)
+│     │  │             └─ rhs: NumericLiteral(0)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: NumericLiteral(0)
+│     ├─ IfStatement
+│     │  ├─ condition: BinaryExpression(DoubleEquals)
+│     │  │             ├─ lhs: Identifier(n)
+│     │  │             └─ rhs: NumericLiteral(1)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: NumericLiteral(1)
+│     └─ ReturnStatement
+│        └─ expression: BinaryExpression(Plus)
+│                       ├─ lhs: CallExpression(fib)
+│                       │       └─ BinaryExpression(Minus)
+│                       │          ├─ lhs: Identifier(n)
+│                       │          └─ rhs: NumericLiteral(1)
+│                       └─ rhs: CallExpression(fib)
+│                               └─ BinaryExpression(Minus)
+│                                  ├─ lhs: Identifier(n)
+│                                  └─ rhs: NumericLiteral(2)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(fib)
+      │                    └─ NumericLiteral(40)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

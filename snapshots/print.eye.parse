@@ -1,0 +1,10 @@
+SourceFile
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ NumericLiteral(3)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

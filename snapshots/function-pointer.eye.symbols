@@ -1,0 +1,14 @@
+Table 'global'
+bar: () => i64
+foo: (i64) => i64
+main: () => i64
+
+  Table 'bar'
+
+  Table 'foo'
+  n: i64
+
+  Table 'main'
+  f1: () => i64
+  f2: (i64) => i64
+

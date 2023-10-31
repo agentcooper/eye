@@ -1,0 +1,18 @@
+Table 'global'
+foo: (i64, (i64) => i64) => i64
+main: () => i64
+minus1: (i64) => i64
+plus1: (i64) => i64
+
+  Table 'plus1'
+  n: i64
+
+  Table 'minus1'
+  n: i64
+
+  Table 'foo'
+  f: (i64) => i64
+  n: i64
+
+  Table 'main'
+

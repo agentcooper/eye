@@ -1,0 +1,19 @@
+Table 'global'
+choose: (i64) => (i64) => i64
+main: () => i64
+minus1: (i64) => i64
+plus1: (i64) => i64
+
+  Table 'plus1'
+  x: i64
+
+  Table 'minus1'
+  x: i64
+
+  Table 'choose'
+  f: i64
+
+  Table 'main'
+  a: (i64) => i64
+  b: (i64) => i64
+

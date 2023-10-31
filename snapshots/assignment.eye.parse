@@ -1,0 +1,16 @@
+SourceFile
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(a)
+      │  └─ expression: NumericLiteral(1)
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(Equals)
+      │                 ├─ lhs: Identifier(a)
+      │                 └─ rhs: NumericLiteral(42)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(a)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

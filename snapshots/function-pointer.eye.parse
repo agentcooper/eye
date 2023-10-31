@@ -1,0 +1,35 @@
+SourceFile
+├─ FunctionDeclaration(bar)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: NumericLiteral(666)
+├─ FunctionDeclaration(foo)
+│  ├─ Parameter(n)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: BinaryExpression(Plus)
+│                       ├─ lhs: Identifier(n)
+│                       └─ rhs: NumericLiteral(1)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(f1)
+      │  └─ expression: Identifier(bar)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(f1)
+      ├─ LetStatement(f2)
+      │  └─ expression: Identifier(foo)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(f2)
+      │                    └─ NumericLiteral(665)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

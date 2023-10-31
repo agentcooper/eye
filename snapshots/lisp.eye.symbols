@@ -1,0 +1,33 @@
+Table 'global'
+car: (((i64, i64) => i64) => i64) => i64
+cdr: (((i64, i64) => i64) => i64) => i64
+cons: (i64, i64) => ((i64, i64) => i64) => i64
+main: () => i64
+
+  Table 'cons'
+  a: i64
+  b: i64
+  inner: ((i64, i64) => i64) => i64
+
+    Table 'anonymous0'
+    f: (i64, i64) => i64
+
+  Table 'car'
+  first: (i64, i64) => i64
+  p: ((i64, i64) => i64) => i64
+
+    Table 'anonymous1'
+    a: i64
+    b: i64
+
+  Table 'cdr'
+  p: ((i64, i64) => i64) => i64
+  second: (i64, i64) => i64
+
+    Table 'anonymous2'
+    a: i64
+    b: i64
+
+  Table 'main'
+  pair: ((i64, i64) => i64) => i64
+

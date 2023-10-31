@@ -1,0 +1,64 @@
+SourceFile
+├─ FunctionDeclaration(apply)
+│  ├─ Parameter(x)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ Parameter(f)
+│  │  └─ FunctionType
+│  │     ├─ Parameter(x)
+│  │     │  └─ TypeReference
+│  │     │     └─ Identifier(i64)
+│  │     └─ returnType: TypeReference
+│  │                    └─ Identifier(i64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: CallExpression(f)
+│                       └─ Identifier(x)
+├─ FunctionDeclaration(foo)
+│  ├─ Parameter(k)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(void)
+│  └─ Block
+│     ├─ ExpressionStatement
+│     │  └─ expression: CallExpression(print)
+│     │                 └─ CallExpression(apply)
+│     │                    ├─ NumericLiteral(5)
+│     │                    └─ ArrowFunction
+│     │                       ├─ Parameter(x)
+│     │                       │  └─ TypeReference
+│     │                       │     └─ Identifier(i64)
+│     │                       ├─ returnType: TypeReference
+│     │                       │              └─ Identifier(i64)
+│     │                       └─ Block
+│     │                          └─ ReturnStatement
+│     │                             └─ expression: BinaryExpression(Plus)
+│     │                                            ├─ lhs: Identifier(x)
+│     │                                            └─ rhs: Identifier(k)
+│     └─ ExpressionStatement
+│        └─ expression: CallExpression(print)
+│                       └─ CallExpression(apply)
+│                          ├─ NumericLiteral(5)
+│                          └─ ArrowFunction
+│                             ├─ Parameter(x)
+│                             │  └─ TypeReference
+│                             │     └─ Identifier(i64)
+│                             ├─ returnType: TypeReference
+│                             │              └─ Identifier(i64)
+│                             └─ Block
+│                                └─ ReturnStatement
+│                                   └─ expression: BinaryExpression(Minus)
+│                                                  ├─ lhs: Identifier(x)
+│                                                  └─ rhs: Identifier(k)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(foo)
+      │                 └─ NumericLiteral(10)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

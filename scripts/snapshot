@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+for filePath in ./snapshots/*.eye;
+do
+    # ./eye lex "$filePath" > "$filePath.lex";
+    ./eye parse "$filePath" > "$filePath.parse";
+    ./eye symbols "$filePath" > "$filePath.symbols";
+    if make program SOURCE_FILE="$filePath"; then
+        ./program > "$filePath.output"
+    else
+        echo "Compilation fail" > "$filePath.output"
+    fi
+done;

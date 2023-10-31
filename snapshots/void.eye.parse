@@ -1,0 +1,23 @@
+SourceFile
+├─ FunctionDeclaration(doublePrint)
+│  ├─ Parameter(n)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(void)
+│  └─ Block
+│     ├─ ExpressionStatement
+│     │  └─ expression: CallExpression(print)
+│     │                 └─ Identifier(n)
+│     └─ ExpressionStatement
+│        └─ expression: CallExpression(print)
+│                       └─ Identifier(n)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(doublePrint)
+      │                 └─ NumericLiteral(7)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

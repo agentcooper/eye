@@ -1,0 +1,31 @@
+SourceFile
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ IfStatement
+      │  ├─ condition: BinaryExpression(DoubleEquals)
+      │  │             ├─ lhs: NumericLiteral(1)
+      │  │             └─ rhs: NumericLiteral(1)
+      │  ├─ ifTrue: Block
+      │  │          └─ ExpressionStatement
+      │  │             └─ expression: CallExpression(print)
+      │  │                            └─ NumericLiteral(3)
+      │  └─ ifFalse: Block
+      │              └─ ExpressionStatement
+      │                 └─ expression: CallExpression(print)
+      │                                └─ NumericLiteral(4)
+      ├─ IfStatement
+      │  ├─ condition: BinaryExpression(DoubleEquals)
+      │  │             ├─ lhs: NumericLiteral(1)
+      │  │             └─ rhs: NumericLiteral(2)
+      │  ├─ ifTrue: Block
+      │  │          └─ ExpressionStatement
+      │  │             └─ expression: CallExpression(print)
+      │  │                            └─ NumericLiteral(3)
+      │  └─ ifFalse: Block
+      │              └─ ExpressionStatement
+      │                 └─ expression: CallExpression(print)
+      │                                └─ NumericLiteral(4)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

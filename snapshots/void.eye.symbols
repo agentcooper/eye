@@ -1,0 +1,9 @@
+Table 'global'
+doublePrint: (i64) => void
+main: () => i64
+
+  Table 'doublePrint'
+  n: i64
+
+  Table 'main'
+

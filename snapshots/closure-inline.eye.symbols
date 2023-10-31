@@ -1,0 +1,20 @@
+Table 'global'
+apply: (i64, (i64) => i64) => i64
+foo: (i64) => void
+main: () => i64
+
+  Table 'apply'
+  f: (i64) => i64
+  x: i64
+
+  Table 'foo'
+  k: i64
+
+    Table 'anonymous0'
+    x: i64
+
+    Table 'anonymous1'
+    x: i64
+
+  Table 'main'
+
