@@ -1,4 +1,5 @@
 #include <iomanip>
+#include <set>
 #include <string>
 
 #include "Codegen.hpp"
@@ -20,9 +21,9 @@ int main(int argc, const char *argv[]) {
   const std::string command{argv[1]};
   const std::string filePath{argv[2]};
 
-  const std::set<std::string> availableCommands = {"lex", "parse", "symbols",
-                                                   "emit"};
-  const std::set<std::string> helpCommands = {"-h", "--help", "help"};
+  const std::set<std::string> availableCommands{"lex", "parse", "symbols",
+                                                "emit"};
+  const std::set<std::string> helpCommands{"-h", "--help", "help"};
 
   if (helpCommands.contains(command)) {
     printHelp();
