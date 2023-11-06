@@ -22,7 +22,7 @@ function main(): i64 {
 }
 ```
 
-At the moment the set of features is rather limited, the only available types are 64-bit integers (`i64`) and first class functions (e.g. `(n: i64) => () => void`).
+At the moment the set of features is rather limited, the only available types are 64-bit integers (`i64`), 64-bit floats (`f64`), and first class functions (e.g. `(n: i64) => () => void`).
 
 Roadmap is available in [`TODO.md`](TODO.md).
 
