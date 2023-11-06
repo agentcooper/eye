@@ -5,20 +5,20 @@
 
 #include "Lexer.hpp"
 
-bool is_space(char c) noexcept {
+bool isSpace(char c) noexcept {
   return std::isspace(static_cast<unsigned char>(c));
 }
 
-bool is_digit(char c) noexcept {
+bool isDigit(char c) noexcept {
   return std::isdigit(static_cast<unsigned char>(c));
 }
 
-bool is_alpha(char c) noexcept {
+bool isAlpha(char c) noexcept {
   return std::isalpha(static_cast<unsigned char>(c));
 }
 
-bool is_identifier_char(char c) noexcept {
-  if (is_digit(c) || is_alpha(c)) {
+bool isIdentifierChar(char c) noexcept {
+  if (isDigit(c) || isAlpha(c)) {
     return true;
   }
   switch (c) {
@@ -30,14 +30,14 @@ bool is_identifier_char(char c) noexcept {
 }
 
 Token Lexer::getNextToken() noexcept {
-  while (is_space(peek())) {
+  while (isSpace(peek())) {
     get();
   }
   auto c = peek();
-  if (is_digit(c)) {
+  if (isDigit(c)) {
     return parseNumber();
   }
-  if (is_identifier_char(c)) {
+  if (isIdentifierChar(c)) {
     auto token = parseIdentifier();
     auto lexeme = token.lexeme();
     if (lexeme == "return") {
@@ -104,7 +104,7 @@ Token Lexer::getNextToken() noexcept {
 Token Lexer::parseIdentifier() noexcept {
   const char *start = m_source;
   get();
-  while (is_identifier_char(peek()))
+  while (isIdentifierChar(peek()))
     get();
   return Token(Token::Kind::Identifier, start, m_source);
 }
@@ -114,7 +114,7 @@ Token Lexer::parseNumber() noexcept {
   bool hasFloatingPoint = false;
   get();
   while (auto c = peek()) {
-    if (is_digit(c) || c == '.') {
+    if (isDigit(c) || c == '.') {
       if (c == '.') {
         hasFloatingPoint = true;
       }
