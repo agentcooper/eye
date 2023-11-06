@@ -33,8 +33,10 @@ struct FunctionTypeNode : public Node {
 };
 
 struct NumericLiteralNode : public Node {
-  const int value;
-  NumericLiteralNode(const int value) : value(value) {}
+  const double value;
+  bool hasFloatingPoint;
+  NumericLiteralNode(const double value, const bool hasFloatingPoint)
+      : value(value), hasFloatingPoint(hasFloatingPoint) {}
 
   void accept(Visitor &v) override { v.visit(*this); }
 };

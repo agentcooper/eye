@@ -7,7 +7,8 @@ public:
   enum class Kind {
     LessThan,
     GreaterThan,
-    Number,
+    Integer,
+    FloatingPoint,
     Plus,
     Minus,
     LeftParen,
@@ -28,7 +29,7 @@ public:
     Return,
     Let,
     End,
-    Unexpected
+    Unexpected,
   };
 
   Token(Kind kind, const char *beg, std::size_t len) noexcept

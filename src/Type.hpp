@@ -11,7 +11,7 @@
 #include "Node.hpp"
 
 class FunctionType;
-enum class PrimitiveType { i64Type, voidType, unknownType };
+enum class PrimitiveType { i64Type, f64Type, voidType, unknownType };
 using Type = std::variant<PrimitiveType, FunctionType>;
 
 class FunctionType {

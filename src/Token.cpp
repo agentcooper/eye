@@ -3,8 +3,10 @@
 const char *kindToString(const Token::Kind kind) {
   using enum Token::Kind;
   switch (kind) {
-  case Number:
-    return "Number";
+  case Integer:
+    return "Integer";
+  case FloatingPoint:
+    return "FloatingPoint";
   case Plus:
     return "Plus";
   case Minus:

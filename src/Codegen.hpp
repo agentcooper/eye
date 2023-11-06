@@ -18,6 +18,8 @@ struct LLVMTypeVisitor {
     switch (type) {
     case PrimitiveType::i64Type:
       return llvm::Type::getInt64Ty(context);
+    case PrimitiveType::f64Type:
+      return llvm::Type::getDoubleTy(context);
     case PrimitiveType::voidType:
       return llvm::Type::getVoidTy(context);
     case PrimitiveType::unknownType:
@@ -56,6 +58,7 @@ class Codegen : public Visitor {
   std::map<std::string, llvm::AllocaInst *> namedValues;
 
   llvm::Type *int64Type;
+  llvm::Type *float64Type;
   llvm::Type *voidPointerType;
 
   size_t arrowFunctionExpressionIndex = 0;
@@ -191,10 +194,19 @@ private:
   }
 
   void createPrintFunction() {
-    auto returnType = llvm::FunctionType::get(
-        llvm::Type::getVoidTy(*llvmContext), {int64Type}, false);
-    llvm::Function::Create(returnType, llvm::Function::ExternalLinkage, "print",
-                           llvmModule.get());
+    auto returnType =
+        llvm::FunctionType::get(llvm::Type::getVoidTy(*llvmContext),
+                                {voidPointerType, int64Type}, false);
+    llvm::Function::Create(returnType, llvm::Function::ExternalLinkage,
+                           "printI64", llvmModule.get());
+  }
+
+  void createPrintF64Function() {
+    auto returnType =
+        llvm::FunctionType::get(llvm::Type::getVoidTy(*llvmContext),
+                                {voidPointerType, float64Type}, false);
+    llvm::Function::Create(returnType, llvm::Function::ExternalLinkage,
+                           "printF64", llvmModule.get());
   }
 
   void createAllocateFunction() {
@@ -212,6 +224,7 @@ public:
     builder = std::make_unique<llvm::IRBuilder<>>(*llvmContext);
 
     int64Type = llvm::IntegerType::get(*llvmContext, 64);
+    float64Type = llvm::Type::getDoubleTy(*llvmContext);
     voidPointerType = llvm::Type::getInt64PtrTy(*llvmContext);
   };
 
@@ -220,7 +233,9 @@ public:
   void visit(FunctionTypeNode &node) override {}
 
   void visit(NumericLiteralNode &node) override {
-    value = llvm::ConstantInt::get(int64Type, node.value);
+    value = node.hasFloatingPoint
+                ? llvm::ConstantFP::get(float64Type, node.value)
+                : llvm::ConstantInt::get(int64Type, node.value);
   }
 
   void visit(ArrowFunctionExpressionNode &node) override {
@@ -390,9 +405,17 @@ public:
       break;
     }
     case Token::Kind::Plus:
+      if (L->getType()->isDoubleTy() && R->getType()->isDoubleTy()) {
+        value = builder->CreateFAdd(L, R);
+        break;
+      }
       value = builder->CreateAdd(L, R, L->getName() + "_plus_" + R->getName());
       break;
     case Token::Kind::Minus:
+      if (L->getType()->isDoubleTy() && R->getType()->isDoubleTy()) {
+        value = builder->CreateFSub(L, R);
+        break;
+      }
       value = builder->CreateSub(L, R, L->getName() + "_minus_" + R->getName());
       break;
     case Token::Kind::DoubleEquals:
@@ -405,6 +428,19 @@ public:
     };
   }
 
+  // @TODO: this make it impossible to pass `print` function as an argument
+  llvm::Function *getFunction(const std::string &name,
+                              std::vector<llvm::Value *> arguments) {
+    if (name == "print") {
+      if (arguments[0]->getType()->isDoubleTy()) {
+        return llvmModule->getFunction("printF64");
+      } else {
+        return llvmModule->getFunction("printI64");
+      }
+    }
+    return llvmModule->getFunction(name);
+  }
+
   void visit(CallExpressionNode &node) override {
     std::vector<llvm::Value *> arguments;
     for (unsigned i = 0, e = node.arguments.size(); i != e; ++i) {
@@ -412,12 +448,10 @@ public:
       arguments.push_back(value);
     }
 
-    auto function = llvmModule->getFunction(node.callee);
+    auto function = getFunction(node.callee, arguments);
     if (function) {
-      if (function->getName() != "print") {
-        arguments.insert(arguments.begin(),
-                         llvm::Constant::getNullValue(voidPointerType));
-      }
+      arguments.insert(arguments.begin(),
+                       llvm::Constant::getNullValue(voidPointerType));
       value = builder->CreateCall(function, arguments);
       return;
     }
@@ -430,8 +464,8 @@ public:
 
     llvm::Value *kValue = localOrEnv(node.callee, true);
 
-    // llvm::outs() << "callee = " << node.callee << ", callType = " <<
-    // *callType
+    // llvm::outs() << "callee = " << node.callee << ", callType = "
+    // << *callType
     //              << ", closureType = " << *closureType
     //              << ", value = " << *kValue << "\n";
 
@@ -515,6 +549,7 @@ public:
 
   int compile(const std::string fileName) {
     createPrintFunction();
+    createPrintF64Function();
     createAllocateFunction();
 
     sourceFile.accept(*this);

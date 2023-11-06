@@ -111,15 +111,32 @@ Token Lexer::parseIdentifier() noexcept {
 
 Token Lexer::parseNumber() noexcept {
   const char *start = m_source;
+  bool hasFloatingPoint = false;
   get();
-  while (is_digit(peek()))
-    get();
-  return Token(Token::Kind::Number, start, m_source);
+  while (auto c = peek()) {
+    if (is_digit(c) || c == '.') {
+      if (c == '.') {
+        hasFloatingPoint = true;
+      }
+      get();
+    } else {
+      break;
+    }
+  }
+  if (hasFloatingPoint) {
+    return Token(Token::Kind::FloatingPoint, start, m_source);
+  }
+  return Token(Token::Kind::Integer, start, m_source);
 }
 
 void Lexer::printDebugOutput() {
-  for (auto token = getNextToken(); token.is_valid(); token = getNextToken()) {
+  for (auto token = getNextToken(); token.kind() != Token::Kind::End;
+       token = getNextToken()) {
     std::cout << std::setw(18) << kindToString(token.kind()) << " |"
               << token.lexeme() << "|" << std::endl;
+    if (token.kind() == Token::Kind::Unexpected) {
+      std::cout << "Found an unexpected token!" << std::endl;
+      break;
+    }
   }
 }

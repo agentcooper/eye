@@ -205,10 +205,15 @@ public:
     case Token::Kind::Identifier: {
       return parseIdentifierExpression();
     }
-    case Token::Kind::Number: {
+    case Token::Kind::Integer: {
       std::string value{currentToken.lexeme()};
       getNextToken();
-      return std::make_unique<NumericLiteralNode>(std::stoi(value));
+      return std::make_unique<NumericLiteralNode>(std::stod(value), false);
+    }
+    case Token::Kind::FloatingPoint: {
+      std::string value{currentToken.lexeme()};
+      getNextToken();
+      return std::make_unique<NumericLiteralNode>(std::stod(value), true);
     }
     case Token::Kind::LeftParen: {
       return parseParenExpression();
@@ -310,7 +315,8 @@ public:
       return parseLetStatement();
 
     case Token::Kind::LeftParen:
-    case Token::Kind::Number:
+    case Token::Kind::Integer:
+    case Token::Kind::FloatingPoint:
     case Token::Kind::Identifier:
       return parseExpressionStatement();
     default:

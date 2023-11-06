@@ -1,0 +1,69 @@
+SourceFile
+├─ FunctionDeclaration(minus)
+│  ├─ Parameter(a)
+│  │  └─ TypeReference
+│  │     └─ Identifier(f64)
+│  ├─ Parameter(b)
+│  │  └─ TypeReference
+│  │     └─ Identifier(f64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(f64)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: BinaryExpression(Minus)
+│                       ├─ lhs: Identifier(a)
+│                       └─ rhs: Identifier(b)
+├─ FunctionDeclaration(apply)
+│  ├─ Parameter(n)
+│  │  └─ TypeReference
+│  │     └─ Identifier(f64)
+│  ├─ Parameter(f)
+│  │  └─ FunctionType
+│  │     ├─ Parameter(x)
+│  │     │  └─ TypeReference
+│  │     │     └─ Identifier(f64)
+│  │     └─ returnType: TypeReference
+│  │                    └─ Identifier(f64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(f64)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: CallExpression(f)
+│                       └─ Identifier(n)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(a)
+      │  └─ expression: NumericLiteral(5)
+      ├─ LetStatement(b)
+      │  └─ expression: NumericLiteral(1.5)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(Plus)
+      │                    ├─ lhs: Identifier(a)
+      │                    └─ rhs: Identifier(b)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(Minus)
+      │                    ├─ lhs: Identifier(a)
+      │                    └─ rhs: Identifier(b)
+      ├─ LetStatement(result)
+      │  └─ expression: CallExpression(apply)
+      │                 ├─ NumericLiteral(3.14)
+      │                 └─ ArrowFunction
+      │                    ├─ Parameter(x)
+      │                    │  └─ TypeReference
+      │                    │     └─ Identifier(f64)
+      │                    ├─ returnType: TypeReference
+      │                    │              └─ Identifier(f64)
+      │                    └─ Block
+      │                       └─ ReturnStatement
+      │                          └─ expression: BinaryExpression(Plus)
+      │                                         ├─ lhs: Identifier(x)
+      │                                         └─ rhs: NumericLiteral(3.14)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(result)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

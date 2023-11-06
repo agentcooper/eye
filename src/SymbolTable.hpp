@@ -159,6 +159,9 @@ public:
 
     auto *numericLiteral = dynamic_cast<NumericLiteralNode *>(node);
     if (numericLiteral) {
+      if (numericLiteral->hasFloatingPoint) {
+        return std::make_shared<Type>(PrimitiveType::f64Type);
+      }
       return std::make_shared<Type>(PrimitiveType::i64Type);
     }
 

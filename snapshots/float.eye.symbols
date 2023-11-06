@@ -1,0 +1,21 @@
+Table 'global'
+apply: (f64, (f64) => f64) => f64
+main: () => i64
+minus: (f64, f64) => f64
+
+  Table 'minus'
+  a: f64
+  b: f64
+
+  Table 'apply'
+  f: (f64) => f64
+  n: f64
+
+  Table 'main'
+  a: f64
+  b: f64
+  result: f64
+
+    Table 'anonymous0'
+    x: f64
+
