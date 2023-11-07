@@ -4,8 +4,10 @@ SourceFile
    │              └─ Identifier(i64)
    └─ Block
       ├─ LetStatement(a)
+      │  ├─ type: Null
       │  └─ expression: NumericLiteral(1)
       ├─ LetStatement(b)
+      │  ├─ type: Null
       │  └─ expression: NumericLiteral(2)
       ├─ ExpressionStatement
       │  └─ expression: CallExpression(print)

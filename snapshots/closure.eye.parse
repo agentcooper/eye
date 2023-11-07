@@ -5,8 +5,10 @@ SourceFile
 │  │                             └─ Identifier(i64)
 │  └─ Block
 │     ├─ LetStatement(counter)
+│     │  ├─ type: Null
 │     │  └─ expression: NumericLiteral(1)
 │     ├─ LetStatement(inc)
+│     │  ├─ type: Null
 │     │  └─ expression: ArrowFunction
 │     │                 ├─ returnType: TypeReference
 │     │                 │              └─ Identifier(i64)
@@ -26,6 +28,7 @@ SourceFile
    │              └─ Identifier(i64)
    └─ Block
       ├─ LetStatement(x)
+      │  ├─ type: Null
       │  └─ expression: CallExpression(makeCounter)
       ├─ ExpressionStatement
       │  └─ expression: CallExpression(print)

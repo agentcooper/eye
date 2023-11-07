@@ -46,6 +46,9 @@ Token Lexer::getNextToken() noexcept {
     if (lexeme == "function") {
       return fromLexeme(Token::Kind::Function, lexeme);
     }
+    if (lexeme == "interface") {
+      return fromLexeme(Token::Kind::Interface, lexeme);
+    }
     if (lexeme == "if") {
       return fromLexeme(Token::Kind::If, lexeme);
     }
@@ -80,6 +83,8 @@ Token Lexer::getNextToken() noexcept {
     return single(Token::Kind::Minus);
   case ',':
     return single(Token::Kind::Comma);
+  case '.':
+    return single(Token::Kind::Dot);
   case ';':
     return single(Token::Kind::Semicolon);
   case ':':

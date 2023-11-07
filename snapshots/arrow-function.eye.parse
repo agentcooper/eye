@@ -4,6 +4,7 @@ SourceFile
    │              └─ Identifier(i64)
    └─ Block
       ├─ LetStatement(f0)
+      │  ├─ type: Null
       │  └─ expression: ArrowFunction
       │                 ├─ returnType: TypeReference
       │                 │              └─ Identifier(i64)
@@ -11,6 +12,7 @@ SourceFile
       │                    └─ ReturnStatement
       │                       └─ expression: NumericLiteral(666)
       ├─ LetStatement(f1)
+      │  ├─ type: Null
       │  └─ expression: ArrowFunction
       │                 ├─ Parameter(a)
       │                 │  └─ TypeReference
@@ -23,6 +25,7 @@ SourceFile
       │                                      ├─ lhs: NumericLiteral(666)
       │                                      └─ rhs: Identifier(a)
       ├─ LetStatement(f2)
+      │  ├─ type: Null
       │  └─ expression: ArrowFunction
       │                 ├─ Parameter(a)
       │                 │  └─ TypeReference
@@ -40,6 +43,7 @@ SourceFile
       │                                      │       └─ rhs: Identifier(a)
       │                                      └─ rhs: Identifier(b)
       ├─ LetStatement(f3)
+      │  ├─ type: Null
       │  └─ expression: ArrowFunction
       │                 ├─ Parameter(a)
       │                 │  └─ TypeReference

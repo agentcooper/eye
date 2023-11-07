@@ -46,6 +46,7 @@ SourceFile
    │              └─ Identifier(i64)
    └─ Block
       ├─ LetStatement(a)
+      │  ├─ type: Null
       │  └─ expression: CallExpression(choose)
       │                 └─ NumericLiteral(0)
       ├─ ExpressionStatement
@@ -53,6 +54,7 @@ SourceFile
       │                 └─ CallExpression(a)
       │                    └─ NumericLiteral(10)
       ├─ LetStatement(b)
+      │  ├─ type: Null
       │  └─ expression: CallExpression(choose)
       │                 └─ NumericLiteral(1)
       ├─ ExpressionStatement

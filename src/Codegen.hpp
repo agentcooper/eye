@@ -26,6 +26,16 @@ struct LLVMTypeVisitor {
       throw std::runtime_error("Can't get LLVM type for unknown type");
     }
   }
+
+  llvm::Type *operator()(const StructType &type) const {
+    LLVMTypeVisitor visitor{context, true, env};
+    std::vector<llvm::Type *> types{};
+    for (const auto &property : type.properties) {
+      types.push_back(std::visit(visitor, *property.second));
+    }
+    return llvm::StructType::get(context, types, false);
+  }
+
   llvm::Type *operator()(const FunctionType &type) const {
     LLVMTypeVisitor visitor{context, true, env};
 
@@ -491,6 +501,22 @@ public:
   };
 
   void visit(ParameterNode &node) override{};
+
+  void visit(PropertySignatureNode &node) override {
+    // TODO
+  }
+
+  void visit(PropertyAssignmentNode &node) override {
+    // TODO
+  }
+
+  void visit(ObjectLiteralNode &node) override {
+    // TODO
+  }
+
+  void visit(InterfaceDeclarationNode &node) override {
+    // TODO
+  }
 
   void visit(FunctionDeclarationNode &node) override {
     auto symbol = symbolTableVisitor.currentScope->lookup(node.name, false);

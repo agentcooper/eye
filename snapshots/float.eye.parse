@@ -35,8 +35,10 @@ SourceFile
    │              └─ Identifier(i64)
    └─ Block
       ├─ LetStatement(a)
+      │  ├─ type: Null
       │  └─ expression: NumericLiteral(5)
       ├─ LetStatement(b)
+      │  ├─ type: Null
       │  └─ expression: NumericLiteral(1.5)
       ├─ ExpressionStatement
       │  └─ expression: CallExpression(print)
@@ -49,6 +51,7 @@ SourceFile
       │                    ├─ lhs: Identifier(a)
       │                    └─ rhs: Identifier(b)
       ├─ LetStatement(result)
+      │  ├─ type: Null
       │  └─ expression: CallExpression(apply)
       │                 ├─ NumericLiteral(3.14)
       │                 └─ ArrowFunction

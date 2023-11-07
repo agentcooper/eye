@@ -26,6 +26,19 @@ struct TypePrinterVisitor {
     result += " => " + std::visit(*this, *type.returnType);
     return result;
   }
+  std::string operator()(const StructType &type) {
+    std::string result;
+    result += "{";
+    for (const auto &property : type.properties) {
+      result += property.first + ": ";
+      result += std::visit(*this, *property.second);
+      if (property != type.properties.back()) {
+        result += ", ";
+      }
+    }
+    result += "}";
+    return result;
+  }
 };
 
 std::string typeToString(Type &type) {
@@ -47,6 +60,17 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
     }
     throw std::runtime_error(
         "Could not convert type reference to a primitive type");
+  }
+
+  auto interfaceDeclarationNode =
+      dynamic_cast<InterfaceDeclarationNode *>(node);
+  if (interfaceDeclarationNode) {
+    std::vector<NamedType> members;
+    for (const auto &member : interfaceDeclarationNode->members) {
+      members.push_back(
+          std::make_pair(member->name, typeNodeToType(member->type.get())));
+    }
+    return std::make_shared<Type>(StructType{members});
   }
 
   auto functionTypeNode = dynamic_cast<FunctionTypeNode *>(node);

@@ -4,6 +4,7 @@ SourceFile
    │              └─ Identifier(i64)
    └─ Block
       ├─ LetStatement(a)
+      │  ├─ type: Null
       │  └─ expression: NumericLiteral(1)
       ├─ ExpressionStatement
       │  └─ expression: BinaryExpression(Equals)

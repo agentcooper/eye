@@ -36,6 +36,7 @@ public:
     precedence[Token::Kind::Plus] = 20;
     precedence[Token::Kind::Minus] = 20;
     precedence[Token::Kind::Asterisk] = 40;
+    precedence[Token::Kind::Dot] = 50;
   };
 
   const Token &peekToken() { return nextToken; }
@@ -136,6 +137,54 @@ public:
     return V;
   }
 
+  std::unique_ptr<PropertyAssignmentNode> parsePropertyAssignment() {
+    TRACE_METHOD;
+    std::string name{currentToken.lexeme()};
+    getNextToken();
+
+    expect(Token::Kind::Colon);
+    getNextToken(); // eat ':'
+
+    auto initializer = parsePrimary();
+
+    return std::make_unique<PropertyAssignmentNode>(name,
+                                                    std::move(initializer));
+  }
+
+  std::vector<std::unique_ptr<PropertyAssignmentNode>> parseProperties() {
+    TRACE_METHOD;
+
+    std::vector<std::unique_ptr<PropertyAssignmentNode>> properties;
+    if (currentToken.kind() != Token::Kind::RightCurly) {
+      while (true) {
+        auto property = parsePropertyAssignment();
+        properties.push_back(std::move(property));
+
+        if (currentToken.kind() == Token::Kind::RightCurly)
+          break;
+
+        if (currentToken.kind() != Token::Kind::Comma)
+          throw std::runtime_error("Bad");
+
+        getNextToken();
+      }
+    }
+    return properties;
+  }
+
+  std::unique_ptr<Node> parseObjectLiteral() {
+    TRACE_METHOD;
+
+    getNextToken(); // eat '{'
+
+    std::vector<std::unique_ptr<PropertyAssignmentNode>> properties =
+        parseProperties();
+
+    getNextToken(); // eat '}'
+
+    return std::make_unique<ObjectLiteralNode>(std::move(properties));
+  }
+
   std::unique_ptr<Node> parseBinaryExpression(int expressionPrecedence,
                                               std::unique_ptr<Node> lhs) {
     TRACE_METHOD;
@@ -215,6 +264,9 @@ public:
       getNextToken();
       return std::make_unique<NumericLiteralNode>(std::stod(value), true);
     }
+    case Token::Kind::LeftCurly: {
+      return parseObjectLiteral();
+    }
     case Token::Kind::LeftParen: {
       return parseParenExpression();
     }
@@ -275,11 +327,18 @@ public:
   std::unique_ptr<Node> parseLetStatement() {
     TRACE_METHOD;
 
+    std::unique_ptr<Node> type = nullptr;
+
     getNextToken(); // eat 'let'
 
     expect(Token::Kind::Identifier);
     std::string name{currentToken.lexeme()};
     getNextToken();
+
+    if (currentToken.kind() == Token::Kind::Colon) {
+      getNextToken();
+      type = parseType();
+    }
 
     expect(Token::Kind::Equals);
     getNextToken();
@@ -289,7 +348,8 @@ public:
     expect(Token::Kind::Semicolon);
     getNextToken();
 
-    return std::make_unique<LetStatementNode>(name, std::move(expression));
+    return std::make_unique<LetStatementNode>(name, std::move(type),
+                                              std::move(expression));
   }
 
   std::unique_ptr<Node> parseExpressionStatement() {
@@ -349,6 +409,7 @@ public:
 
   std::unique_ptr<ParameterNode> parseParameter() {
     TRACE_METHOD;
+
     std::string argumentName{currentToken.lexeme()};
     getNextToken();
 
@@ -360,7 +421,24 @@ public:
     return std::make_unique<ParameterNode>(argumentName, std::move(type));
   }
 
+  std::unique_ptr<PropertySignatureNode> parsePropertySignature() {
+    TRACE_METHOD;
+
+    std::string argumentName{currentToken.lexeme()};
+    getNextToken();
+
+    expect(Token::Kind::Colon);
+    getNextToken(); // eat ':'
+
+    auto type = parseType();
+
+    return std::make_unique<PropertySignatureNode>(argumentName,
+                                                   std::move(type));
+  }
+
   std::vector<std::unique_ptr<ParameterNode>> parseParameters() {
+    TRACE_METHOD;
+
     std::vector<std::unique_ptr<ParameterNode>> parameters;
     if (currentToken.kind() != Token::Kind::RightParen) {
       while (true) {
@@ -377,6 +455,48 @@ public:
       }
     }
     return parameters;
+  }
+
+  std::vector<std::unique_ptr<PropertySignatureNode>> parseMembers() {
+    TRACE_METHOD;
+
+    std::vector<std::unique_ptr<PropertySignatureNode>> members;
+    if (currentToken.kind() != Token::Kind::RightCurly) {
+      while (true) {
+        auto member = parsePropertySignature();
+        members.push_back(std::move(member));
+
+        if (currentToken.kind() == Token::Kind::RightCurly)
+          break;
+
+        if (currentToken.kind() != Token::Kind::Comma)
+          throw std::runtime_error("Bad");
+
+        getNextToken();
+      }
+    }
+    return members;
+  }
+
+  std::unique_ptr<InterfaceDeclarationNode> parseInterfaceDeclaration() {
+    TRACE_METHOD;
+
+    getNextToken(); // eat 'interface'
+
+    expect(Token::Kind::Identifier);
+    std::string name{currentToken.lexeme()};
+
+    getNextToken();
+    expect(Token::Kind::LeftCurly);
+
+    getNextToken(); // eat '{'
+
+    std::vector<std::unique_ptr<PropertySignatureNode>> members =
+        parseMembers();
+
+    getNextToken(); // eat '}'
+
+    return std::make_unique<InterfaceDeclarationNode>(name, std::move(members));
   }
 
   std::unique_ptr<FunctionDeclarationNode> parseFunction() {
@@ -415,6 +535,9 @@ public:
       switch (currentToken.kind()) {
       case Token::Kind::Function:
         p->functions.push_back(parseFunction());
+        break;
+      case Token::Kind::Interface:
+        p->interfaces.push_back(parseInterfaceDeclaration());
         break;
       default:
         goto exit_loop;

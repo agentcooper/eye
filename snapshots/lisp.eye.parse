@@ -21,6 +21,7 @@ SourceFile
 │  │                             └─ Identifier(i64)
 │  └─ Block
 │     ├─ LetStatement(inner)
+│     │  ├─ type: Null
 │     │  └─ expression: ArrowFunction
 │     │                 ├─ Parameter(f)
 │     │                 │  └─ FunctionType
@@ -60,6 +61,7 @@ SourceFile
 │  │              └─ Identifier(i64)
 │  └─ Block
 │     ├─ LetStatement(first)
+│     │  ├─ type: Null
 │     │  └─ expression: ArrowFunction
 │     │                 ├─ Parameter(a)
 │     │                 │  └─ TypeReference
@@ -94,6 +96,7 @@ SourceFile
 │  │              └─ Identifier(i64)
 │  └─ Block
 │     ├─ LetStatement(second)
+│     │  ├─ type: Null
 │     │  └─ expression: ArrowFunction
 │     │                 ├─ Parameter(a)
 │     │                 │  └─ TypeReference
@@ -114,6 +117,7 @@ SourceFile
    │              └─ Identifier(i64)
    └─ Block
       ├─ LetStatement(pair)
+      │  ├─ type: Null
       │  └─ expression: CallExpression(cons)
       │                 ├─ NumericLiteral(3)
       │                 └─ NumericLiteral(4)

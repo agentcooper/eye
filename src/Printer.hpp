@@ -21,6 +21,16 @@ private:
     node.accept(p);
   }
 
+  void maybeAccept(Node *node, bool isLast, std::string property = "") {
+    if (!node) {
+      PrintVisitor p{isLast, prefix, property};
+      p.printPrefix();
+      std::cout << "Null" << std::endl;
+      return;
+    }
+    accept(*node, isLast, property);
+  }
+
   void printPrefix() {
     auto postfix = property.size() > 0 ? (property + ": ") : "";
 
@@ -37,6 +47,15 @@ private:
   void visit(NumericLiteralNode &node) override {
     printPrefix();
     std::cout << "NumericLiteral(" << node.value << ")" << std::endl;
+  }
+
+  void visit(ObjectLiteralNode &node) override {
+    printPrefix();
+    std::cout << "ObjectLiteral" << std::endl;
+    for (const auto &property : node.properties) {
+      auto isLast = &property == &node.properties.back();
+      accept(*property, isLast);
+    }
   }
 
   void visit(TypeReferenceNode &node) override {
@@ -87,6 +106,8 @@ private:
   void visit(LetStatementNode &node) override {
     printPrefix();
     std::cout << "LetStatement(" << node.name << ")" << std::endl;
+
+    maybeAccept(node.type.get(), false, "type");
     accept(*node.expression, true, "expression");
   };
 
@@ -117,6 +138,18 @@ private:
     }
   };
 
+  void visit(PropertySignatureNode &node) override {
+    printPrefix();
+    std::cout << "PropertySignature(" << node.name << ")" << std::endl;
+    accept(*node.type, true);
+  };
+
+  void visit(PropertyAssignmentNode &node) override {
+    printPrefix();
+    std::cout << "PropertyAssignment(" << node.name << ")" << std::endl;
+    accept(*node.initializer, true);
+  };
+
   void visit(ParameterNode &node) override {
     printPrefix();
     std::cout << "Parameter(" << node.name << ")" << std::endl;
@@ -143,8 +176,20 @@ private:
     accept(*node.body, true);
   };
 
+  void visit(InterfaceDeclarationNode &node) override {
+    printPrefix();
+    std::cout << "InterfaceDeclaration(" << node.name << ")" << std::endl;
+    for (const auto &member : node.members) {
+      auto isLast = &member == &node.members.back();
+      accept(*member, isLast);
+    }
+  };
+
   void visit(SourceFileNode &node) override {
     std::cout << "SourceFile" << std::endl;
+    for (const auto &interface : node.interfaces) {
+      accept(*interface, false);
+    }
     for (const auto &function : node.functions) {
       auto isLast = &function == &node.functions.back();
       accept(*function, isLast);

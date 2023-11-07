@@ -21,11 +21,13 @@ SourceFile
    │              └─ Identifier(i64)
    └─ Block
       ├─ LetStatement(f1)
+      │  ├─ type: Null
       │  └─ expression: Identifier(bar)
       ├─ ExpressionStatement
       │  └─ expression: CallExpression(print)
       │                 └─ CallExpression(f1)
       ├─ LetStatement(f2)
+      │  ├─ type: Null
       │  └─ expression: Identifier(foo)
       ├─ ExpressionStatement
       │  └─ expression: CallExpression(print)

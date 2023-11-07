@@ -154,7 +154,14 @@ public:
     if (identifier) {
       if (auto symbol = currentScope->lookup(identifier->name)) {
         return symbol->type;
+      } else {
+        std::cout << "Got identifier, but could not look it up" << std::endl;
       }
+    }
+
+    auto *typeReference = dynamic_cast<TypeReferenceNode *>(node);
+    if (typeReference) {
+      return inferType(typeReference->typeName.get());
     }
 
     auto *numericLiteral = dynamic_cast<NumericLiteralNode *>(node);
@@ -200,7 +207,9 @@ public:
   };
 
   void visit(LetStatementNode &node) override {
-    auto type = inferType(node.expression.get());
+
+    auto type = node.type ? inferType(node.type.get())
+                          : inferType(node.expression.get());
     Symbol symbol{.name = node.name, .type = type};
 
     currentScope->symbolTable.addSymbol(symbol);
@@ -212,6 +221,18 @@ public:
     for (const auto &statement : node.statements) {
       statement->accept(*this);
     }
+  };
+
+  void visit(PropertySignatureNode &node) override{
+      // TODO
+  };
+
+  void visit(PropertyAssignmentNode &node) override{
+      // TODO
+  };
+
+  void visit(ObjectLiteralNode &node) override{
+      // TODO
   };
 
   void visit(ParameterNode &node) override {
@@ -230,6 +251,11 @@ public:
     node.body->accept(*this);
     exitScope();
   };
+
+  void visit(InterfaceDeclarationNode &node) override {
+    Symbol symbol{.name = node.name, .type = typeNodeToType(&node)};
+    currentScope->symbolTable.addSymbol(symbol);
+  }
 
   void visit(FunctionDeclarationNode &node) override {
     std::vector<std::shared_ptr<Type>> parameters;
@@ -251,6 +277,9 @@ public:
   }
 
   void visit(SourceFileNode &node) override {
+    for (const auto &interface : node.interfaces) {
+      interface->accept(*this);
+    }
     for (const auto &function : node.functions) {
       function->accept(*this);
     }

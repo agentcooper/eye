@@ -25,6 +25,8 @@ const char *kindToString(const Token::Kind kind) {
     return "Colon";
   case Comma:
     return "Comma";
+  case Dot:
+    return "Dot";
   case Asterisk:
     return "Asterisk";
   case Identifier:
@@ -47,6 +49,8 @@ const char *kindToString(const Token::Kind kind) {
     return "Return";
   case Function:
     return "Function";
+  case Interface:
+    return "Interface";
   case Let:
     return "Let";
   case End:

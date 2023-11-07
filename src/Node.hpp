@@ -57,6 +57,25 @@ struct ParameterNode : public Node {
   void accept(Visitor &v) override { v.visit(*this); }
 };
 
+struct PropertySignatureNode : public Node {
+  const std::string name;
+  std::unique_ptr<Node> type;
+  PropertySignatureNode(const std::string &name, std::unique_ptr<Node> type)
+      : name(name), type(std::move(type)) {}
+
+  void accept(Visitor &v) override { v.visit(*this); }
+};
+
+struct PropertyAssignmentNode : public Node {
+  const std::string name;
+  std::unique_ptr<Node> initializer;
+  PropertyAssignmentNode(const std::string &name,
+                         std::unique_ptr<Node> initializer)
+      : name(name), initializer(std::move(initializer)) {}
+
+  void accept(Visitor &v) override { v.visit(*this); }
+};
+
 struct ReturnStatementNode : public Node {
   std::unique_ptr<Node> expression;
   ReturnStatementNode(std::unique_ptr<Node> expression)
@@ -87,10 +106,12 @@ struct IfStatementNode : public Node {
 
 struct LetStatementNode : public Node {
   const std::string name;
+  std::unique_ptr<Node> type;
   std::unique_ptr<Node> expression;
 
-  LetStatementNode(const std::string &name, std::unique_ptr<Node> expression)
-      : name(name), expression(std::move(expression)) {}
+  LetStatementNode(const std::string &name, std::unique_ptr<Node> type,
+                   std::unique_ptr<Node> expression)
+      : name(name), type(std::move(type)), expression(std::move(expression)) {}
 
   void accept(Visitor &v) override { v.visit(*this); }
 };
@@ -141,6 +162,28 @@ struct ArrowFunctionExpressionNode : public Node {
   void accept(Visitor &v) override { v.visit(*this); }
 };
 
+struct ObjectLiteralNode : public Node {
+  std::vector<std::unique_ptr<PropertyAssignmentNode>> properties;
+
+  ObjectLiteralNode(
+      std::vector<std::unique_ptr<PropertyAssignmentNode>> properties)
+      : properties(std::move(properties)) {}
+
+  void accept(Visitor &v) override { v.visit(*this); }
+};
+
+struct InterfaceDeclarationNode : public Node {
+  const std::string name;
+  std::vector<std::unique_ptr<PropertySignatureNode>> members;
+
+  InterfaceDeclarationNode(
+      const std::string &name,
+      std::vector<std::unique_ptr<PropertySignatureNode>> members)
+      : name(name), members(std::move(members)) {}
+
+  void accept(Visitor &v) override { v.visit(*this); }
+};
+
 struct FunctionDeclarationNode : public Node {
   const std::string name;
   std::vector<std::unique_ptr<ParameterNode>> parameters;
@@ -159,6 +202,7 @@ struct FunctionDeclarationNode : public Node {
 
 struct SourceFileNode : public Node {
   std::vector<std::unique_ptr<FunctionDeclarationNode>> functions;
+  std::vector<std::unique_ptr<InterfaceDeclarationNode>> interfaces;
 
   void accept(Visitor &v) override { v.visit(*this); }
 };
