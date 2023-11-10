@@ -1,10 +1,14 @@
 Table 'global'
 Foo: {a: i64, b: i64}
+getBar: () => {c: i64}
 getFoo: () => Foo
 main: () => i64
 
   Table 'getFoo'
 
+  Table 'getBar'
+
   Table 'main'
+  bar: {c: i64}
   foo: Foo
 

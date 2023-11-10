@@ -15,7 +15,17 @@ SourceFile
 │                       ├─ PropertyAssignment(a)
 │                       │  └─ NumericLiteral(111)
 │                       └─ PropertyAssignment(b)
-│                          └─ NumericLiteral(555)
+│                          └─ NumericLiteral(333)
+├─ FunctionDeclaration(getBar)
+│  ├─ returnType: StructTypeNode
+│  │              └─ PropertySignature(c)
+│  │                 └─ TypeReference
+│  │                    └─ Identifier(i64)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: ObjectLiteral
+│                       └─ PropertyAssignment(c)
+│                          └─ NumericLiteral(222)
 └─ FunctionDeclaration(main)
    ├─ returnType: TypeReference
    │              └─ Identifier(i64)
@@ -23,14 +33,21 @@ SourceFile
       ├─ LetStatement(foo)
       │  ├─ type: Null
       │  └─ expression: CallExpression(getFoo)
+      ├─ LetStatement(bar)
+      │  ├─ type: Null
+      │  └─ expression: CallExpression(getBar)
       ├─ ExpressionStatement
       │  └─ expression: CallExpression(print)
       │                 └─ BinaryExpression(Plus)
-      │                    ├─ lhs: BinaryExpression(Dot)
-      │                    │       ├─ lhs: Identifier(foo)
-      │                    │       └─ rhs: Identifier(a)
+      │                    ├─ lhs: BinaryExpression(Plus)
+      │                    │       ├─ lhs: BinaryExpression(Dot)
+      │                    │       │       ├─ lhs: Identifier(foo)
+      │                    │       │       └─ rhs: Identifier(a)
+      │                    │       └─ rhs: BinaryExpression(Dot)
+      │                    │               ├─ lhs: Identifier(foo)
+      │                    │               └─ rhs: Identifier(b)
       │                    └─ rhs: BinaryExpression(Dot)
-      │                            ├─ lhs: Identifier(foo)
-      │                            └─ rhs: Identifier(b)
+      │                            ├─ lhs: Identifier(bar)
+      │                            └─ rhs: Identifier(c)
       └─ ReturnStatement
          └─ expression: NumericLiteral(0)

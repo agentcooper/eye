@@ -1,0 +1,86 @@
+SourceFile
+├─ InterfaceDeclaration(Counter)
+│  ├─ PropertySignature(inc)
+│  │  └─ FunctionType
+│  │     └─ returnType: TypeReference
+│  │                    └─ Identifier(i64)
+│  └─ PropertySignature(reset)
+│     └─ FunctionType
+│        └─ returnType: TypeReference
+│                       └─ Identifier(void)
+├─ FunctionDeclaration(makeCounter)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(Counter)
+│  └─ Block
+│     ├─ LetStatement(counter)
+│     │  ├─ type: Null
+│     │  └─ expression: NumericLiteral(0)
+│     ├─ LetStatement(inc)
+│     │  ├─ type: Null
+│     │  └─ expression: ArrowFunction
+│     │                 ├─ returnType: TypeReference
+│     │                 │              └─ Identifier(i64)
+│     │                 └─ Block
+│     │                    ├─ ExpressionStatement
+│     │                    │  └─ expression: BinaryExpression(Equals)
+│     │                    │                 ├─ lhs: Identifier(counter)
+│     │                    │                 └─ rhs: BinaryExpression(Plus)
+│     │                    │                         ├─ lhs: Identifier(counter)
+│     │                    │                         └─ rhs: NumericLiteral(1)
+│     │                    └─ ReturnStatement
+│     │                       └─ expression: Identifier(counter)
+│     ├─ LetStatement(reset)
+│     │  ├─ type: Null
+│     │  └─ expression: ArrowFunction
+│     │                 ├─ returnType: TypeReference
+│     │                 │              └─ Identifier(void)
+│     │                 └─ Block
+│     │                    └─ ExpressionStatement
+│     │                       └─ expression: BinaryExpression(Equals)
+│     │                                      ├─ lhs: Identifier(counter)
+│     │                                      └─ rhs: NumericLiteral(0)
+│     └─ ReturnStatement
+│        └─ expression: ObjectLiteral
+│                       ├─ PropertyAssignment(inc)
+│                       │  └─ Identifier(inc)
+│                       └─ PropertyAssignment(reset)
+│                          └─ Identifier(reset)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(counter)
+      │  ├─ type: Null
+      │  └─ expression: CallExpression(makeCounter)
+      ├─ LetStatement(inc)
+      │  ├─ type: Null
+      │  └─ expression: BinaryExpression(Dot)
+      │                 ├─ lhs: Identifier(counter)
+      │                 └─ rhs: Identifier(inc)
+      ├─ LetStatement(reset)
+      │  ├─ type: Null
+      │  └─ expression: BinaryExpression(Dot)
+      │                 ├─ lhs: Identifier(counter)
+      │                 └─ rhs: Identifier(reset)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(inc)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(inc)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(inc)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(reset)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(inc)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(inc)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(inc)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

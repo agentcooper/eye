@@ -80,6 +80,8 @@ class Codegen : public Visitor {
 
   size_t arrowFunctionExpressionIndex = 0;
 
+  std::map<Scope *, llvm::AllocaInst *> scopeEnv;
+
 private:
   llvm::AllocaInst *createEntryBlockAlloca(llvm::Function *function,
                                            llvm::StringRef name,
@@ -90,7 +92,8 @@ private:
   }
 
   llvm::Value *allocateClosure(llvm::Function *f,
-                               const std::vector<Symbol> closureSymbols) {
+                               const std::vector<Symbol> closureSymbols,
+                               Scope *scope) {
     debug << "Allocating closure" << std::endl;
 
     auto envType = getEnvTypeForSymbols(closureSymbols);
@@ -100,17 +103,22 @@ private:
 
     if (!closureSymbols.empty()) {
       // TODO: figure out the right amount of memory
-      envAlloca = createAllocateCall(envType, "env", 128);
+      envAlloca = scopeEnv.contains(scope)
+                      ? scopeEnv[scope]
+                      : createAllocateCall(envType, "env", 128);
+      scopeEnv[scope] = envAlloca;
+
       auto env = builder->CreateLoad(envType->getPointerTo(), envAlloca, "env");
 
       for (size_t idx = 0; const auto &symbol : closureSymbols) {
         if (namedValues.contains(symbol.name)) {
           debug << "Storing " << symbol.name << " at index " << idx
                 << std::endl;
-          auto gep1 = builder->CreateStructGEP(envType, env, idx);
-          auto v = builder->CreateLoad(buildLLVMType(*symbol.type),
-                                       namedValues[symbol.name], "env_v");
-          builder->CreateStore(v, gep1);
+          auto gep = builder->CreateStructGEP(envType, env, idx);
+          auto value = builder->CreateLoad(buildLLVMType(*symbol.type),
+                                           namedValues[symbol.name],
+                                           "env_" + symbol.name);
+          builder->CreateStore(value, gep);
         }
         idx += 1;
       }
@@ -316,13 +324,14 @@ public:
     value = function;
     builder->SetInsertPoint(bb);
     symbolTableVisitor.exitScope();
-    value = allocateClosure(function, parentSymbols);
+    value = allocateClosure(function, parentSymbols,
+                            symbolTableVisitor.currentScope);
   }
 
   void visit(IdentifierNode &node) override {
     auto moduleFunction = llvmModule->getFunction(node.name);
     if (moduleFunction) {
-      value = allocateClosure(moduleFunction, {});
+      value = allocateClosure(moduleFunction, {}, nullptr);
       return;
     }
 
@@ -533,7 +542,7 @@ public:
         builder->CreateStructGEP(closureType, closure, 0), "closure_call_fn");
 
     arguments.insert(arguments.begin(), env);
-    value = builder->CreateCall(callType, fn, arguments, "res");
+    value = builder->CreateCall(callType, fn, arguments);
   };
 
   void visit(BlockNode &node) override {
