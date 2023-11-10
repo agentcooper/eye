@@ -86,3 +86,13 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
 
   throw std::runtime_error("Could not convert type node to a type");
 }
+
+int findIndex(StructType &structType, std::string propertyName) {
+  for (int index = 0; const auto &property : structType.properties) {
+    if (property.first == propertyName) {
+      return index;
+    }
+    index += 1;
+  }
+  return -1;
+}

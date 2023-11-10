@@ -144,7 +144,7 @@ private:
       symbol = symbolTableVisitor.currentScope->lookup(name);
     }
     if (!symbol) {
-      throw std::runtime_error("Could not find the symbol");
+      throw std::runtime_error("Could not find the symbol '" + name + "'");
     }
 
     auto llvmType = buildLLVMType(*symbol->type);
@@ -330,8 +330,12 @@ public:
     llvm::AllocaInst *alloca =
         createEntryBlockAlloca(TheFunction, node.name, type);
 
-    builder->CreateStore(value, alloca);
-    namedValues[node.name] = alloca;
+    if (llvm::AllocaInst *rightAlloca = dyn_cast<llvm::AllocaInst>(value)) {
+      namedValues[node.name] = rightAlloca;
+    } else {
+      namedValues[node.name] = alloca;
+      builder->CreateStore(value, alloca);
+    }
   };
 
   void visit(ReturnStatementNode &node) override {
@@ -387,51 +391,80 @@ public:
     node.lhs->accept(*this);
     llvm::Value *L = value;
 
-    node.rhs->accept(*this);
-    llvm::Value *R = value;
-
     switch (node.op) {
     case Token::Kind::Equals: {
-      IdentifierNode *identifierNode =
-          static_cast<IdentifierNode *>(node.lhs.get());
-      if (!identifierNode) {
-        throw std::runtime_error(
-            "Error: left-hand side needs to be an identifier.");
-      }
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
 
-      // TODO: improve check over local symbols
-      llvm::Value *lPointer = namedValues[identifierNode->name];
-      if (lPointer == nullptr) {
+      isWrite = true;
+      node.lhs->accept(*this);
+      isWrite = false;
 
-        // TODO: don't lookup twice
-        isWrite = true;
-        node.lhs->accept(*this);
-        lPointer = value;
-        isWrite = false;
-      }
-
-      builder->CreateStore(R, lPointer);
+      builder->CreateStore(R, value);
       value = L;
       break;
     }
-    case Token::Kind::Plus:
+    case Token::Kind::Dot: {
+      auto prevIsWrite = isWrite;
+
+      isWrite = true;
+      node.lhs->accept(*this);
+      isWrite = prevIsWrite;
+      llvm::Value *L = value;
+
+      IdentifierNode *rightIdentifierNode =
+          dynamic_cast<IdentifierNode *>(node.rhs.get());
+      if (!rightIdentifierNode) {
+        throw std::runtime_error(
+            "Error: right-hand side needs to be an identifier.");
+      }
+
+      auto lhsType = symbolTableVisitor.inferType(node.lhs.get());
+
+      StructType *structType = std::get_if<StructType>(&*lhsType);
+      if (!structType) {
+        throw std::runtime_error("Expected struct type, but got " +
+                                 typeToString(*lhsType));
+      }
+
+      auto gep = builder->CreateStructGEP(
+          buildLLVMType(*lhsType), L,
+          findIndex(*structType, rightIdentifierNode->name));
+
+      value = isWrite ? gep : builder->CreateLoad(int64Type, gep);
+
+      break;
+    }
+    case Token::Kind::Plus: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
       if (L->getType()->isDoubleTy() && R->getType()->isDoubleTy()) {
         value = builder->CreateFAdd(L, R);
         break;
       }
       value = builder->CreateAdd(L, R, L->getName() + "_plus_" + R->getName());
       break;
-    case Token::Kind::Minus:
+    }
+    case Token::Kind::Minus: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
       if (L->getType()->isDoubleTy() && R->getType()->isDoubleTy()) {
         value = builder->CreateFSub(L, R);
         break;
       }
       value = builder->CreateSub(L, R, L->getName() + "_minus_" + R->getName());
       break;
-    case Token::Kind::DoubleEquals:
+    }
+    case Token::Kind::DoubleEquals: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
       value =
           builder->CreateICmpEQ(L, R, L->getName() + "_equals_" + R->getName());
       break;
+    }
     default:
       throw std::runtime_error("Error: unknown operator: " +
                                std::string(kindToString(node.op)));
@@ -511,7 +544,33 @@ public:
   }
 
   void visit(ObjectLiteralNode &node) override {
-    // TODO
+    auto type = symbolTableVisitor.inferType(&node);
+    auto llvmType = buildLLVMType(*type);
+
+    llvm::Function *function = builder->GetInsertBlock()->getParent();
+    llvm::AllocaInst *objectLiteralAlloca =
+        createEntryBlockAlloca(function, "object_literal", llvmType);
+
+    llvm::StructType *structType = dyn_cast<llvm::StructType>(llvmType);
+    if (!structType) {
+      throw std::runtime_error("Expected struct type");
+    }
+
+    for (auto index = 0; const auto &property : node.properties) {
+      property->initializer->accept(*this);
+      auto gep = builder->CreateStructGEP(structType, objectLiteralAlloca,
+                                          index++, property->name);
+      if (llvm::AllocaInst *rightAlloca = dyn_cast<llvm::AllocaInst>(value)) {
+        builder->CreateMemCpy(
+            gep, llvm::MaybeAlign(), rightAlloca, llvm::MaybeAlign(),
+            llvm::ConstantInt::get(int64Type,
+                                   llvmModule->getDataLayout().getTypeAllocSize(
+                                       rightAlloca->getAllocatedType())));
+      } else {
+        builder->CreateStore(value, gep);
+      }
+    }
+    value = objectLiteralAlloca;
   }
 
   void visit(InterfaceDeclarationNode &node) override {

@@ -172,6 +172,41 @@ public:
       return std::make_shared<Type>(PrimitiveType::i64Type);
     }
 
+    auto *objectLiteral = dynamic_cast<ObjectLiteralNode *>(node);
+    if (objectLiteral) {
+      std::vector<NamedType> properties;
+      for (const auto &property : objectLiteral->properties) {
+        properties.push_back(std::make_pair(
+            property->name, inferType(property->initializer.get())));
+      }
+      return std::make_shared<Type>(StructType{properties});
+    }
+
+    auto *binaryExpression = dynamic_cast<BinaryExpressionNode *>(node);
+    if (binaryExpression) {
+      if (binaryExpression->op != Token::Kind::Dot) {
+        throw std::runtime_error("Expected op = dot");
+      }
+
+      auto *rhsIdentifier =
+          dynamic_cast<IdentifierNode *>(binaryExpression->rhs.get());
+      if (!rhsIdentifier) {
+        throw std::runtime_error("Expected identifier as rhs");
+      }
+
+      auto lhsType = inferType(binaryExpression->lhs.get());
+      StructType *structType = std::get_if<StructType>(&*lhsType);
+      if (!structType) {
+        throw std::runtime_error("Expected struct type, but got " +
+                                 typeToString(*lhsType));
+      }
+      for (const auto &property : structType->properties) {
+        if (property.first == rhsIdentifier->name) {
+          return property.second;
+        }
+      }
+    }
+
     return std::make_shared<Type>(PrimitiveType::unknownType);
   }
 

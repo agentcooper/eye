@@ -1,0 +1,31 @@
+SourceFile
+├─ InterfaceDeclaration(Foo)
+│  ├─ PropertySignature(a)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  └─ PropertySignature(b)
+│     └─ TypeReference
+│        └─ Identifier(i64)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(foo)
+      │  ├─ type: TypeReference
+      │  │        └─ Identifier(Foo)
+      │  └─ expression: ObjectLiteral
+      │                 ├─ PropertyAssignment(a)
+      │                 │  └─ NumericLiteral(1)
+      │                 └─ PropertyAssignment(b)
+      │                    └─ NumericLiteral(2)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(Plus)
+      │                    ├─ lhs: BinaryExpression(Dot)
+      │                    │       ├─ lhs: Identifier(foo)
+      │                    │       └─ rhs: Identifier(a)
+      │                    └─ rhs: BinaryExpression(Dot)
+      │                            ├─ lhs: Identifier(foo)
+      │                            └─ rhs: Identifier(b)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)
