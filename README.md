@@ -5,24 +5,35 @@
 Eye is a statically typed compiled language implemented using LLVM, with a syntax inspired by TypeScript.
 
 ```typescript
-function makeCounter(): () => i64 {
-  let counter = 1;
+interface Counter {
+  inc: () => i64,
+  reset: () => void
+}
+
+function makeCounter(initialValue: i64): Counter {
+  let counter = initialValue;
   let inc = (): i64 => {
     counter = counter + 1;
     return counter;
   };
-  return inc;
+  let reset = (): void => {
+    counter = 0;
+  };
+  return { inc: inc, reset: reset };
 }
 
 function main(): i64 {
-  let x = makeCounter();
-  print(x());
-  print(x());
+  let counter = makeCounter(10);
+  let inc = counter.inc;
+  let reset = counter.reset;
+  print(inc());
+  print(inc());
+  reset();
+  print(inc());
+  print(inc());
   return 0;
 }
 ```
-
-At the moment the set of features is rather limited, the only available types are 64-bit integers (`i64`), 64-bit floats (`f64`), and first class functions (e.g. `(n: i64) => () => void`).
 
 Roadmap is available in [`TODO.md`](TODO.md).
 

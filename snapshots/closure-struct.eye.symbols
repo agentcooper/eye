@@ -1,11 +1,12 @@
 Table 'global'
 Counter: {inc: () => i64, reset: () => void}
 main: () => i64
-makeCounter: () => Counter
+makeCounter: (i64) => Counter
 
   Table 'makeCounter'
   counter: i64
   inc: () => i64
+  initialValue: i64
   reset: () => void
 
     Table 'anonymous0'

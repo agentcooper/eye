@@ -9,12 +9,15 @@ SourceFile
 │        └─ returnType: TypeReference
 │                       └─ Identifier(void)
 ├─ FunctionDeclaration(makeCounter)
+│  ├─ Parameter(initialValue)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
 │  ├─ returnType: TypeReference
 │  │              └─ Identifier(Counter)
 │  └─ Block
 │     ├─ LetStatement(counter)
 │     │  ├─ type: Null
-│     │  └─ expression: NumericLiteral(0)
+│     │  └─ expression: Identifier(initialValue)
 │     ├─ LetStatement(inc)
 │     │  ├─ type: Null
 │     │  └─ expression: ArrowFunction
@@ -52,6 +55,7 @@ SourceFile
       ├─ LetStatement(counter)
       │  ├─ type: Null
       │  └─ expression: CallExpression(makeCounter)
+      │                 └─ NumericLiteral(10)
       ├─ LetStatement(inc)
       │  ├─ type: Null
       │  └─ expression: BinaryExpression(Dot)
@@ -69,13 +73,7 @@ SourceFile
       │  └─ expression: CallExpression(print)
       │                 └─ CallExpression(inc)
       ├─ ExpressionStatement
-      │  └─ expression: CallExpression(print)
-      │                 └─ CallExpression(inc)
-      ├─ ExpressionStatement
       │  └─ expression: CallExpression(reset)
-      ├─ ExpressionStatement
-      │  └─ expression: CallExpression(print)
-      │                 └─ CallExpression(inc)
       ├─ ExpressionStatement
       │  └─ expression: CallExpression(print)
       │                 └─ CallExpression(inc)
