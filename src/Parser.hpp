@@ -92,6 +92,14 @@ public:
                                                 std::move(returnType));
     }
 
+    if (currentToken.kind() == Token::Kind::LeftCurly) {
+      getNextToken(); // eat '{'
+      std::vector<std::unique_ptr<PropertySignatureNode>> members =
+          parseMembers();
+      getNextToken(); // eat '}'
+      return std::make_unique<StructTypeNode>(std::move(members));
+    }
+
     throw std::runtime_error("Can't parse type");
   }
 

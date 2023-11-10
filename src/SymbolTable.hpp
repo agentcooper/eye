@@ -153,6 +153,10 @@ public:
     auto *identifier = dynamic_cast<IdentifierNode *>(node);
     if (identifier) {
       if (auto symbol = currentScope->lookup(identifier->name)) {
+        if (TypeReference *typeReference =
+                std::get_if<TypeReference>(&*symbol->type)) {
+          return currentScope->lookup(typeReference->name)->type;
+        }
         return symbol->type;
       } else {
         std::cout << "Got identifier, but could not look it up" << std::endl;
@@ -161,7 +165,10 @@ public:
 
     auto *typeReference = dynamic_cast<TypeReferenceNode *>(node);
     if (typeReference) {
-      return inferType(typeReference->typeName.get());
+      if (auto symbol = currentScope->lookup(typeReference->typeName->name)) {
+        return symbol->type;
+      }
+      throw std::runtime_error("Couldn't find the symbol");
     }
 
     auto *numericLiteral = dynamic_cast<NumericLiteralNode *>(node);
@@ -197,7 +204,7 @@ public:
       auto lhsType = inferType(binaryExpression->lhs.get());
       StructType *structType = std::get_if<StructType>(&*lhsType);
       if (!structType) {
-        throw std::runtime_error("Expected struct type, but got " +
+        throw std::runtime_error("2 Expected struct type, but got " +
                                  typeToString(*lhsType));
       }
       for (const auto &property : structType->properties) {
@@ -286,6 +293,10 @@ public:
     node.body->accept(*this);
     exitScope();
   };
+
+  void visit(StructTypeNode &node) override {
+    // TODO
+  }
 
   void visit(InterfaceDeclarationNode &node) override {
     Symbol symbol{.name = node.name, .type = typeNodeToType(&node)};

@@ -11,6 +11,8 @@
 
 struct LLVMTypeVisitor {
   llvm::LLVMContext &context;
+  SymbolTableVisitor &symbolTableVisitor;
+
   bool functionAsPointer;
   llvm::Type *env;
 
@@ -27,8 +29,13 @@ struct LLVMTypeVisitor {
     }
   }
 
+  llvm::Type *operator()(const TypeReference &type) const {
+    auto symbol = symbolTableVisitor.globalScope.lookup(type.name);
+    return std::visit(*this, *symbol->type);
+  }
+
   llvm::Type *operator()(const StructType &type) const {
-    LLVMTypeVisitor visitor{context, true, env};
+    LLVMTypeVisitor visitor{context, symbolTableVisitor, true, env};
     std::vector<llvm::Type *> types{};
     for (const auto &property : type.properties) {
       types.push_back(std::visit(visitor, *property.second));
@@ -37,7 +44,7 @@ struct LLVMTypeVisitor {
   }
 
   llvm::Type *operator()(const FunctionType &type) const {
-    LLVMTypeVisitor visitor{context, true, env};
+    LLVMTypeVisitor visitor{context, symbolTableVisitor, true, env};
 
     auto returnType = std::visit(visitor, *type.returnType);
     std::vector<llvm::Type *> parameters{};
@@ -57,7 +64,7 @@ struct LLVMTypeVisitor {
 
 class Codegen : public Visitor {
   SourceFileNode &sourceFile;
-  SymbolTableVisitor symbolTableVisitor;
+  SymbolTableVisitor &symbolTableVisitor;
 
   std::unique_ptr<llvm::LLVMContext> llvmContext;
   std::unique_ptr<llvm::Module> llvmModule;
@@ -174,12 +181,14 @@ private:
   }
 
   llvm::Type *buildLLVMType(const Type &type, llvm::Type *env = nullptr) const {
-    LLVMTypeVisitor llvmTypeVisitor{*llvmContext, true, env};
+    LLVMTypeVisitor llvmTypeVisitor{*llvmContext, symbolTableVisitor, true,
+                                    env};
     return std::visit(llvmTypeVisitor, type);
   }
 
   llvm::FunctionType *asFunctionType(const Type &type, llvm::Type *env) const {
-    LLVMTypeVisitor llvmTypeVisitor{*llvmContext, false, env};
+    LLVMTypeVisitor llvmTypeVisitor{*llvmContext, symbolTableVisitor, false,
+                                    env};
     auto llvmType = std::visit(llvmTypeVisitor, type);
     if (llvm::FunctionType *ft = llvm::dyn_cast<llvm::FunctionType>(llvmType)) {
       return ft;
@@ -423,7 +432,7 @@ public:
 
       StructType *structType = std::get_if<StructType>(&*lhsType);
       if (!structType) {
-        throw std::runtime_error("Expected struct type, but got " +
+        throw std::runtime_error("1 Expected struct type, but got " +
                                  typeToString(*lhsType));
       }
 
@@ -570,7 +579,11 @@ public:
         builder->CreateStore(value, gep);
       }
     }
-    value = objectLiteralAlloca;
+    value = builder->CreateLoad(llvmType, objectLiteralAlloca);
+  }
+
+  void visit(StructTypeNode &node) override {
+    // TODO
   }
 
   void visit(InterfaceDeclarationNode &node) override {

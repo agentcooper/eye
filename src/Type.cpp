@@ -13,6 +13,7 @@ struct TypePrinterVisitor {
       return "unknown";
     }
   }
+  std::string operator()(const TypeReference &type) { return type.name; }
   std::string operator()(const FunctionType &type) {
     std::string result;
     result += "(";
@@ -58,8 +59,8 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
     if (typeReferenceNode->typeName->name == "void") {
       return std::make_shared<Type>(PrimitiveType::voidType);
     }
-    throw std::runtime_error(
-        "Could not convert type reference to a primitive type");
+    return std::make_shared<Type>(
+        TypeReference(typeReferenceNode->typeName->name));
   }
 
   auto interfaceDeclarationNode =
@@ -67,6 +68,16 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
   if (interfaceDeclarationNode) {
     std::vector<NamedType> members;
     for (const auto &member : interfaceDeclarationNode->members) {
+      members.push_back(
+          std::make_pair(member->name, typeNodeToType(member->type.get())));
+    }
+    return std::make_shared<Type>(StructType{members});
+  }
+
+  auto structTypeNode = dynamic_cast<StructTypeNode *>(node);
+  if (structTypeNode) {
+    std::vector<NamedType> members;
+    for (const auto &member : structTypeNode->members) {
       members.push_back(
           std::make_pair(member->name, typeNodeToType(member->type.get())));
     }

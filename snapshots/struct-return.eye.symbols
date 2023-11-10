@@ -1,0 +1,10 @@
+Table 'global'
+Foo: {a: i64, b: i64}
+getFoo: () => Foo
+main: () => i64
+
+  Table 'getFoo'
+
+  Table 'main'
+  foo: Foo
+

@@ -10,10 +10,19 @@
 
 #include "Node.hpp"
 
+class TypeReference;
 class FunctionType;
 class StructType;
 enum class PrimitiveType { i64Type, f64Type, voidType, unknownType };
-using Type = std::variant<PrimitiveType, FunctionType, StructType>;
+using Type =
+    std::variant<PrimitiveType, TypeReference, FunctionType, StructType>;
+
+class TypeReference {
+public:
+  const std::string name;
+
+  TypeReference(const std::string &name) : name(name){};
+};
 
 class FunctionType {
 public:

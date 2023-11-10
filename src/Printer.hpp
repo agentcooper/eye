@@ -176,6 +176,16 @@ private:
     accept(*node.body, true);
   };
 
+  void visit(StructTypeNode &node) override {
+    // TODO
+    printPrefix();
+    std::cout << "StructTypeNode" << std::endl;
+    for (const auto &member : node.members) {
+      auto isLast = &member == &node.members.back();
+      accept(*member, isLast);
+    }
+  }
+
   void visit(InterfaceDeclarationNode &node) override {
     printPrefix();
     std::cout << "InterfaceDeclaration(" << node.name << ")" << std::endl;

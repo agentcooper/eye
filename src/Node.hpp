@@ -21,6 +21,15 @@ struct TypeReferenceNode : public Node {
   void accept(Visitor &v) override { v.visit(*this); }
 };
 
+struct StructTypeNode : public Node {
+  std::vector<std::unique_ptr<PropertySignatureNode>> members;
+
+  StructTypeNode(std::vector<std::unique_ptr<PropertySignatureNode>> members)
+      : members(std::move(members)) {}
+
+  void accept(Visitor &v) override { v.visit(*this); }
+};
+
 struct FunctionTypeNode : public Node {
   std::vector<std::unique_ptr<ParameterNode>> parameters;
   std::unique_ptr<Node> returnType;
