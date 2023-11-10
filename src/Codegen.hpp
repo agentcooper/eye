@@ -102,10 +102,10 @@ private:
     llvm::AllocaInst *envAlloca;
 
     if (!closureSymbols.empty()) {
-      // TODO: figure out the right amount of memory
+      int envSize = llvmModule->getDataLayout().getTypeAllocSize(envType);
       envAlloca = scopeEnv.contains(scope)
                       ? scopeEnv[scope]
-                      : createAllocateCall(envType, "env", 128);
+                      : createAllocateCall(envType, "env", envSize);
       scopeEnv[scope] = envAlloca;
 
       auto env = builder->CreateLoad(envType->getPointerTo(), envAlloca, "env");
