@@ -13,7 +13,13 @@
 class TypeReference;
 class FunctionType;
 class StructType;
-enum class PrimitiveType { i64Type, f64Type, voidType, unknownType };
+enum class PrimitiveType {
+  i64Type,
+  f64Type,
+  stringType,
+  voidType,
+  unknownType
+};
 using Type =
     std::variant<PrimitiveType, TypeReference, FunctionType, StructType>;
 

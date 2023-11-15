@@ -53,6 +53,8 @@ const char *kindToString(const Token::Kind kind) {
     return "Interface";
   case Let:
     return "Let";
+  case String:
+    return "String";
   case End:
     return "End";
   case Unexpected:

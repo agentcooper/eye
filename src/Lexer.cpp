@@ -37,6 +37,9 @@ Token Lexer::getNextToken() noexcept {
   if (isDigit(c)) {
     return parseNumber();
   }
+  if (c == '"') {
+    return parseString();
+  }
   if (isIdentifierChar(c)) {
     auto token = parseIdentifier();
     auto lexeme = token.lexeme();
@@ -104,6 +107,15 @@ Token Lexer::getNextToken() noexcept {
   case '*':
     return single(Token::Kind::Asterisk);
   }
+}
+
+Token Lexer::parseString() noexcept {
+  const char *start = m_source;
+  get();
+  while (peek() != '"')
+    get();
+  get();
+  return Token(Token::Kind::String, start, m_source);
 }
 
 Token Lexer::parseIdentifier() noexcept {

@@ -272,6 +272,12 @@ public:
       getNextToken();
       return std::make_unique<NumericLiteralNode>(std::stod(value), true);
     }
+    case Token::Kind::String: {
+      std::string value{currentToken.lexeme()};
+      getNextToken();
+      return std::make_unique<StringLiteralNode>(
+          value.substr(1, value.size() - 2));
+    }
     case Token::Kind::LeftCurly: {
       return parseObjectLiteral();
     }

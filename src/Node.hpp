@@ -57,6 +57,13 @@ struct IdentifierNode : public Node {
   void accept(Visitor &v) override { v.visit(*this); }
 };
 
+struct StringLiteralNode : public Node {
+  const std::string text;
+  StringLiteralNode(const std::string &text) : text(text) {}
+
+  void accept(Visitor &v) override { v.visit(*this); }
+};
+
 struct ParameterNode : public Node {
   const std::string name;
   std::unique_ptr<Node> type;

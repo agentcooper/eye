@@ -7,6 +7,8 @@ struct TypePrinterVisitor {
       return "i64";
     case PrimitiveType::f64Type:
       return "f64";
+    case PrimitiveType::stringType:
+      return "string";
     case PrimitiveType::voidType:
       return "void";
     case PrimitiveType::unknownType:

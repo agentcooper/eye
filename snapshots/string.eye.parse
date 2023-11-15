@@ -1,0 +1,13 @@
+SourceFile
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(s)
+      │  ├─ type: Null
+      │  └─ expression: StringLiteral(Hello, world!)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(s)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

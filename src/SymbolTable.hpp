@@ -179,6 +179,11 @@ public:
       return std::make_shared<Type>(PrimitiveType::i64Type);
     }
 
+    auto *stringLiteral = dynamic_cast<StringLiteralNode *>(node);
+    if (stringLiteral) {
+      return std::make_shared<Type>(PrimitiveType::stringType);
+    }
+
     auto *objectLiteral = dynamic_cast<ObjectLiteralNode *>(node);
     if (objectLiteral) {
       std::vector<NamedType> properties;
@@ -227,6 +232,8 @@ public:
   void visit(FunctionTypeNode &node) override {}
 
   void visit(NumericLiteralNode &node) override {}
+
+  void visit(StringLiteralNode &node) override {}
 
   void visit(IdentifierNode &node) override{};
 

@@ -18,6 +18,7 @@ struct PropertyAssignmentNode;
 struct PropertySignatureNode;
 struct ReturnStatementNode;
 struct SourceFileNode;
+struct StringLiteralNode;
 struct StructTypeNode;
 struct TypeReferenceNode;
 
@@ -41,6 +42,7 @@ public:
   virtual void visit(PropertySignatureNode &node) = 0;
   virtual void visit(ReturnStatementNode &node) = 0;
   virtual void visit(SourceFileNode &node) = 0;
+  virtual void visit(StringLiteralNode &node) = 0;
   virtual void visit(StructTypeNode &node) = 0;
   virtual void visit(TypeReferenceNode &node) = 0;
 

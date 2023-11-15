@@ -30,6 +30,7 @@ public:
     EqualsGreaterThan,
     Return,
     Let,
+    String,
     End,
     Unexpected,
   };

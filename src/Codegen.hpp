@@ -22,6 +22,8 @@ struct LLVMTypeVisitor {
       return llvm::Type::getInt64Ty(context);
     case PrimitiveType::f64Type:
       return llvm::Type::getDoubleTy(context);
+    case PrimitiveType::stringType:
+      return llvm::Type::getInt8PtrTy(context);
     case PrimitiveType::voidType:
       return llvm::Type::getVoidTy(context);
     case PrimitiveType::unknownType:
@@ -31,6 +33,9 @@ struct LLVMTypeVisitor {
 
   llvm::Type *operator()(const TypeReference &type) const {
     auto symbol = symbolTableVisitor.globalScope.lookup(type.name);
+    if (!symbol.has_value()) {
+      throw std::runtime_error("Bad lookup");
+    }
     return std::visit(*this, *symbol->type);
   }
 
@@ -236,6 +241,16 @@ private:
                            "printF64", llvmModule.get());
   }
 
+  void createPrintStringFunction() {
+    auto returnType = llvm::FunctionType::get(
+        llvm::Type::getVoidTy(*llvmContext),
+        {voidPointerType,
+         llvm::IntegerType::get(*llvmContext, 8)->getPointerTo()},
+        false);
+    llvm::Function::Create(returnType, llvm::Function::ExternalLinkage,
+                           "printString", llvmModule.get());
+  }
+
   void createAllocateFunction() {
     auto returnType =
         llvm::FunctionType::get(int64Type->getPointerTo(), {int64Type}, false);
@@ -263,6 +278,10 @@ public:
     value = node.hasFloatingPoint
                 ? llvm::ConstantFP::get(float64Type, node.value)
                 : llvm::ConstantInt::get(int64Type, node.value);
+  }
+
+  void visit(StringLiteralNode &node) override {
+    value = builder->CreateGlobalStringPtr(llvm::StringRef(node.text));
   }
 
   void visit(ArrowFunctionExpressionNode &node) override {
@@ -495,6 +514,8 @@ public:
     if (name == "print") {
       if (arguments[0]->getType()->isDoubleTy()) {
         return llvmModule->getFunction("printF64");
+      } else if (arguments[0]->getType()->isPointerTy()) {
+        return llvmModule->getFunction("printString");
       } else {
         return llvmModule->getFunction("printI64");
       }
@@ -657,6 +678,7 @@ public:
   int compile(const std::string fileName) {
     createPrintFunction();
     createPrintF64Function();
+    createPrintStringFunction();
     createAllocateFunction();
 
     sourceFile.accept(*this);

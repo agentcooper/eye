@@ -49,6 +49,11 @@ private:
     std::cout << "NumericLiteral(" << node.value << ")" << std::endl;
   }
 
+  void visit(StringLiteralNode &node) override {
+    printPrefix();
+    std::cout << "StringLiteral(" << node.text << ")" << std::endl;
+  }
+
   void visit(ObjectLiteralNode &node) override {
     printPrefix();
     std::cout << "ObjectLiteral" << std::endl;
