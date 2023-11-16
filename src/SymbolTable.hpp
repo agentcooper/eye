@@ -159,7 +159,8 @@ public:
         }
         return symbol->type;
       } else {
-        std::cout << "Got identifier, but could not look it up" << std::endl;
+        std::cout << "Got identifier, but could not look it up: "
+                  << identifier->name << std::endl;
       }
     }
 
@@ -197,7 +198,7 @@ public:
     auto *binaryExpression = dynamic_cast<BinaryExpressionNode *>(node);
     if (binaryExpression) {
       if (binaryExpression->op != Token::Kind::Dot) {
-        throw std::runtime_error("Expected op = dot");
+        return inferType(binaryExpression->lhs.get());
       }
 
       auto *rhsIdentifier =
@@ -219,7 +220,7 @@ public:
       }
     }
 
-    return std::make_shared<Type>(PrimitiveType::unknownType);
+    throw std::runtime_error("Couldn't infer type");
   }
 
 public:

@@ -544,14 +544,16 @@ public:
   std::unique_ptr<SourceFileNode> parseSourceFile() {
     TRACE_METHOD;
 
-    auto p = std::make_unique<SourceFileNode>();
+    std::vector<std::unique_ptr<Node>> functions;
+    std::vector<std::unique_ptr<Node>> interfaces;
+
     while (true) {
       switch (currentToken.kind()) {
       case Token::Kind::Function:
-        p->functions.push_back(parseFunction());
+        functions.push_back(parseFunction());
         break;
       case Token::Kind::Interface:
-        p->interfaces.push_back(parseInterfaceDeclaration());
+        interfaces.push_back(parseInterfaceDeclaration());
         break;
       default:
         goto exit_loop;
@@ -559,6 +561,7 @@ public:
       }
     }
   exit_loop:;
-    return p;
+    return std::make_unique<SourceFileNode>(std::move(functions),
+                                            std::move(interfaces));
   }
 };

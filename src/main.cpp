@@ -7,6 +7,7 @@
 #include "File.hpp"
 #include "Lexer.hpp"
 #include "Parser.hpp"
+#include "PostProcessor.hpp"
 #include "Printer.hpp"
 #include "SymbolTable.hpp"
 
@@ -22,7 +23,7 @@ int main(int argc, const char *argv[]) {
   const std::string filePath{argv[2]};
 
   const std::set<std::string> availableCommands{"lex", "parse", "symbols",
-                                                "emit"};
+                                                "post", "emit"};
   const std::set<std::string> helpCommands{"-h", "--help", "help"};
 
   if (helpCommands.contains(command)) {
@@ -63,7 +64,16 @@ int main(int argc, const char *argv[]) {
     return 0;
   }
 
-  Codegen codegen{*sourceFile, symbolTableVisitor};
+  PostProcessor postProcessor{*sourceFile, symbolTableVisitor};
+  auto modifiedSourceFile = postProcessor.run();
+
+  if (command == "post") {
+    Printer printer{*modifiedSourceFile};
+    printer.print();
+    return 0;
+  }
+
+  Codegen codegen{*modifiedSourceFile, symbolTableVisitor};
   return codegen.compile("program.o");
 }
 
@@ -83,6 +93,8 @@ void printHelp() {
             << "Parse and print the Abstract Syntax Tree." << std::endl;
   std::cout << std::setw(26) << std::left << "  symbols"
             << "Run semantic analysis and print symbol tables." << std::endl;
+  std::cout << std::setw(26) << std::left << "  post"
+            << "Run post-processor and print the modified AST." << std::endl;
   std::cout << std::setw(26) << std::left << "  emit"
             << "Emit object file (program.o)." << std::endl;
 }

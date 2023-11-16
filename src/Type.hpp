@@ -54,6 +54,8 @@ public:
 
 std::string typeToString(Type &type);
 
+bool isStringType(Type &type);
+
 std::shared_ptr<Type> typeNodeToType(Node *node);
 
 int findIndex(StructType &structType, std::string propertyName);

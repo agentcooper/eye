@@ -3,11 +3,18 @@ SourceFile
    ├─ returnType: TypeReference
    │              └─ Identifier(i64)
    └─ Block
-      ├─ LetStatement(s)
+      ├─ LetStatement(s1)
       │  ├─ type: Null
-      │  └─ expression: StringLiteral(Hello, world!)
+      │  └─ expression: StringLiteral(Hello,)
+      ├─ LetStatement(s2)
+      │  ├─ type: Null
+      │  └─ expression: StringLiteral( World)
       ├─ ExpressionStatement
       │  └─ expression: CallExpression(print)
-      │                 └─ Identifier(s)
+      │                 └─ BinaryExpression(Plus)
+      │                    ├─ lhs: BinaryExpression(Plus)
+      │                    │       ├─ lhs: Identifier(s1)
+      │                    │       └─ rhs: Identifier(s2)
+      │                    └─ rhs: StringLiteral(!)
       └─ ReturnStatement
          └─ expression: NumericLiteral(0)

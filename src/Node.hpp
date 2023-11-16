@@ -167,11 +167,11 @@ struct BlockNode : public Node {
 struct ArrowFunctionExpressionNode : public Node {
   std::vector<std::unique_ptr<ParameterNode>> parameters;
   std::unique_ptr<Node> returnType;
-  std::unique_ptr<BlockNode> body;
+  std::unique_ptr<Node> body;
 
   ArrowFunctionExpressionNode(
       std::vector<std::unique_ptr<ParameterNode>> parameters,
-      std::unique_ptr<Node> returnType, std::unique_ptr<BlockNode> body)
+      std::unique_ptr<Node> returnType, std::unique_ptr<Node> body)
       : parameters(std::move(parameters)), returnType(std::move(returnType)),
         body(std::move(body)) {}
 
@@ -204,12 +204,12 @@ struct FunctionDeclarationNode : public Node {
   const std::string name;
   std::vector<std::unique_ptr<ParameterNode>> parameters;
   std::unique_ptr<Node> returnType;
-  std::unique_ptr<BlockNode> body;
+  std::unique_ptr<Node> body;
 
   FunctionDeclarationNode(
       const std::string &name,
       std::vector<std::unique_ptr<ParameterNode>> parameters,
-      std::unique_ptr<Node> returnType, std::unique_ptr<BlockNode> body)
+      std::unique_ptr<Node> returnType, std::unique_ptr<Node> body)
       : name(name), parameters(std::move(parameters)),
         returnType(std::move(returnType)), body(std::move(body)) {}
 
@@ -217,8 +217,12 @@ struct FunctionDeclarationNode : public Node {
 };
 
 struct SourceFileNode : public Node {
-  std::vector<std::unique_ptr<FunctionDeclarationNode>> functions;
-  std::vector<std::unique_ptr<InterfaceDeclarationNode>> interfaces;
+  std::vector<std::unique_ptr<Node>> functions;
+  std::vector<std::unique_ptr<Node>> interfaces;
+
+  SourceFileNode(std::vector<std::unique_ptr<Node>> functions,
+                 std::vector<std::unique_ptr<Node>> interfaces)
+      : functions(std::move(functions)), interfaces(std::move(interfaces)) {}
 
   void accept(Visitor &v) override { v.visit(*this); }
 };

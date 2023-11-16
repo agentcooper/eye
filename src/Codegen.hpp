@@ -242,13 +242,22 @@ private:
   }
 
   void createPrintStringFunction() {
-    auto returnType = llvm::FunctionType::get(
-        llvm::Type::getVoidTy(*llvmContext),
-        {voidPointerType,
-         llvm::IntegerType::get(*llvmContext, 8)->getPointerTo()},
-        false);
+    auto charType = llvm::IntegerType::get(*llvmContext, 8)->getPointerTo();
+
+    auto returnType =
+        llvm::FunctionType::get(llvm::Type::getVoidTy(*llvmContext),
+                                {voidPointerType, charType}, false);
     llvm::Function::Create(returnType, llvm::Function::ExternalLinkage,
                            "printString", llvmModule.get());
+  }
+
+  void createJoinStringsFunction() {
+    auto charType = llvm::IntegerType::get(*llvmContext, 8)->getPointerTo();
+
+    auto functionType = llvm::FunctionType::get(
+        charType, {voidPointerType, charType, charType}, false);
+    llvm::Function::Create(functionType, llvm::Function::ExternalLinkage,
+                           "joinStrings", llvmModule.get());
   }
 
   void createAllocateFunction() {
@@ -679,6 +688,7 @@ public:
     createPrintFunction();
     createPrintF64Function();
     createPrintStringFunction();
+    createJoinStringsFunction();
     createAllocateFunction();
 
     sourceFile.accept(*this);

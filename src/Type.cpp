@@ -49,6 +49,14 @@ std::string typeToString(Type &type) {
   return std::visit(visitor, type);
 }
 
+bool isStringType(Type &type) {
+  PrimitiveType *t = std::get_if<PrimitiveType>(&type);
+  if (!t) {
+    return false;
+  }
+  return *t == PrimitiveType::stringType;
+}
+
 std::shared_ptr<Type> typeNodeToType(Node *node) {
   auto typeReferenceNode = dynamic_cast<TypeReferenceNode *>(node);
   if (typeReferenceNode) {

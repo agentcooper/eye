@@ -2,5 +2,6 @@ Table 'global'
 main: () => i64
 
   Table 'main'
-  s: string
+  s1: string
+  s2: string
 
