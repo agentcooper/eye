@@ -4,6 +4,7 @@
 - [x] Make sure the classic LISP example with pair/car/cdr works
 - [ ] Support `//` comments
 - [ ] Support double type
+- [ ] Support boolean type
 - [ ] Support structs
 - [ ] Garbage collection
 - [ ] Implement |> operator
