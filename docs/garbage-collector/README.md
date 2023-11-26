@@ -1,0 +1,1 @@
+Garbage collector is based on a [tutorial by Dmitry Soshnikov](http://dmitrysoshnikov.com/compilers/writing-a-mark-sweep-garbage-collector/). See [my modified version of his GitHub Gist](https://gist.github.com/agentcooper/425c7eec022fa806f4db537c171cba70?permalink_comment_id=4770497#gistcomment-4770497).

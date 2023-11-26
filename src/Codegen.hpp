@@ -260,6 +260,20 @@ private:
                            "joinStrings", llvmModule.get());
   }
 
+  void create_beforeStart_call() {
+    auto functionType =
+        llvm::FunctionType::get(llvm::Type::getVoidTy(*llvmContext), {}, false);
+    llvm::Function::Create(functionType, llvm::Function::ExternalLinkage,
+                           "beforeStart", llvmModule.get());
+  }
+
+  void create_beforeExit_call() {
+    auto functionType =
+        llvm::FunctionType::get(llvm::Type::getVoidTy(*llvmContext), {}, false);
+    llvm::Function::Create(functionType, llvm::Function::ExternalLinkage,
+                           "beforeExit", llvmModule.get());
+  }
+
   void createAllocateFunction() {
     auto returnType =
         llvm::FunctionType::get(int64Type->getPointerTo(), {int64Type}, false);
@@ -664,10 +678,19 @@ public:
       namedValues[std::string(arg.getName())] = alloca;
     }
 
+    if (node.name == "main") {
+      builder->CreateCall(llvmModule->getFunction("beforeStart"), {});
+    }
+
     node.body->accept(*this);
 
     if (!mainBlock->getTerminator()) {
       builder->CreateRetVoid();
+    }
+
+    if (node.name == "main") {
+      builder->SetInsertPoint(mainBlock->getTerminator());
+      builder->CreateCall(llvmModule->getFunction("beforeExit"), {});
     }
 
     if (llvm::verifyFunction(*function, &llvm::outs())) {
@@ -689,6 +712,8 @@ public:
     createPrintF64Function();
     createPrintStringFunction();
     createJoinStringsFunction();
+    create_beforeStart_call();
+    create_beforeExit_call();
     createAllocateFunction();
 
     sourceFile.accept(*this);

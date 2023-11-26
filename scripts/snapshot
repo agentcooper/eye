@@ -2,11 +2,17 @@
 for filePath in ./snapshots/*.eye;
 do
     # ./eye lex "$filePath" > "$filePath.lex";
+    
     ./eye parse "$filePath" > "$filePath.parse";
     ./eye symbols "$filePath" > "$filePath.symbols";
     if make program SOURCE_FILE="$filePath"; then
         ./program > "$filePath.output"
     else
         echo "Compilation fail" > "$filePath.output"
+    fi
+
+    # `leaks` utility is a part of Xcode, so it is macOS specific
+    if ! leaks --quiet --atExit -- ./program &>/dev/null; then
+        echo "Leaks detected!"
     fi
 done;

@@ -1,0 +1,64 @@
+SourceFile
+├─ FunctionDeclaration(printBigString)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(void)
+│  └─ Block
+│     ├─ LetStatement(s)
+│     │  ├─ type: Null
+│     │  └─ expression: StringLiteral(All work and no play makes Jack a dull boy. )
+│     ├─ LetStatement(bigString)
+│     │  ├─ type: Null
+│     │  └─ expression: BinaryExpression(Plus)
+│     │                 ├─ lhs: BinaryExpression(Plus)
+│     │                 │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       ├─ lhs: BinaryExpression(Plus)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       ├─ lhs: Identifier(s)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       │       └─ rhs: Identifier(s)
+│     │                 │       │       └─ rhs: Identifier(s)
+│     │                 │       └─ rhs: Identifier(s)
+│     │                 └─ rhs: Identifier(s)
+│     └─ ExpressionStatement
+│        └─ expression: CallExpression(print)
+│                       └─ Identifier(bigString)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(printBigString)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(printBigString)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(printBigString)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

@@ -1,0 +1,10 @@
+Table 'global'
+main: () => i64
+printBigString: () => void
+
+  Table 'printBigString'
+  bigString: string
+  s: string
+
+  Table 'main'
+

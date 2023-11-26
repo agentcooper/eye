@@ -28,15 +28,15 @@ $(TARGET): $(OBJS)
 
 # Runtime
 
-$(BUILD_DIR)/runtime.o: runtime/runtime.cpp
-	$(CPP) -c runtime/runtime.cpp -o $(BUILD_DIR)/runtime.o
+$(BUILD_DIR)/runtime.o: runtime/runtime.cpp runtime/GarbageCollector.hpp runtime/debug.hpp
+	$(CPP) $(CPPFLAGS) -c runtime/runtime.cpp -o $(BUILD_DIR)/runtime.o
 
 .PHONY: program.o
 program.o: $(TARGET) $(SOURCE_FILE)
 	./$(TARGET) emit $(SOURCE_FILE)
 
 program: program.o $(BUILD_DIR)/runtime.o
-	@$(CPP) program.o $(BUILD_DIR)/runtime.o -o program
+	@$(CPP) $(CPPFLAGS) program.o $(BUILD_DIR)/runtime.o -o program
 
 # Other
 

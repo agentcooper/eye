@@ -1,7 +1,16 @@
 Table 'global'
+cleanUpRegistersForGC: (i64, i64, i64, i64, i64) => i64
 main: () => i64
 
+  Table 'cleanUpRegistersForGC'
+  a: i64
+  b: i64
+  c: i64
+  d: i64
+  e: i64
+
   Table 'main'
+  _: i64
   s1: string
   s2: string
 
