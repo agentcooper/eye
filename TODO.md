@@ -3,10 +3,10 @@
 - [x] Properly parse function types
 - [x] Make sure the classic LISP example with pair/car/cdr works
 - [ ] Support `//` comments
-- [ ] Support double type
+- [x] Support double type
 - [ ] Support boolean type
-- [ ] Support structs
-- [ ] Garbage collection
+- [x] Support structs
+- [x] Garbage collection
 - [ ] Implement |> operator
 - [ ] Support string type
 - [ ] Type inference
