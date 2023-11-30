@@ -81,7 +81,8 @@ private:
       auto t1 = symbolTableVisitor.getType(node.lhs.get());
       auto t2 = symbolTableVisitor.getType(node.rhs.get());
 
-      if (isStringType(*t1) && isStringType(*t2)) {
+      if (isPrimitiveType(*t1, PrimitiveType::stringType) &&
+          isPrimitiveType(*t2, PrimitiveType::stringType)) {
         std::vector<std::unique_ptr<Node>> arguments;
         arguments.push_back(visit(node.lhs));
         arguments.push_back(visit(node.rhs));
@@ -96,6 +97,15 @@ private:
   };
 
   void visit(CallExpressionNode &node) override {
+    if (node.callee == "print") {
+      // @TODO: this make it impossible to pass `print` function as an argument
+      auto firstArgumentType =
+          symbolTableVisitor.getType(node.arguments.front().get());
+      value = std::make_unique<CallExpressionNode>(
+          "print_" + typeToString(*firstArgumentType), visit(node.arguments));
+      return;
+    }
+
     value = std::make_unique<CallExpressionNode>(node.callee,
                                                  visit(node.arguments));
   };

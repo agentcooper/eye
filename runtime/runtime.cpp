@@ -14,13 +14,13 @@ void beforeExit() {
   GarbageCollector::run();
 }
 
-void printI64(void *env, int n) { printf("%d\n", n); }
+void print_i64(const void *env, const int n) { printf("%d\n", n); }
 
-void printF64(void *env, double n) { printf("%g\n", n); }
+void print_f64(const void *env, const double n) { printf("%g\n", n); }
 
-void printString(void *env, char *s) { printf("%s\n", s); }
+void print_string(const void *env, const char *s) { printf("%s\n", s); }
 
-char *joinStrings(void *env, const char *s1, const char *s2) {
+char *joinStrings(const void *env, const char *s1, const char *s2) {
   char *result =
       (char *)GarbageCollector::allocate(strlen(s1) + strlen(s2) + 1);
   strcpy(result, s1);

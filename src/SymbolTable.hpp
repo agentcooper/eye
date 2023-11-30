@@ -188,7 +188,13 @@ public:
     node.expression->accept(*this);
   };
 
-  void visit(IfStatementNode &node) override{};
+  void visit(IfStatementNode &node) override {
+    node.condition->accept(*this);
+    node.ifTrue->accept(*this);
+    if (node.ifFalse) {
+      node.ifFalse->accept(*this);
+    }
+  };
 
   void visit(BinaryExpressionNode &node) override {
     node.lhs->accept(*this);
@@ -231,7 +237,7 @@ public:
     } else if (node.callee == "print") {
       // TODO
     } else {
-      throw std::runtime_error("OHNO");
+      throw std::runtime_error("Couldn't find symbol for " + node.callee);
     }
   };
 

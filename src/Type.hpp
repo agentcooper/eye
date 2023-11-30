@@ -54,7 +54,7 @@ public:
 
 std::string typeToString(Type &type);
 
-bool isStringType(Type &type);
+bool isPrimitiveType(Type &type, PrimitiveType primitiveType);
 
 std::shared_ptr<Type> typeNodeToType(Node *node);
 

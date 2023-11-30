@@ -49,12 +49,12 @@ std::string typeToString(Type &type) {
   return std::visit(visitor, type);
 }
 
-bool isStringType(Type &type) {
+bool isPrimitiveType(Type &type, PrimitiveType primitiveType) {
   PrimitiveType *t = std::get_if<PrimitiveType>(&type);
   if (!t) {
     return false;
   }
-  return *t == PrimitiveType::stringType;
+  return *t == primitiveType;
 }
 
 std::shared_ptr<Type> typeNodeToType(Node *node) {

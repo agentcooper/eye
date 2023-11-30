@@ -75,15 +75,15 @@ int main(int argc, const char *argv[]) {
   PostProcessor postProcessor{*sourceFile, symbolTableVisitor};
   auto modifiedSourceFile = postProcessor.run();
 
-  for (auto &preludeFunction : prelude->functions) {
-    modifiedSourceFile->functions.insert(modifiedSourceFile->functions.begin(),
-                                         std::move(preludeFunction));
-  }
-
   if (command == "post") {
     Printer printer{*modifiedSourceFile};
     printer.print();
     return 0;
+  }
+
+  for (auto &preludeFunction : prelude->functions) {
+    modifiedSourceFile->functions.insert(modifiedSourceFile->functions.begin(),
+                                         std::move(preludeFunction));
   }
 
   Codegen codegen{*modifiedSourceFile, symbolTableVisitor};

@@ -496,18 +496,8 @@ public:
     };
   }
 
-  // @TODO: this make it impossible to pass `print` function as an argument
   llvm::Function *getFunction(const std::string &name,
                               std::vector<llvm::Value *> arguments) {
-    if (name == "print") {
-      if (arguments[0]->getType()->isDoubleTy()) {
-        return llvmModule->getFunction("printF64");
-      } else if (arguments[0]->getType()->isPointerTy()) {
-        return llvmModule->getFunction("printString");
-      } else {
-        return llvmModule->getFunction("printI64");
-      }
-    }
     return llvmModule->getFunction(name);
   }
 
