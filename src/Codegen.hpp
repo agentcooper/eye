@@ -311,7 +311,7 @@ public:
     std::string scopeName =
         "anonymous" + std::to_string(arrowFunctionExpressionIndex++);
 
-    auto t = symbolTableVisitor.inferType(&node);
+    auto t = symbolTableVisitor.getType(&node);
 
     auto functionType = asFunctionType(*t, voidPointerType);
 
@@ -479,7 +479,7 @@ public:
             "Error: right-hand side needs to be an identifier.");
       }
 
-      auto lhsType = symbolTableVisitor.inferType(node.lhs.get());
+      auto lhsType = symbolTableVisitor.getType(node.lhs.get());
 
       StructType *structType = std::get_if<StructType>(&*lhsType);
       if (!structType) {
@@ -606,7 +606,7 @@ public:
   }
 
   void visit(ObjectLiteralNode &node) override {
-    auto type = symbolTableVisitor.inferType(&node);
+    auto type = symbolTableVisitor.getType(&node);
     auto llvmType = buildLLVMType(*type);
 
     llvm::Function *function = builder->GetInsertBlock()->getParent();

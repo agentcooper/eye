@@ -56,8 +56,8 @@ int main(int argc, const char *argv[]) {
   }
 
   // TODO: pick a better name, ScopeCollection?
-  SymbolTableVisitor symbolTableVisitor{*sourceFile};
-  symbolTableVisitor.run();
+  SymbolTableVisitor symbolTableVisitor;
+  symbolTableVisitor.update(*sourceFile);
 
   if (command == "symbols") {
     symbolTableVisitor.print();

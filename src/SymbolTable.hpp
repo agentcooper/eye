@@ -10,6 +10,7 @@
 
 #include "Debug.hpp"
 #include "Node.hpp"
+#include "Printer.hpp"
 #include "Type.hpp"
 
 struct Symbol {
@@ -76,6 +77,14 @@ public:
     return scope.get();
   }
 
+  Symbol get(const std::string &name, bool traverseParent = true) const {
+    auto symbol = lookup(name, traverseParent);
+    if (!symbol) {
+      throw std::runtime_error("Could not find symbol '" + name + "'");
+    }
+    return *symbol;
+  }
+
   std::optional<Symbol> lookup(const std::string &name,
                                bool traverseParent = true) const {
     if (auto symbol = symbolTable.get(name)) {
@@ -102,9 +111,14 @@ public:
 };
 
 class SymbolTableVisitor : public Visitor {
-public:
-  SourceFileNode &sourceFileNode;
+private:
+  std::map<Node *, std::shared_ptr<Type>> nodeToType;
 
+  void setType(const Node &node, const std::shared_ptr<Type> &type) {
+    nodeToType[(Node *)&node] = type;
+  }
+
+public:
   Scope globalScope;
   Scope *currentScope;
 
@@ -126,117 +140,45 @@ public:
 
   void exitScope() { currentScope = currentScope->parent; }
 
-  std::shared_ptr<Type> inferType(Node *node) const {
-    auto *callExpression = dynamic_cast<CallExpressionNode *>(node);
-    if (callExpression) {
-      if (auto symbol = currentScope->lookup(callExpression->callee)) {
-        if (FunctionType *functionType =
-                std::get_if<FunctionType>(&*symbol->type)) {
-          return functionType->returnType;
-        }
-      }
+  std::shared_ptr<Type> getType(Node *node) const {
+    if (!nodeToType.contains(node)) {
+      Printer p{*node};
+      p.print();
     }
 
-    auto *arrowFunctionExpression =
-        dynamic_cast<ArrowFunctionExpressionNode *>(node);
-    if (arrowFunctionExpression) {
-      std::vector<std::shared_ptr<Type>> parameters;
-      for (auto &parameter : arrowFunctionExpression->parameters) {
-        parameters.push_back(typeNodeToType(parameter->type.get()));
-      }
-      auto functionType = std::make_shared<Type>(FunctionType{
-          typeNodeToType(arrowFunctionExpression->returnType.get()),
-          std::move(parameters)});
-      return functionType;
-    }
-
-    auto *identifier = dynamic_cast<IdentifierNode *>(node);
-    if (identifier) {
-      if (auto symbol = currentScope->lookup(identifier->name)) {
-        if (TypeReference *typeReference =
-                std::get_if<TypeReference>(&*symbol->type)) {
-          return currentScope->lookup(typeReference->name)->type;
-        }
-        return symbol->type;
-      } else {
-        std::cout << "Got identifier, but could not look it up: "
-                  << identifier->name << std::endl;
-      }
-    }
-
-    auto *typeReference = dynamic_cast<TypeReferenceNode *>(node);
-    if (typeReference) {
-      if (auto symbol = currentScope->lookup(typeReference->typeName->name)) {
-        return symbol->type;
-      }
-      throw std::runtime_error("Couldn't find the symbol");
-    }
-
-    auto *numericLiteral = dynamic_cast<NumericLiteralNode *>(node);
-    if (numericLiteral) {
-      if (numericLiteral->hasFloatingPoint) {
-        return std::make_shared<Type>(PrimitiveType::f64Type);
-      }
-      return std::make_shared<Type>(PrimitiveType::i64Type);
-    }
-
-    auto *stringLiteral = dynamic_cast<StringLiteralNode *>(node);
-    if (stringLiteral) {
-      return std::make_shared<Type>(PrimitiveType::stringType);
-    }
-
-    auto *objectLiteral = dynamic_cast<ObjectLiteralNode *>(node);
-    if (objectLiteral) {
-      std::vector<NamedType> properties;
-      for (const auto &property : objectLiteral->properties) {
-        properties.push_back(std::make_pair(
-            property->name, inferType(property->initializer.get())));
-      }
-      return std::make_shared<Type>(StructType{properties});
-    }
-
-    auto *binaryExpression = dynamic_cast<BinaryExpressionNode *>(node);
-    if (binaryExpression) {
-      if (binaryExpression->op != Token::Kind::Dot) {
-        return inferType(binaryExpression->lhs.get());
-      }
-
-      auto *rhsIdentifier =
-          dynamic_cast<IdentifierNode *>(binaryExpression->rhs.get());
-      if (!rhsIdentifier) {
-        throw std::runtime_error("Expected identifier as rhs");
-      }
-
-      auto lhsType = inferType(binaryExpression->lhs.get());
-      StructType *structType = std::get_if<StructType>(&*lhsType);
-      if (!structType) {
-        throw std::runtime_error("2 Expected struct type, but got " +
-                                 typeToString(*lhsType));
-      }
-      for (const auto &property : structType->properties) {
-        if (property.first == rhsIdentifier->name) {
-          return property.second;
-        }
-      }
-    }
-
-    throw std::runtime_error("Couldn't infer type");
+    return nodeToType.at(node);
   }
 
 public:
-  SymbolTableVisitor(SourceFileNode &sourceFileNode)
-      : sourceFileNode(sourceFileNode), globalScope("global", nullptr),
-        currentScope(&globalScope) {}
+  SymbolTableVisitor()
+      : globalScope("global", nullptr), currentScope(&globalScope) {}
 
-  void visit(TypeReferenceNode &node) override {}
+  void visit(TypeReferenceNode &node) override {
+    auto symbol = currentScope->get(node.typeName->name);
+    setType(node, symbol.type);
+  }
 
   void visit(FunctionTypeNode &node) override {}
 
-  void visit(NumericLiteralNode &node) override {}
+  void visit(NumericLiteralNode &node) override {
+    setType(node, std::make_shared<Type>(node.hasFloatingPoint
+                                             ? PrimitiveType::f64Type
+                                             : PrimitiveType::i64Type));
+  }
 
-  void visit(StringLiteralNode &node) override {}
+  void visit(StringLiteralNode &node) override {
+    setType(node, std::make_shared<Type>(PrimitiveType::stringType));
+  }
 
-  void visit(IdentifierNode &node) override{};
+  void visit(IdentifierNode &node) override {
+    auto symbol = currentScope->get(node.name);
+    if (TypeReference *typeReference =
+            std::get_if<TypeReference>(&*symbol.type)) {
+      setType(node, currentScope->lookup(typeReference->name)->type);
+      return;
+    }
+    setType(node, symbol.type);
+  };
 
   void visit(ReturnStatementNode &node) override {
     node.expression->accept(*this);
@@ -248,23 +190,68 @@ public:
 
   void visit(IfStatementNode &node) override{};
 
-  void visit(BinaryExpressionNode &node) override{};
+  void visit(BinaryExpressionNode &node) override {
+    node.lhs->accept(*this);
+
+    if (node.op != Token::Kind::Dot) {
+      node.rhs->accept(*this);
+      setType(node, getType(node.lhs.get()));
+      return;
+    }
+
+    auto *rhsIdentifier = dynamic_cast<IdentifierNode *>(node.rhs.get());
+    if (!rhsIdentifier) {
+      throw std::runtime_error("Expected identifier as rhs");
+    }
+
+    auto lhsType = getType(node.lhs.get());
+    StructType *structType = std::get_if<StructType>(&*lhsType);
+    if (!structType) {
+      throw std::runtime_error("2 Expected struct type, but got " +
+                               typeToString(*lhsType));
+    }
+    for (const auto &property : structType->properties) {
+      if (property.first == rhsIdentifier->name) {
+        setType(node, property.second);
+        return;
+      }
+    }
+  };
 
   void visit(CallExpressionNode &node) override {
     for (const auto &argument : node.arguments) {
       argument->accept(*this);
     }
+
+    if (auto symbol = currentScope->lookup(node.callee)) {
+      if (FunctionType *functionType =
+              std::get_if<FunctionType>(&*symbol->type)) {
+        setType(node, functionType->returnType);
+      }
+    } else if (node.callee == "joinStrings") {
+      // TODO: find a nice way to set global symbols
+      setType(node, std::make_shared<Type>(FunctionType{
+                        std::make_shared<Type>(PrimitiveType::stringType),
+                        {std::make_shared<Type>(PrimitiveType::stringType),
+                         std::make_shared<Type>(PrimitiveType::stringType)}}));
+    } else if (node.callee == "print") {
+      // TODO
+    } else {
+      throw std::runtime_error("OHNO");
+    }
   };
 
   void visit(LetStatementNode &node) override {
+    if (node.type) {
+      node.type->accept(*this);
+    }
+    node.expression->accept(*this);
 
-    auto type = node.type ? inferType(node.type.get())
-                          : inferType(node.expression.get());
+    auto type =
+        node.type ? getType(node.type.get()) : getType(node.expression.get());
     Symbol symbol{.name = node.name, .type = type};
 
     currentScope->symbolTable.addSymbol(symbol);
-
-    node.expression->accept(*this);
   }
 
   void visit(BlockNode &node) override {
@@ -281,8 +268,14 @@ public:
       // TODO
   };
 
-  void visit(ObjectLiteralNode &node) override{
-      // TODO
+  void visit(ObjectLiteralNode &node) override {
+    std::vector<NamedType> properties;
+    for (const auto &property : node.properties) {
+      property->initializer->accept(*this);
+      properties.push_back(
+          std::make_pair(property->name, getType(property->initializer.get())));
+    }
+    setType(node, std::make_shared<Type>(StructType{properties}));
   };
 
   void visit(ParameterNode &node) override {
@@ -291,6 +284,14 @@ public:
   };
 
   void visit(ArrowFunctionExpressionNode &node) override {
+    std::vector<std::shared_ptr<Type>> parameters;
+    for (auto &parameter : node.parameters) {
+      parameters.push_back(typeNodeToType(parameter->type.get()));
+    }
+    auto functionType = std::make_shared<Type>(FunctionType{
+        typeNodeToType(node.returnType.get()), std::move(parameters)});
+    setType(node, functionType);
+
     std::string scopeName =
         "anonymous" + std::to_string(arrowFunctionExpressionIndex++);
 
@@ -339,7 +340,7 @@ public:
     }
   };
 
-  void run() { sourceFileNode.accept(*this); }
+  void update(Node &node) { node.accept(*this); }
 
   void print() { globalScope.print(0); }
 };

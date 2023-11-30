@@ -78,8 +78,8 @@ private:
 
   void visit(BinaryExpressionNode &node) override {
     if (node.op == Token::Kind::Plus) {
-      auto t1 = symbolTableVisitor.inferType(node.lhs.get());
-      auto t2 = symbolTableVisitor.inferType(node.rhs.get());
+      auto t1 = symbolTableVisitor.getType(node.lhs.get());
+      auto t2 = symbolTableVisitor.getType(node.rhs.get());
 
       if (isStringType(*t1) && isStringType(*t2)) {
         std::vector<std::unique_ptr<Node>> arguments;
@@ -168,6 +168,9 @@ public:
     node.accept(postProcessVisitor);
     std::unique_ptr<SourceFileNode> sourceFileNode(
         static_cast<SourceFileNode *>(postProcessVisitor.value.release()));
+
+    symbolTableVisitor.update(*sourceFileNode);
+
     return sourceFileNode;
   }
 };
