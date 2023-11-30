@@ -129,7 +129,7 @@ public:
         std::find_if(currentScope->scopes.begin(), currentScope->scopes.end(),
                      [&name](auto x) { return x->name == name; });
     if (it == currentScope->scopes.end()) {
-      throw std::runtime_error("Could not find scope");
+      throw std::runtime_error("Could not find scope for '" + name + "'");
     }
     currentScope = (*it).get();
   }
@@ -228,12 +228,6 @@ public:
               std::get_if<FunctionType>(&*symbol->type)) {
         setType(node, functionType->returnType);
       }
-    } else if (node.callee == "joinStrings") {
-      // TODO: find a nice way to set global symbols
-      setType(node, std::make_shared<Type>(FunctionType{
-                        std::make_shared<Type>(PrimitiveType::stringType),
-                        {std::make_shared<Type>(PrimitiveType::stringType),
-                         std::make_shared<Type>(PrimitiveType::stringType)}}));
     } else if (node.callee == "print") {
       // TODO
     } else {
@@ -326,8 +320,9 @@ public:
     for (auto &parameter : node.parameters) {
       parameter->accept(*this);
     }
-
-    node.body->accept(*this);
+    if (node.body) {
+      node.body->accept(*this);
+    }
     exitScope();
   }
 
@@ -340,7 +335,7 @@ public:
     }
   };
 
-  void update(Node &node) { node.accept(*this); }
+  void createSymbolsFromSourceFile(SourceFileNode &node) { node.accept(*this); }
 
   void print() { globalScope.print(0); }
 };

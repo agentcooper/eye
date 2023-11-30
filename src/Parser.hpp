@@ -513,7 +513,7 @@ public:
     return std::make_unique<InterfaceDeclarationNode>(name, std::move(members));
   }
 
-  std::unique_ptr<FunctionDeclarationNode> parseFunction() {
+  std::unique_ptr<FunctionDeclarationNode> parseFunction(bool isDeclaration) {
     TRACE_METHOD;
 
     getNextToken(); // eat 'function'
@@ -535,6 +535,11 @@ public:
 
     auto returnType = parseType();
 
+    if (isDeclaration) {
+      return std::make_unique<FunctionDeclarationNode>(
+          name, std::move(parameters), std::move(returnType), nullptr);
+    }
+
     auto block = parseBlock();
 
     return std::make_unique<FunctionDeclarationNode>(
@@ -549,8 +554,15 @@ public:
 
     while (true) {
       switch (currentToken.kind()) {
+
       case Token::Kind::Function:
-        functions.push_back(parseFunction());
+        functions.push_back(parseFunction(false));
+        break;
+      case Token::Kind::Declare:
+        getNextToken(); // eat 'declare'
+        functions.push_back(parseFunction(true));
+        expect(Token::Kind::Semicolon);
+        getNextToken(); // eat ';'
         break;
       case Token::Kind::Interface:
         interfaces.push_back(parseInterfaceDeclaration());

@@ -61,6 +61,9 @@ Token Lexer::getNextToken() noexcept {
     if (lexeme == "let") {
       return fromLexeme(Token::Kind::Let, lexeme);
     }
+    if (lexeme == "declare") {
+      return fromLexeme(Token::Kind::Declare, lexeme);
+    }
     return token;
   }
   switch (c) {

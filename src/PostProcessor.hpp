@@ -169,7 +169,7 @@ public:
     std::unique_ptr<SourceFileNode> sourceFileNode(
         static_cast<SourceFileNode *>(postProcessVisitor.value.release()));
 
-    symbolTableVisitor.update(*sourceFileNode);
+    symbolTableVisitor.createSymbolsFromSourceFile(*sourceFileNode);
 
     return sourceFileNode;
   }

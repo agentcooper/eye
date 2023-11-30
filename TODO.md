@@ -10,6 +10,7 @@
 - [ ] Implement |> operator
 - [ ] Support string type
 - [ ] Type inference
+- [x] Allow to define external functions
 
 ## Infrastructure
 

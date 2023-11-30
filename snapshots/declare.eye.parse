@@ -1,0 +1,7 @@
+SourceFile
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

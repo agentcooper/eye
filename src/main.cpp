@@ -8,6 +8,7 @@
 #include "Lexer.hpp"
 #include "Parser.hpp"
 #include "PostProcessor.hpp"
+#include "Prelude.hpp"
 #include "Printer.hpp"
 #include "SymbolTable.hpp"
 
@@ -39,7 +40,10 @@ int main(int argc, const char *argv[]) {
   }
 
   const auto source = File::getContent(filePath);
+  const auto preludeSource = getPrelude();
+
   Lexer lexer{source};
+  Lexer preludeLexer{preludeSource};
 
   if (command == "lex") {
     lexer.printDebugOutput();
@@ -47,7 +51,9 @@ int main(int argc, const char *argv[]) {
   }
 
   Parser parser{lexer};
+  Parser preludeParser{preludeLexer};
   auto sourceFile = parser.parseSourceFile();
+  auto prelude = preludeParser.parseSourceFile();
 
   if (command == "parse") {
     Printer printer{*sourceFile};
@@ -57,15 +63,22 @@ int main(int argc, const char *argv[]) {
 
   // TODO: pick a better name, ScopeCollection?
   SymbolTableVisitor symbolTableVisitor;
-  symbolTableVisitor.update(*sourceFile);
+  symbolTableVisitor.createSymbolsFromSourceFile(*sourceFile);
 
   if (command == "symbols") {
     symbolTableVisitor.print();
     return 0;
   }
 
+  symbolTableVisitor.createSymbolsFromSourceFile(*prelude);
+
   PostProcessor postProcessor{*sourceFile, symbolTableVisitor};
   auto modifiedSourceFile = postProcessor.run();
+
+  for (auto &preludeFunction : prelude->functions) {
+    modifiedSourceFile->functions.insert(modifiedSourceFile->functions.begin(),
+                                         std::move(preludeFunction));
+  }
 
   if (command == "post") {
     Printer printer{*modifiedSourceFile};

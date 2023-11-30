@@ -225,41 +225,6 @@ private:
                                  {voidPointerType, voidPointerType}, false);
   }
 
-  void createPrintFunction() {
-    auto returnType =
-        llvm::FunctionType::get(llvm::Type::getVoidTy(*llvmContext),
-                                {voidPointerType, int64Type}, false);
-    llvm::Function::Create(returnType, llvm::Function::ExternalLinkage,
-                           "printI64", llvmModule.get());
-  }
-
-  void createPrintF64Function() {
-    auto returnType =
-        llvm::FunctionType::get(llvm::Type::getVoidTy(*llvmContext),
-                                {voidPointerType, float64Type}, false);
-    llvm::Function::Create(returnType, llvm::Function::ExternalLinkage,
-                           "printF64", llvmModule.get());
-  }
-
-  void createPrintStringFunction() {
-    auto charType = llvm::IntegerType::get(*llvmContext, 8)->getPointerTo();
-
-    auto returnType =
-        llvm::FunctionType::get(llvm::Type::getVoidTy(*llvmContext),
-                                {voidPointerType, charType}, false);
-    llvm::Function::Create(returnType, llvm::Function::ExternalLinkage,
-                           "printString", llvmModule.get());
-  }
-
-  void createJoinStringsFunction() {
-    auto charType = llvm::IntegerType::get(*llvmContext, 8)->getPointerTo();
-
-    auto functionType = llvm::FunctionType::get(
-        charType, {voidPointerType, charType, charType}, false);
-    llvm::Function::Create(functionType, llvm::Function::ExternalLinkage,
-                           "joinStrings", llvmModule.get());
-  }
-
   void create_beforeStart_call() {
     auto functionType =
         llvm::FunctionType::get(llvm::Type::getVoidTy(*llvmContext), {}, false);
@@ -647,8 +612,6 @@ public:
     auto symbol = symbolTableVisitor.currentScope->lookup(node.name, false);
     auto functionType = asFunctionType(*symbol->type, voidPointerType);
 
-    symbolTableVisitor.enterScope(node.name);
-
     std::vector<llvm::Type *> params{};
     std::vector<std::string> names{};
 
@@ -665,6 +628,12 @@ public:
     for (auto &arg : function->args()) {
       arg.setName(names[index++]);
     }
+
+    if (!node.body) {
+      return;
+    }
+
+    symbolTableVisitor.enterScope(node.name);
 
     auto mainBlock =
         llvm::BasicBlock::Create(*llvmContext, "main_block", function);
@@ -708,10 +677,6 @@ public:
   };
 
   int compile(const std::string fileName) {
-    createPrintFunction();
-    createPrintF64Function();
-    createPrintStringFunction();
-    createJoinStringsFunction();
     create_beforeStart_call();
     create_beforeExit_call();
     createAllocateFunction();

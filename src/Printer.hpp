@@ -178,7 +178,9 @@ private:
       accept(*parameter, false);
     }
     accept(*node.returnType, false, "returnType");
-    accept(*node.body, true);
+    if (node.body) {
+      accept(*node.body, true);
+    }
   };
 
   void visit(StructTypeNode &node) override {

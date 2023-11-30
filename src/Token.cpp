@@ -55,6 +55,8 @@ const char *kindToString(const Token::Kind kind) {
     return "Let";
   case String:
     return "String";
+  case Declare:
+    return "Declare";
   case End:
     return "End";
   case Unexpected:
