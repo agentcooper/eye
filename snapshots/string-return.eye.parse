@@ -1,0 +1,16 @@
+SourceFile
+├─ FunctionDeclaration(getExclamationMark)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(string)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: StringLiteral(!)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(getExclamationMark)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

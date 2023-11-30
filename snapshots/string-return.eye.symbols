@@ -1,0 +1,8 @@
+Table 'global'
+getExclamationMark: () => string
+main: () => i64
+
+  Table 'getExclamationMark'
+
+  Table 'main'
+

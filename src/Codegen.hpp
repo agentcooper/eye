@@ -33,8 +33,8 @@ struct LLVMTypeVisitor {
 
   llvm::Type *operator()(const TypeReference &type) const {
     auto symbol = symbolTableVisitor.globalScope.lookup(type.name);
-    if (!symbol.has_value()) {
-      throw std::runtime_error("Bad lookup");
+    if (!symbol) {
+      throw std::runtime_error("Bad lookup " + type.name);
     }
     return std::visit(*this, *symbol->type);
   }

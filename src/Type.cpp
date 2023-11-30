@@ -66,6 +66,9 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
     if (typeReferenceNode->typeName->name == "f64") {
       return std::make_shared<Type>(PrimitiveType::f64Type);
     }
+    if (typeReferenceNode->typeName->name == "string") {
+      return std::make_shared<Type>(PrimitiveType::stringType);
+    }
     if (typeReferenceNode->typeName->name == "void") {
       return std::make_shared<Type>(PrimitiveType::voidType);
     }
