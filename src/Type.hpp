@@ -16,6 +16,7 @@ class StructType;
 enum class PrimitiveType {
   i64Type,
   f64Type,
+  booleanType,
   stringType,
   voidType,
   unknownType

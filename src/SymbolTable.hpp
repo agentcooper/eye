@@ -161,6 +161,10 @@ public:
 
   void visit(FunctionTypeNode &node) override {}
 
+  void visit(BooleanLiteralNode &node) override {
+    setType(node, std::make_shared<Type>(PrimitiveType::booleanType));
+  }
+
   void visit(NumericLiteralNode &node) override {
     setType(node, std::make_shared<Type>(node.hasFloatingPoint
                                              ? PrimitiveType::f64Type

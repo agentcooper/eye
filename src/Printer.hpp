@@ -49,6 +49,12 @@ private:
     std::cout << "NumericLiteral(" << node.value << ")" << std::endl;
   }
 
+  void visit(BooleanLiteralNode &node) override {
+    printPrefix();
+    std::cout << "BooleanLiteral(" << (node.value ? "true" : "false") << ")"
+              << std::endl;
+  }
+
   void visit(StringLiteralNode &node) override {
     printPrefix();
     std::cout << "StringLiteral(" << node.text << ")" << std::endl;

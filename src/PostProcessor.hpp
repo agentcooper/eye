@@ -37,6 +37,10 @@ private:
         std::make_unique<NumericLiteralNode>(node.value, node.hasFloatingPoint);
   }
 
+  void visit(BooleanLiteralNode &node) override {
+    value = std::make_unique<BooleanLiteralNode>(node.value);
+  }
+
   void visit(StringLiteralNode &node) override {
     value = std::make_unique<StringLiteralNode>(node.text);
   }

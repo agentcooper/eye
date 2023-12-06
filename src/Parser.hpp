@@ -33,6 +33,8 @@ public:
     precedence[Token::Kind::LessThan] = 10;
     precedence[Token::Kind::GreaterThan] = 10;
     precedence[Token::Kind::DoubleEquals] = 10;
+    precedence[Token::Kind::AmpersandAmpersand] = 15;
+    precedence[Token::Kind::BarBar] = 14;
     precedence[Token::Kind::Plus] = 20;
     precedence[Token::Kind::Minus] = 20;
     precedence[Token::Kind::Asterisk] = 40;
@@ -259,6 +261,12 @@ public:
     TRACE_METHOD;
 
     switch (currentToken.kind()) {
+    case Token::Kind::True:
+    case Token::Kind::False: {
+      std::string value{currentToken.lexeme()};
+      getNextToken();
+      return std::make_unique<BooleanLiteralNode>(value == "true");
+    }
     case Token::Kind::Identifier: {
       return parseIdentifierExpression();
     }

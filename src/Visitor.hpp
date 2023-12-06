@@ -3,6 +3,7 @@
 struct ArrowFunctionExpressionNode;
 struct BinaryExpressionNode;
 struct BlockNode;
+struct BooleanLiteralNode;
 struct CallExpressionNode;
 struct ExpressionStatementNode;
 struct ForStatementNode;
@@ -28,6 +29,7 @@ public:
   virtual void visit(ArrowFunctionExpressionNode &node) = 0;
   virtual void visit(BinaryExpressionNode &node) = 0;
   virtual void visit(BlockNode &node) = 0;
+  virtual void visit(BooleanLiteralNode &node) = 0;
   virtual void visit(CallExpressionNode &node) = 0;
   virtual void visit(ExpressionStatementNode &node) = 0;
   virtual void visit(ForStatementNode &node) = 0;

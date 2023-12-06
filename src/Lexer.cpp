@@ -61,6 +61,12 @@ Token Lexer::getNextToken() noexcept {
     if (lexeme == "for") {
       return fromLexeme(Token::Kind::For, lexeme);
     }
+    if (lexeme == "true") {
+      return fromLexeme(Token::Kind::True, lexeme);
+    }
+    if (lexeme == "false") {
+      return fromLexeme(Token::Kind::False, lexeme);
+    }
     if (lexeme == "let") {
       return fromLexeme(Token::Kind::Let, lexeme);
     }
@@ -98,6 +104,20 @@ Token Lexer::getNextToken() noexcept {
     return single(Token::Kind::Semicolon);
   case ':':
     return single(Token::Kind::Colon);
+  case '&':
+    if (*(m_source + 1) == '&') {
+      auto token = Token(Token::Kind::AmpersandAmpersand, m_source, 2);
+      m_source += 2;
+      return token;
+    }
+    return single(Token::Kind::Unexpected);
+  case '|':
+    if (*(m_source + 1) == '|') {
+      auto token = Token(Token::Kind::BarBar, m_source, 2);
+      m_source += 2;
+      return token;
+    }
+    return single(Token::Kind::Unexpected);
   case '=':
     if (*(m_source + 1) == '=') {
       auto token = Token(Token::Kind::DoubleEquals, m_source, 2);

@@ -7,6 +7,8 @@ struct TypePrinterVisitor {
       return "i64";
     case PrimitiveType::f64Type:
       return "f64";
+    case PrimitiveType::booleanType:
+      return "boolean";
     case PrimitiveType::stringType:
       return "string";
     case PrimitiveType::voidType:
@@ -65,6 +67,9 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
     }
     if (typeReferenceNode->typeName->name == "f64") {
       return std::make_shared<Type>(PrimitiveType::f64Type);
+    }
+    if (typeReferenceNode->typeName->name == "boolean") {
+      return std::make_shared<Type>(PrimitiveType::booleanType);
     }
     if (typeReferenceNode->typeName->name == "string") {
       return std::make_shared<Type>(PrimitiveType::stringType);

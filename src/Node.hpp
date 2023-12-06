@@ -41,6 +41,13 @@ struct FunctionTypeNode : public Node {
   void accept(Visitor &v) override { v.visit(*this); }
 };
 
+struct BooleanLiteralNode : public Node {
+  bool value;
+  BooleanLiteralNode(bool value) : value(value) {}
+
+  void accept(Visitor &v) override { v.visit(*this); }
+};
+
 struct NumericLiteralNode : public Node {
   const double value;
   bool hasFloatingPoint;

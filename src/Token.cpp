@@ -39,6 +39,10 @@ const char *kindToString(const Token::Kind kind) {
     return "Equals";
   case DoubleEquals:
     return "DoubleEquals";
+  case AmpersandAmpersand:
+    return "AmpersandAmpersand";
+  case BarBar:
+    return "BarBar";
   case EqualsGreaterThan:
     return "EqualsGreaterThan";
   case LessThan:
@@ -59,6 +63,10 @@ const char *kindToString(const Token::Kind kind) {
     return "Declare";
   case For:
     return "For";
+  case True:
+    return "True";
+  case False:
+    return "False";
   case End:
     return "End";
   case Unexpected:

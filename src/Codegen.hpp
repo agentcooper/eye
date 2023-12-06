@@ -22,6 +22,8 @@ struct LLVMTypeVisitor {
       return llvm::Type::getInt64Ty(context);
     case PrimitiveType::f64Type:
       return llvm::Type::getDoubleTy(context);
+    case PrimitiveType::booleanType:
+      return llvm::Type::getInt1Ty(context);
     case PrimitiveType::stringType:
       return llvm::Type::getInt8PtrTy(context);
     case PrimitiveType::voidType:
@@ -262,6 +264,11 @@ public:
   void visit(TypeReferenceNode &node) override {}
 
   void visit(FunctionTypeNode &node) override {}
+
+  void visit(BooleanLiteralNode &node) override {
+    value = llvm::ConstantInt::get(llvm::IntegerType::get(*llvmContext, 1),
+                                   node.value ? 1 : 0);
+  }
 
   void visit(NumericLiteralNode &node) override {
     value = node.hasFloatingPoint
@@ -527,6 +534,20 @@ public:
       llvm::Value *R = value;
 
       value = builder->CreateICmpSLT(L, R);
+      break;
+    }
+    case Token::Kind::AmpersandAmpersand: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
+      value = builder->CreateLogicalAnd(L, R);
+      break;
+    }
+    case Token::Kind::BarBar: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
+      value = builder->CreateLogicalOr(L, R);
       break;
     }
 
