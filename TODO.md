@@ -4,11 +4,11 @@
 - [x] Make sure the classic LISP example with pair/car/cdr works
 - [ ] Support `//` comments
 - [x] Support double type
-- [ ] Support boolean type
+- [x] Support boolean type
 - [x] Support structs
 - [x] Garbage collection
 - [ ] Implement |> operator
-- [ ] Support string type
+- [x] Support string type
 - [ ] Type inference
 - [x] Allow to define external functions
 
