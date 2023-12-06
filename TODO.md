@@ -11,6 +11,10 @@
 - [x] Support string type
 - [ ] Type inference
 - [x] Allow to define external functions
+- [x] For loop
+- [ ] String indexing
+- [ ] Library function for reading files
+- [ ] Command-line arguments
 
 ## Infrastructure
 
