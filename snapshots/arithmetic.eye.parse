@@ -5,13 +5,33 @@ SourceFile
    └─ Block
       ├─ LetStatement(a)
       │  ├─ type: Null
-      │  └─ expression: NumericLiteral(1)
+      │  └─ expression: NumericLiteral(10)
       ├─ LetStatement(b)
       │  ├─ type: Null
-      │  └─ expression: NumericLiteral(2)
+      │  └─ expression: NumericLiteral(3)
       ├─ ExpressionStatement
       │  └─ expression: CallExpression(print)
       │                 └─ BinaryExpression(Plus)
+      │                    ├─ lhs: Identifier(a)
+      │                    └─ rhs: Identifier(b)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(Minus)
+      │                    ├─ lhs: Identifier(a)
+      │                    └─ rhs: Identifier(b)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(Asterisk)
+      │                    ├─ lhs: Identifier(a)
+      │                    └─ rhs: Identifier(b)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(Slash)
+      │                    ├─ lhs: Identifier(a)
+      │                    └─ rhs: Identifier(b)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(Percent)
       │                    ├─ lhs: Identifier(a)
       │                    └─ rhs: Identifier(b)
       └─ ReturnStatement

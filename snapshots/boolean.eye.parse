@@ -1,0 +1,77 @@
+SourceFile
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(a)
+      │  ├─ type: Null
+      │  └─ expression: BooleanLiteral(true)
+      ├─ LetStatement(b)
+      │  ├─ type: Null
+      │  └─ expression: BooleanLiteral(false)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(a)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(b)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ StringLiteral(And:)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(AmpersandAmpersand)
+      │                    ├─ lhs: BooleanLiteral(false)
+      │                    └─ rhs: BooleanLiteral(false)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(AmpersandAmpersand)
+      │                    ├─ lhs: BooleanLiteral(false)
+      │                    └─ rhs: BooleanLiteral(true)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(AmpersandAmpersand)
+      │                    ├─ lhs: BooleanLiteral(true)
+      │                    └─ rhs: BooleanLiteral(false)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(AmpersandAmpersand)
+      │                    ├─ lhs: BooleanLiteral(true)
+      │                    └─ rhs: BooleanLiteral(true)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ StringLiteral(Or:)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(BarBar)
+      │                    ├─ lhs: BooleanLiteral(false)
+      │                    └─ rhs: BooleanLiteral(false)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(BarBar)
+      │                    ├─ lhs: BooleanLiteral(false)
+      │                    └─ rhs: BooleanLiteral(true)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(BarBar)
+      │                    ├─ lhs: BooleanLiteral(true)
+      │                    └─ rhs: BooleanLiteral(false)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(BarBar)
+      │                    ├─ lhs: BooleanLiteral(true)
+      │                    └─ rhs: BooleanLiteral(true)
+      ├─ IfStatement
+      │  ├─ condition: BooleanLiteral(true)
+      │  └─ ifTrue: Block
+      │             └─ ExpressionStatement
+      │                └─ expression: CallExpression(print)
+      │                               └─ StringLiteral(true!)
+      ├─ IfStatement
+      │  ├─ condition: BooleanLiteral(false)
+      │  └─ ifTrue: Block
+      │             └─ ExpressionStatement
+      │                └─ expression: CallExpression(print)
+      │                               └─ StringLiteral(oh no!)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

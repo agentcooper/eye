@@ -1,0 +1,8 @@
+Table 'global'
+main: () => i64
+
+  Table 'main'
+
+    Table 'for0'
+    i: i64
+

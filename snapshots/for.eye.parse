@@ -1,0 +1,23 @@
+SourceFile
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ ForStatement
+      │  ├─ initializer: LetStatement(i)
+      │  │               ├─ type: Null
+      │  │               └─ expression: NumericLiteral(0)
+      │  ├─ condition: BinaryExpression(LessThan)
+      │  │             ├─ lhs: Identifier(i)
+      │  │             └─ rhs: NumericLiteral(5)
+      │  ├─ incrementer: BinaryExpression(Equals)
+      │  │               ├─ lhs: Identifier(i)
+      │  │               └─ rhs: BinaryExpression(Plus)
+      │  │                       ├─ lhs: Identifier(i)
+      │  │                       └─ rhs: NumericLiteral(1)
+      │  ├─ body: Block
+      │  │        └─ ExpressionStatement
+      │  │           └─ expression: CallExpression(print)
+      │  │                          └─ Identifier(i)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)
