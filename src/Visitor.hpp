@@ -5,6 +5,7 @@ struct BinaryExpressionNode;
 struct BlockNode;
 struct CallExpressionNode;
 struct ExpressionStatementNode;
+struct ForStatementNode;
 struct FunctionDeclarationNode;
 struct FunctionTypeNode;
 struct IdentifierNode;
@@ -29,6 +30,7 @@ public:
   virtual void visit(BlockNode &node) = 0;
   virtual void visit(CallExpressionNode &node) = 0;
   virtual void visit(ExpressionStatementNode &node) = 0;
+  virtual void visit(ForStatementNode &node) = 0;
   virtual void visit(FunctionDeclarationNode &node) = 0;
   virtual void visit(FunctionTypeNode &node) = 0;
   virtual void visit(IdentifierNode &node) = 0;

@@ -132,6 +132,22 @@ struct LetStatementNode : public Node {
   void accept(Visitor &v) override { v.visit(*this); }
 };
 
+struct ForStatementNode : public Node {
+  std::unique_ptr<Node> initializer;
+  std::unique_ptr<Node> condition;
+  std::unique_ptr<Node> incrementer;
+  std::unique_ptr<Node> body;
+
+  ForStatementNode(std::unique_ptr<Node> initializer,
+                   std::unique_ptr<Node> condition,
+                   std::unique_ptr<Node> incrementer,
+                   std::unique_ptr<Node> body)
+      : initializer(std::move(initializer)), condition(std::move(condition)),
+        incrementer(std::move(incrementer)), body(std::move(body)) {}
+
+  void accept(Visitor &v) override { v.visit(*this); }
+};
+
 struct BinaryExpressionNode : public Node {
   Token::Kind op;
   std::unique_ptr<Node> lhs;

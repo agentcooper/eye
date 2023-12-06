@@ -58,6 +58,9 @@ Token Lexer::getNextToken() noexcept {
     if (lexeme == "else") {
       return fromLexeme(Token::Kind::Else, lexeme);
     }
+    if (lexeme == "for") {
+      return fromLexeme(Token::Kind::For, lexeme);
+    }
     if (lexeme == "let") {
       return fromLexeme(Token::Kind::Let, lexeme);
     }

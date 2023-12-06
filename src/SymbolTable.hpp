@@ -123,6 +123,7 @@ public:
   Scope *currentScope;
 
   size_t arrowFunctionExpressionIndex = 0;
+  size_t forScopeIndex = 0;
 
   void enterScope(std::string name) {
     auto it =
@@ -252,6 +253,18 @@ public:
     Symbol symbol{.name = node.name, .type = type};
 
     currentScope->symbolTable.addSymbol(symbol);
+  }
+
+  void visit(ForStatementNode &node) override {
+    std::string scopeName = "for" + std::to_string(forScopeIndex++);
+    createScopeAndEnter(scopeName);
+
+    node.initializer->accept(*this);
+    node.condition->accept(*this);
+    node.incrementer->accept(*this);
+    node.body->accept(*this);
+
+    exitScope();
   }
 
   void visit(BlockNode &node) override {

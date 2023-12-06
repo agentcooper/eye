@@ -84,6 +84,7 @@ class Codegen : public Visitor {
   llvm::Type *voidPointerType;
 
   size_t arrowFunctionExpressionIndex = 0;
+  size_t forScopeIndex = 0;
 
   std::map<Scope *, llvm::AllocaInst *> scopeEnv;
 
@@ -363,6 +364,37 @@ public:
     }
   };
 
+  void visit(ForStatementNode &node) override {
+    std::string scopeName = "for" + std::to_string(forScopeIndex++);
+    symbolTableVisitor.enterScope(scopeName);
+
+    llvm::Function *function = builder->GetInsertBlock()->getParent();
+
+    llvm::BasicBlock *conditionBB =
+        llvm::BasicBlock::Create(*llvmContext, "for_condition", function);
+    llvm::BasicBlock *bodyBB =
+        llvm::BasicBlock::Create(*llvmContext, "for_body", function);
+    llvm::BasicBlock *mergeBB =
+        llvm::BasicBlock::Create(*llvmContext, "for_continued");
+
+    node.initializer->accept(*this);
+
+    builder->CreateBr(conditionBB);
+    builder->SetInsertPoint(conditionBB);
+    node.condition->accept(*this);
+    builder->CreateCondBr(value, bodyBB, mergeBB);
+
+    builder->SetInsertPoint(bodyBB);
+    node.body->accept(*this);
+    node.incrementer->accept(*this);
+    builder->CreateBr(conditionBB);
+
+    function->insert(function->end(), mergeBB);
+    builder->SetInsertPoint(mergeBB);
+
+    symbolTableVisitor.exitScope();
+  };
+
   void visit(ReturnStatementNode &node) override {
     node.expression->accept(*this);
     builder->CreateRet(value);
@@ -490,6 +522,14 @@ public:
           builder->CreateICmpEQ(L, R, L->getName() + "_equals_" + R->getName());
       break;
     }
+    case Token::Kind::LessThan: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
+      value = builder->CreateICmpSLT(L, R);
+      break;
+    }
+
     default:
       throw std::runtime_error("Error: unknown operator: " +
                                std::string(kindToString(node.op)));

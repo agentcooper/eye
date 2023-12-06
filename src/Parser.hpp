@@ -338,6 +338,37 @@ public:
         std::move(condition), std::move(ifTrue), std::move(ifFalse));
   }
 
+  std::unique_ptr<Node> parseForStatement() {
+    TRACE_METHOD;
+
+    expect(Token::Kind::For);
+    getNextToken();
+
+    expect(Token::Kind::LeftParen);
+    getNextToken();
+
+    auto initializer = parseLetStatement();
+
+    // expect(Token::Kind::Semicolon);
+    // getNextToken();
+
+    auto condition = parseExpression();
+
+    expect(Token::Kind::Semicolon);
+    getNextToken();
+
+    auto incrementer = parseExpression();
+
+    expect(Token::Kind::RightParen);
+    getNextToken();
+
+    auto body = parseBlock();
+
+    return std::make_unique<ForStatementNode>(
+        std::move(initializer), std::move(condition), std::move(incrementer),
+        std::move(body));
+  }
+
   std::unique_ptr<Node> parseLetStatement() {
     TRACE_METHOD;
 
@@ -387,6 +418,8 @@ public:
       return parseReturnStatement();
     case Token::Kind::Let:
       return parseLetStatement();
+    case Token::Kind::For:
+      return parseForStatement();
 
     case Token::Kind::LeftParen:
     case Token::Kind::Integer:

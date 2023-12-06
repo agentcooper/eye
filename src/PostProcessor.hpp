@@ -76,6 +76,12 @@ private:
                                                visit(node.expression));
   };
 
+  void visit(ForStatementNode &node) override {
+    value = std::make_unique<ForStatementNode>(
+        visit(node.initializer), visit(node.condition), visit(node.incrementer),
+        visit(node.body));
+  };
+
   void visit(BinaryExpressionNode &node) override {
     if (node.op == Token::Kind::Plus) {
       auto t1 = symbolTableVisitor.getType(node.lhs.get());

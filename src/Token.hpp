@@ -31,8 +31,8 @@ public:
     Return,
     Let,
     String,
-
     Declare,
+    For,
     End,
     Unexpected,
   };

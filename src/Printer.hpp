@@ -116,6 +116,16 @@ private:
     accept(*node.expression, true, "expression");
   };
 
+  void visit(ForStatementNode &node) override {
+    printPrefix();
+    std::cout << "ForStatement" << std::endl;
+
+    accept(*node.initializer, false, "initializer");
+    accept(*node.condition, false, "condition");
+    accept(*node.incrementer, false, "incrementer");
+    accept(*node.body, false, "body");
+  };
+
   void visit(BinaryExpressionNode &node) override {
     printPrefix();
     std::cout << "BinaryExpression(" << kindToString(node.op) << ")"
