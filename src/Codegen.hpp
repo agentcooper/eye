@@ -499,6 +499,39 @@ public:
 
       break;
     }
+    case Token::Kind::Asterisk: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
+      if (L->getType()->isDoubleTy() && R->getType()->isDoubleTy()) {
+        value = builder->CreateFMul(L, R);
+        break;
+      }
+      value = builder->CreateMul(L, R);
+      break;
+    }
+    case Token::Kind::Slash: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
+      if (L->getType()->isDoubleTy() && R->getType()->isDoubleTy()) {
+        value = builder->CreateFDiv(L, R);
+        break;
+      }
+      value = builder->CreateSDiv(L, R);
+      break;
+    }
+    case Token::Kind::Percent: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
+      if (L->getType()->isDoubleTy() && R->getType()->isDoubleTy()) {
+        value = builder->CreateFRem(L, R);
+        break;
+      }
+      value = builder->CreateSRem(L, R);
+      break;
+    }
     case Token::Kind::Plus: {
       node.rhs->accept(*this);
       llvm::Value *R = value;

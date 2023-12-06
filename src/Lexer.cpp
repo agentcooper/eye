@@ -132,6 +132,10 @@ Token Lexer::getNextToken() noexcept {
     return single(Token::Kind::Equals);
   case '*':
     return single(Token::Kind::Asterisk);
+  case '/':
+    return single(Token::Kind::Slash);
+  case '%':
+    return single(Token::Kind::Percent);
   }
 }
 

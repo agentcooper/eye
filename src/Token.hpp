@@ -22,6 +22,8 @@ public:
     If,
     Else,
     Asterisk,
+    Slash,
+    Percent,
     Identifier,
     Function,
     Interface,

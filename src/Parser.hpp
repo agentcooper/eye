@@ -38,6 +38,8 @@ public:
     precedence[Token::Kind::Plus] = 20;
     precedence[Token::Kind::Minus] = 20;
     precedence[Token::Kind::Asterisk] = 40;
+    precedence[Token::Kind::Slash] = 40;
+    precedence[Token::Kind::Percent] = 40;
     precedence[Token::Kind::Dot] = 50;
   };
 

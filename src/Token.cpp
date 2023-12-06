@@ -29,6 +29,10 @@ const char *kindToString(const Token::Kind kind) {
     return "Dot";
   case Asterisk:
     return "Asterisk";
+  case Slash:
+    return "Slash";
+  case Percent:
+    return "Percent";
   case Identifier:
     return "Identifier";
   case If:
