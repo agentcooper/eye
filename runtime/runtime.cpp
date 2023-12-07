@@ -22,6 +22,8 @@ void print_boolean(const void *env, const bool b) {
   printf("%s\n", b ? "true" : "false");
 }
 
+void print_char(const void *env, const char c) { printf("%c\n", c); }
+
 void print_string(const void *env, const char *s) { printf("%s\n", s); }
 
 char *joinStrings(const void *env, const char *s1, const char *s2) {

@@ -232,31 +232,43 @@ public:
     std::string name{currentToken.lexeme()};
     getNextToken(); // eat identifier
 
-    if (currentToken.kind() != Token::Kind::LeftParen) {
-      return std::make_unique<IdentifierNode>(name);
-    }
+    if (currentToken.kind() == Token::Kind::LeftParen) {
+      getNextToken(); // eat '('
+      std::vector<std::unique_ptr<Node>> arguments;
+      if (currentToken.kind() != Token::Kind::RightParen) {
+        while (true) {
+          if (auto argument = parseExpression())
+            arguments.push_back(std::move(argument));
+          else
+            return nullptr;
 
-    getNextToken(); // eat '('
-    std::vector<std::unique_ptr<Node>> arguments;
-    if (currentToken.kind() != Token::Kind::RightParen) {
-      while (true) {
-        if (auto argument = parseExpression())
-          arguments.push_back(std::move(argument));
-        else
-          return nullptr;
+          if (currentToken.kind() == Token::Kind::RightParen)
+            break;
 
-        if (currentToken.kind() == Token::Kind::RightParen)
-          break;
+          if (currentToken.kind() != Token::Kind::Comma)
+            throw std::runtime_error("Bad");
 
-        if (currentToken.kind() != Token::Kind::Comma)
-          throw std::runtime_error("Bad");
-
-        getNextToken();
+          getNextToken();
+        }
       }
+      getNextToken(); // eat ')'
+      return std::make_unique<CallExpressionNode>(name, std::move(arguments));
     }
 
-    getNextToken(); // eat ')'
-    return std::make_unique<CallExpressionNode>(name, std::move(arguments));
+    if (currentToken.kind() == Token::Kind::LeftSquareBracket) {
+      getNextToken(); // eat '['
+
+      auto identifier = std::make_unique<IdentifierNode>(name);
+
+      auto argumentExpression = parseExpression();
+
+      getNextToken(); // eat ']'
+
+      return std::make_unique<ElementAccessExpressionNode>(
+          std::move(identifier), std::move(argumentExpression));
+    }
+
+    return std::make_unique<IdentifierNode>(name);
   }
 
   std::unique_ptr<Node> parsePrimary() {
@@ -281,6 +293,11 @@ public:
       std::string value{currentToken.lexeme()};
       getNextToken();
       return std::make_unique<NumericLiteralNode>(std::stod(value), true);
+    }
+    case Token::Kind::Char: {
+      std::string value{currentToken.lexeme()};
+      getNextToken();
+      return std::make_unique<CharLiteralNode>(value[1]);
     }
     case Token::Kind::String: {
       std::string value{currentToken.lexeme()};

@@ -24,6 +24,7 @@ private:
   }
 
   Token parseIdentifier() noexcept;
+  Token parseChar() noexcept;
   Token parseString() noexcept;
   Token parseNumber() noexcept;
 };

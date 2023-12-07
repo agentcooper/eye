@@ -17,6 +17,7 @@ enum class PrimitiveType {
   i64Type,
   f64Type,
   booleanType,
+  charType,
   stringType,
   voidType,
   unknownType

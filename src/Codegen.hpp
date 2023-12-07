@@ -24,6 +24,8 @@ struct LLVMTypeVisitor {
       return llvm::Type::getDoubleTy(context);
     case PrimitiveType::booleanType:
       return llvm::Type::getInt1Ty(context);
+    case PrimitiveType::charType:
+      return llvm::Type::getInt8Ty(context);
     case PrimitiveType::stringType:
       return llvm::Type::getInt8PtrTy(context);
     case PrimitiveType::voidType:
@@ -276,6 +278,11 @@ public:
                 : llvm::ConstantInt::get(int64Type, node.value);
   }
 
+  void visit(CharLiteralNode &node) override {
+    value =
+        llvm::ConstantInt::get(llvm::Type::getInt8Ty(*llvmContext), node.value);
+  }
+
   void visit(StringLiteralNode &node) override {
     value = builder->CreateGlobalStringPtr(llvm::StringRef(node.text));
   }
@@ -450,6 +457,19 @@ public:
     function->insert(function->end(), mergeBB);
     builder->SetInsertPoint(mergeBB);
   };
+
+  void visit(ElementAccessExpressionNode &node) override {
+    node.expression->accept(*this);
+    auto expressionValue = value;
+
+    node.argumentExpression->accept(*this);
+    auto argumentValue = value;
+
+    value = builder->CreateLoad(
+        llvm::Type::getInt8Ty(*llvmContext),
+        builder->CreateInBoundsGEP(llvm::Type::getInt8Ty(*llvmContext),
+                                   expressionValue, {argumentValue}));
+  }
 
   void visit(BinaryExpressionNode &node) override {
     node.lhs->accept(*this);

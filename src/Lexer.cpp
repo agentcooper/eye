@@ -40,6 +40,9 @@ Token Lexer::getNextToken() noexcept {
   if (c == '"') {
     return parseString();
   }
+  if (c == '\'') {
+    return parseChar();
+  }
   if (isIdentifierChar(c)) {
     auto token = parseIdentifier();
     auto lexeme = token.lexeme();
@@ -84,6 +87,10 @@ Token Lexer::getNextToken() noexcept {
     return single(Token::Kind::LeftParen);
   case ')':
     return single(Token::Kind::RightParen);
+  case '[':
+    return single(Token::Kind::LeftSquareBracket);
+  case ']':
+    return single(Token::Kind::RightSquareBracket);
   case '<':
     return single(Token::Kind::LessThan);
   case '>':
@@ -137,6 +144,15 @@ Token Lexer::getNextToken() noexcept {
   case '%':
     return single(Token::Kind::Percent);
   }
+}
+
+Token Lexer::parseChar() noexcept {
+  const char *start = m_source;
+  get();
+  while (peek() != '\'')
+    get();
+  get();
+  return Token(Token::Kind::Char, start, m_source);
 }
 
 Token Lexer::parseString() noexcept {

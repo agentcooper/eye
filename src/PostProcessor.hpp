@@ -41,6 +41,10 @@ private:
     value = std::make_unique<BooleanLiteralNode>(node.value);
   }
 
+  void visit(CharLiteralNode &node) override {
+    value = std::make_unique<CharLiteralNode>(node.value);
+  }
+
   void visit(StringLiteralNode &node) override {
     value = std::make_unique<StringLiteralNode>(node.text);
   }
@@ -84,6 +88,11 @@ private:
     value = std::make_unique<ForStatementNode>(
         visit(node.initializer), visit(node.condition), visit(node.incrementer),
         visit(node.body));
+  };
+
+  void visit(ElementAccessExpressionNode &node) override {
+    value = std::make_unique<ElementAccessExpressionNode>(
+        visit(node.expression), visit(node.argumentExpression));
   };
 
   void visit(BinaryExpressionNode &node) override {

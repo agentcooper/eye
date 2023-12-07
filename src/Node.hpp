@@ -64,6 +64,13 @@ struct IdentifierNode : public Node {
   void accept(Visitor &v) override { v.visit(*this); }
 };
 
+struct CharLiteralNode : public Node {
+  const char value;
+  CharLiteralNode(const char &value) : value(value) {}
+
+  void accept(Visitor &v) override { v.visit(*this); }
+};
+
 struct StringLiteralNode : public Node {
   const std::string text;
   StringLiteralNode(const std::string &text) : text(text) {}
@@ -151,6 +158,18 @@ struct ForStatementNode : public Node {
                    std::unique_ptr<Node> body)
       : initializer(std::move(initializer)), condition(std::move(condition)),
         incrementer(std::move(incrementer)), body(std::move(body)) {}
+
+  void accept(Visitor &v) override { v.visit(*this); }
+};
+
+struct ElementAccessExpressionNode : public Node {
+  std::unique_ptr<Node> expression;
+  std::unique_ptr<Node> argumentExpression;
+
+  ElementAccessExpressionNode(std::unique_ptr<Node> expression,
+                              std::unique_ptr<Node> argumentExpression)
+      : expression(std::move(expression)),
+        argumentExpression(std::move(argumentExpression)) {}
 
   void accept(Visitor &v) override { v.visit(*this); }
 };

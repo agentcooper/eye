@@ -15,6 +15,10 @@ const char *kindToString(const Token::Kind kind) {
     return "LeftParen";
   case RightParen:
     return "RightParen";
+  case LeftSquareBracket:
+    return "LeftSquareBracket";
+  case RightSquareBracket:
+    return "RightSquareBracket";
   case LeftCurly:
     return "LeftCurly";
   case RightCurly:
@@ -63,6 +67,8 @@ const char *kindToString(const Token::Kind kind) {
     return "Let";
   case String:
     return "String";
+  case Char:
+    return "Char";
   case Declare:
     return "Declare";
   case For:

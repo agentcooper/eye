@@ -60,6 +60,11 @@ private:
     std::cout << "StringLiteral(" << node.text << ")" << std::endl;
   }
 
+  void visit(CharLiteralNode &node) override {
+    printPrefix();
+    std::cout << "CharLiteral(" << node.value << ")" << std::endl;
+  }
+
   void visit(ObjectLiteralNode &node) override {
     printPrefix();
     std::cout << "ObjectLiteral" << std::endl;
@@ -130,6 +135,13 @@ private:
     accept(*node.condition, false, "condition");
     accept(*node.incrementer, false, "incrementer");
     accept(*node.body, false, "body");
+  };
+
+  void visit(ElementAccessExpressionNode &node) override {
+    printPrefix();
+    std::cout << "ElementAccessExpression" << std::endl;
+    accept(*node.expression, false, "expression");
+    accept(*node.argumentExpression, true, "argument");
   };
 
   void visit(BinaryExpressionNode &node) override {

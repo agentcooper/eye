@@ -1,0 +1,7 @@
+Table 'global'
+main: () => i64
+
+  Table 'main'
+  c: char
+  s: string
+

@@ -1,0 +1,26 @@
+SourceFile
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(s)
+      │  ├─ type: Null
+      │  └─ expression: StringLiteral(Hello, World!)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ ElementAccessExpression
+      │                    ├─ expression: Identifier(s)
+      │                    └─ argument: NumericLiteral(0)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ ElementAccessExpression
+      │                    ├─ expression: Identifier(s)
+      │                    └─ argument: NumericLiteral(7)
+      ├─ LetStatement(c)
+      │  ├─ type: Null
+      │  └─ expression: CharLiteral(h)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(c)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

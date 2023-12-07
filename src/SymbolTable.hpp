@@ -171,6 +171,10 @@ public:
                                              : PrimitiveType::i64Type));
   }
 
+  void visit(CharLiteralNode &node) override {
+    setType(node, std::make_shared<Type>(PrimitiveType::charType));
+  }
+
   void visit(StringLiteralNode &node) override {
     setType(node, std::make_shared<Type>(PrimitiveType::stringType));
   }
@@ -199,6 +203,13 @@ public:
     if (node.ifFalse) {
       node.ifFalse->accept(*this);
     }
+  };
+
+  void visit(ElementAccessExpressionNode &node) override {
+    node.expression->accept(*this);
+    node.argumentExpression->accept(*this);
+
+    setType(node, std::make_shared<Type>(PrimitiveType::charType));
   };
 
   void visit(BinaryExpressionNode &node) override {
