@@ -1,7 +1,9 @@
 Table 'global'
 isDigit: (char) => boolean
 main: () => i64
+match: (string, i64, string) => boolean
 not: (boolean) => boolean
+parseDigit: (string, i64, boolean) => i64
 
   Table 'isDigit'
   c: char
@@ -9,15 +11,29 @@ not: (boolean) => boolean
   Table 'not'
   b: boolean
 
+  Table 'match'
+  query: string
+  s: string
+  start: i64
+
+    Table 'for0'
+    i: i64
+
+  Table 'parseDigit'
+  index: i64
+  parseStringDigits: boolean
+  s: string
+
   Table 'main'
   firstDigit: i64
   foundFirstDigit: boolean
   input: string
   inputLength: i64
   lastDigit: i64
+  parseStringDigits: boolean
   sum: i64
 
-    Table 'for0'
+    Table 'for1'
     c: char
     digit: i64
     i: i64

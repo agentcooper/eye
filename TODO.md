@@ -12,9 +12,10 @@
 - [ ] Type inference
 - [x] Allow to define external functions
 - [x] For loop
-- [ ] String indexing
-- [ ] Library function for reading files
+- [x] String indexing
+- [x] Library function for reading files
 - [ ] Command-line arguments
+- [ ] Unary operators, e.g. unary minus and boolean negation
 
 ## Infrastructure
 

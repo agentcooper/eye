@@ -28,10 +28,159 @@ SourceFile
 │     │                └─ expression: BooleanLiteral(false)
 │     └─ ReturnStatement
 │        └─ expression: BooleanLiteral(true)
+├─ FunctionDeclaration(match)
+│  ├─ Parameter(s)
+│  │  └─ TypeReference
+│  │     └─ Identifier(string)
+│  ├─ Parameter(start)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ Parameter(query)
+│  │  └─ TypeReference
+│  │     └─ Identifier(string)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(boolean)
+│  └─ Block
+│     ├─ ForStatement
+│     │  ├─ initializer: LetStatement(i)
+│     │  │               ├─ type: Null
+│     │  │               └─ expression: NumericLiteral(0)
+│     │  ├─ condition: BinaryExpression(LessThan)
+│     │  │             ├─ lhs: Identifier(i)
+│     │  │             └─ rhs: CallExpression(string_length)
+│     │  │                     └─ Identifier(query)
+│     │  ├─ incrementer: BinaryExpression(Equals)
+│     │  │               ├─ lhs: Identifier(i)
+│     │  │               └─ rhs: BinaryExpression(Plus)
+│     │  │                       ├─ lhs: Identifier(i)
+│     │  │                       └─ rhs: NumericLiteral(1)
+│     │  ├─ body: Block
+│     │  │        └─ IfStatement
+│     │  │           ├─ condition: BinaryExpression(ExclamationMarkEquals)
+│     │  │           │             ├─ lhs: ElementAccessExpression
+│     │  │           │             │       ├─ expression: Identifier(s)
+│     │  │           │             │       └─ argument: BinaryExpression(Plus)
+│     │  │           │             │                    ├─ lhs: Identifier(start)
+│     │  │           │             │                    └─ rhs: Identifier(i)
+│     │  │           │             └─ rhs: ElementAccessExpression
+│     │  │           │                     ├─ expression: Identifier(query)
+│     │  │           │                     └─ argument: Identifier(i)
+│     │  │           └─ ifTrue: Block
+│     │  │                      └─ ReturnStatement
+│     │  │                         └─ expression: BooleanLiteral(false)
+│     └─ ReturnStatement
+│        └─ expression: BooleanLiteral(true)
+├─ FunctionDeclaration(parseDigit)
+│  ├─ Parameter(s)
+│  │  └─ TypeReference
+│  │     └─ Identifier(string)
+│  ├─ Parameter(index)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ Parameter(parseStringDigits)
+│  │  └─ TypeReference
+│  │     └─ Identifier(boolean)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     ├─ IfStatement
+│     │  ├─ condition: CallExpression(isDigit)
+│     │  │             └─ ElementAccessExpression
+│     │  │                ├─ expression: Identifier(s)
+│     │  │                └─ argument: Identifier(index)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: CallExpression(char_to_i64)
+│     │                               └─ ElementAccessExpression
+│     │                                  ├─ expression: Identifier(s)
+│     │                                  └─ argument: Identifier(index)
+│     ├─ IfStatement
+│     │  ├─ condition: CallExpression(not)
+│     │  │             └─ Identifier(parseStringDigits)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: NumericLiteral(777)
+│     ├─ IfStatement
+│     │  ├─ condition: CallExpression(match)
+│     │  │             ├─ Identifier(s)
+│     │  │             ├─ Identifier(index)
+│     │  │             └─ StringLiteral(one)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: NumericLiteral(1)
+│     ├─ IfStatement
+│     │  ├─ condition: CallExpression(match)
+│     │  │             ├─ Identifier(s)
+│     │  │             ├─ Identifier(index)
+│     │  │             └─ StringLiteral(two)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: NumericLiteral(2)
+│     ├─ IfStatement
+│     │  ├─ condition: CallExpression(match)
+│     │  │             ├─ Identifier(s)
+│     │  │             ├─ Identifier(index)
+│     │  │             └─ StringLiteral(three)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: NumericLiteral(3)
+│     ├─ IfStatement
+│     │  ├─ condition: CallExpression(match)
+│     │  │             ├─ Identifier(s)
+│     │  │             ├─ Identifier(index)
+│     │  │             └─ StringLiteral(four)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: NumericLiteral(4)
+│     ├─ IfStatement
+│     │  ├─ condition: CallExpression(match)
+│     │  │             ├─ Identifier(s)
+│     │  │             ├─ Identifier(index)
+│     │  │             └─ StringLiteral(five)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: NumericLiteral(5)
+│     ├─ IfStatement
+│     │  ├─ condition: CallExpression(match)
+│     │  │             ├─ Identifier(s)
+│     │  │             ├─ Identifier(index)
+│     │  │             └─ StringLiteral(six)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: NumericLiteral(6)
+│     ├─ IfStatement
+│     │  ├─ condition: CallExpression(match)
+│     │  │             ├─ Identifier(s)
+│     │  │             ├─ Identifier(index)
+│     │  │             └─ StringLiteral(seven)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: NumericLiteral(7)
+│     ├─ IfStatement
+│     │  ├─ condition: CallExpression(match)
+│     │  │             ├─ Identifier(s)
+│     │  │             ├─ Identifier(index)
+│     │  │             └─ StringLiteral(eight)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: NumericLiteral(8)
+│     ├─ IfStatement
+│     │  ├─ condition: CallExpression(match)
+│     │  │             ├─ Identifier(s)
+│     │  │             ├─ Identifier(index)
+│     │  │             └─ StringLiteral(nine)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: NumericLiteral(9)
+│     └─ ReturnStatement
+│        └─ expression: NumericLiteral(777)
 └─ FunctionDeclaration(main)
    ├─ returnType: TypeReference
    │              └─ Identifier(i64)
    └─ Block
+      ├─ LetStatement(parseStringDigits)
+      │  ├─ type: Null
+      │  └─ expression: BooleanLiteral(true)
       ├─ LetStatement(input)
       │  ├─ type: Null
       │  └─ expression: CallExpression(readFile)
@@ -70,14 +219,17 @@ SourceFile
       │  │        │  └─ expression: ElementAccessExpression
       │  │        │                 ├─ expression: Identifier(input)
       │  │        │                 └─ argument: Identifier(i)
+      │  │        ├─ LetStatement(digit)
+      │  │        │  ├─ type: Null
+      │  │        │  └─ expression: CallExpression(parseDigit)
+      │  │        │                 ├─ Identifier(input)
+      │  │        │                 ├─ Identifier(i)
+      │  │        │                 └─ Identifier(parseStringDigits)
       │  │        ├─ IfStatement
-      │  │        │  ├─ condition: CallExpression(isDigit)
-      │  │        │  │             └─ Identifier(c)
+      │  │        │  ├─ condition: BinaryExpression(ExclamationMarkEquals)
+      │  │        │  │             ├─ lhs: Identifier(digit)
+      │  │        │  │             └─ rhs: NumericLiteral(777)
       │  │        │  └─ ifTrue: Block
-      │  │        │             ├─ LetStatement(digit)
-      │  │        │             │  ├─ type: Null
-      │  │        │             │  └─ expression: CallExpression(char_to_i64)
-      │  │        │             │                 └─ Identifier(c)
       │  │        │             ├─ IfStatement
       │  │        │             │  ├─ condition: CallExpression(not)
       │  │        │             │  │             └─ Identifier(foundFirstDigit)
