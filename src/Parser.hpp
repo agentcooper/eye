@@ -23,24 +23,38 @@ class Parser {
     return "token = '" + std::string(currentToken.lexeme()) + "'";
   }
 
+  void setPrecedence(const Token::Kind kind, const int rank) {
+    precedence[kind] = 100 - rank;
+  }
+
 public:
   Parser(Lexer &lexer)
       : lexer(lexer), currentToken(lexer.getNextToken()),
         nextToken(lexer.getNextToken()) {
 
     // https://en.wikipedia.org/wiki/Order_of_operations#Programming_languages
-    precedence[Token::Kind::Equals] = 5;
-    precedence[Token::Kind::LessThan] = 10;
-    precedence[Token::Kind::GreaterThan] = 10;
-    precedence[Token::Kind::DoubleEquals] = 10;
-    precedence[Token::Kind::AmpersandAmpersand] = 15;
-    precedence[Token::Kind::BarBar] = 14;
-    precedence[Token::Kind::Plus] = 20;
-    precedence[Token::Kind::Minus] = 20;
-    precedence[Token::Kind::Asterisk] = 40;
-    precedence[Token::Kind::Slash] = 40;
-    precedence[Token::Kind::Percent] = 40;
-    precedence[Token::Kind::Dot] = 50;
+    setPrecedence(Token::Kind::Dot, 1);
+
+    setPrecedence(Token::Kind::Asterisk, 3);
+    setPrecedence(Token::Kind::Slash, 3);
+    setPrecedence(Token::Kind::Percent, 3);
+
+    setPrecedence(Token::Kind::Plus, 4);
+    setPrecedence(Token::Kind::Minus, 4);
+
+    setPrecedence(Token::Kind::LessThan, 6);
+    setPrecedence(Token::Kind::GreaterThan, 6);
+    setPrecedence(Token::Kind::LessThanEquals, 6);
+    setPrecedence(Token::Kind::GreaterThanEquals, 6);
+
+    setPrecedence(Token::Kind::DoubleEquals, 7);
+    setPrecedence(Token::Kind::ExclamationMarkEquals, 7);
+
+    setPrecedence(Token::Kind::AmpersandAmpersand, 11);
+
+    setPrecedence(Token::Kind::BarBar, 12);
+
+    setPrecedence(Token::Kind::Equals, 15);
   };
 
   const Token &peekToken() { return nextToken; }

@@ -51,12 +51,20 @@ const char *kindToString(const Token::Kind kind) {
     return "AmpersandAmpersand";
   case BarBar:
     return "BarBar";
+  case ExclamationMark:
+    return "ExclamationMark";
+  case ExclamationMarkEquals:
+    return "ExclamationMarkEquals";
   case EqualsGreaterThan:
     return "EqualsGreaterThan";
   case LessThan:
     return "LessThan";
   case GreaterThan:
     return "GreaterThan";
+  case LessThanEquals:
+    return "LessThanEquals";
+  case GreaterThanEquals:
+    return "GreaterThanEquals";
   case Return:
     return "Return";
   case Function:

@@ -3,5 +3,6 @@ main: () => i64
 
   Table 'main'
   c: char
+  d: char
   s: string
 

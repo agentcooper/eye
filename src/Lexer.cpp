@@ -92,9 +92,26 @@ Token Lexer::getNextToken() noexcept {
   case ']':
     return single(Token::Kind::RightSquareBracket);
   case '<':
+    if (*(m_source + 1) == '=') {
+      auto token = Token(Token::Kind::LessThanEquals, m_source, 2);
+      m_source += 2;
+      return token;
+    }
     return single(Token::Kind::LessThan);
   case '>':
+    if (*(m_source + 1) == '=') {
+      auto token = Token(Token::Kind::GreaterThanEquals, m_source, 2);
+      m_source += 2;
+      return token;
+    }
     return single(Token::Kind::GreaterThan);
+  case '!':
+    if (*(m_source + 1) == '=') {
+      auto token = Token(Token::Kind::ExclamationMarkEquals, m_source, 2);
+      m_source += 2;
+      return token;
+    }
+    return single(Token::Kind::ExclamationMark);
   case '{':
     return single(Token::Kind::LeftCurly);
   case '}':

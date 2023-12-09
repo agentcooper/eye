@@ -26,5 +26,25 @@ function main(): i64 {
     print("oh no!");
   }
 
+  if (true == true) {
+    print("OK");
+  } else {
+    print("FAIL");
+  }
+
+  if (false == false) {
+    print("OK");
+  } else {
+    print("FAIL");
+  }
+
+  if (true != true) {
+    print("FAIL");
+  }
+
+  if (false != false) {
+    print("FAIL");
+  }
+
   return 0;
 }

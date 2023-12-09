@@ -73,5 +73,45 @@ SourceFile
       │             └─ ExpressionStatement
       │                └─ expression: CallExpression(print)
       │                               └─ StringLiteral(oh no!)
+      ├─ IfStatement
+      │  ├─ condition: BinaryExpression(DoubleEquals)
+      │  │             ├─ lhs: BooleanLiteral(true)
+      │  │             └─ rhs: BooleanLiteral(true)
+      │  ├─ ifTrue: Block
+      │  │          └─ ExpressionStatement
+      │  │             └─ expression: CallExpression(print)
+      │  │                            └─ StringLiteral(OK)
+      │  └─ ifFalse: Block
+      │              └─ ExpressionStatement
+      │                 └─ expression: CallExpression(print)
+      │                                └─ StringLiteral(FAIL)
+      ├─ IfStatement
+      │  ├─ condition: BinaryExpression(DoubleEquals)
+      │  │             ├─ lhs: BooleanLiteral(false)
+      │  │             └─ rhs: BooleanLiteral(false)
+      │  ├─ ifTrue: Block
+      │  │          └─ ExpressionStatement
+      │  │             └─ expression: CallExpression(print)
+      │  │                            └─ StringLiteral(OK)
+      │  └─ ifFalse: Block
+      │              └─ ExpressionStatement
+      │                 └─ expression: CallExpression(print)
+      │                                └─ StringLiteral(FAIL)
+      ├─ IfStatement
+      │  ├─ condition: BinaryExpression(ExclamationMarkEquals)
+      │  │             ├─ lhs: BooleanLiteral(true)
+      │  │             └─ rhs: BooleanLiteral(true)
+      │  └─ ifTrue: Block
+      │             └─ ExpressionStatement
+      │                └─ expression: CallExpression(print)
+      │                               └─ StringLiteral(FAIL)
+      ├─ IfStatement
+      │  ├─ condition: BinaryExpression(ExclamationMarkEquals)
+      │  │             ├─ lhs: BooleanLiteral(false)
+      │  │             └─ rhs: BooleanLiteral(false)
+      │  └─ ifTrue: Block
+      │             └─ ExpressionStatement
+      │                └─ expression: CallExpression(print)
+      │                               └─ StringLiteral(FAIL)
       └─ ReturnStatement
          └─ expression: NumericLiteral(0)

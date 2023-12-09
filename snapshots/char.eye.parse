@@ -22,5 +22,52 @@ SourceFile
       ├─ ExpressionStatement
       │  └─ expression: CallExpression(print)
       │                 └─ Identifier(c)
+      ├─ LetStatement(d)
+      │  ├─ type: Null
+      │  └─ expression: CharLiteral(0)
+      ├─ IfStatement
+      │  ├─ condition: BinaryExpression(AmpersandAmpersand)
+      │  │             ├─ lhs: BinaryExpression(GreaterThanEquals)
+      │  │             │       ├─ lhs: Identifier(d)
+      │  │             │       └─ rhs: CharLiteral(0)
+      │  │             └─ rhs: BinaryExpression(LessThanEquals)
+      │  │                     ├─ lhs: Identifier(d)
+      │  │                     └─ rhs: CharLiteral(9)
+      │  └─ ifTrue: Block
+      │             └─ ExpressionStatement
+      │                └─ expression: CallExpression(print)
+      │                               └─ StringLiteral(Digit OK)
+      ├─ IfStatement
+      │  ├─ condition: BinaryExpression(DoubleEquals)
+      │  │             ├─ lhs: CharLiteral(a)
+      │  │             └─ rhs: CharLiteral(a)
+      │  └─ ifTrue: Block
+      │             └─ ExpressionStatement
+      │                └─ expression: CallExpression(print)
+      │                               └─ StringLiteral(== OK)
+      ├─ IfStatement
+      │  ├─ condition: BinaryExpression(DoubleEquals)
+      │  │             ├─ lhs: CharLiteral(a)
+      │  │             └─ rhs: CharLiteral(b)
+      │  └─ ifTrue: Block
+      │             └─ ExpressionStatement
+      │                └─ expression: CallExpression(print)
+      │                               └─ StringLiteral(== FAIL)
+      ├─ IfStatement
+      │  ├─ condition: BinaryExpression(ExclamationMarkEquals)
+      │  │             ├─ lhs: CharLiteral(a)
+      │  │             └─ rhs: CharLiteral(b)
+      │  └─ ifTrue: Block
+      │             └─ ExpressionStatement
+      │                └─ expression: CallExpression(print)
+      │                               └─ StringLiteral(!= OK)
+      ├─ IfStatement
+      │  ├─ condition: BinaryExpression(ExclamationMarkEquals)
+      │  │             ├─ lhs: CharLiteral(a)
+      │  │             └─ rhs: CharLiteral(a)
+      │  └─ ifTrue: Block
+      │             └─ ExpressionStatement
+      │                └─ expression: CallExpression(print)
+      │                               └─ StringLiteral(!= FAIL)
       └─ ReturnStatement
          └─ expression: NumericLiteral(0)

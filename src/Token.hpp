@@ -6,7 +6,9 @@ struct Token {
 public:
   enum class Kind {
     LessThan,
+    LessThanEquals,
     GreaterThan,
+    GreaterThanEquals,
     Integer,
     FloatingPoint,
     Plus,
@@ -34,6 +36,8 @@ public:
     EqualsGreaterThan,
     AmpersandAmpersand,
     BarBar,
+    ExclamationMark,
+    ExclamationMarkEquals,
     Return,
     Let,
     String,

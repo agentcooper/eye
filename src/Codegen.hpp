@@ -560,7 +560,7 @@ public:
         value = builder->CreateFAdd(L, R);
         break;
       }
-      value = builder->CreateAdd(L, R, L->getName() + "_plus_" + R->getName());
+      value = builder->CreateAdd(L, R);
       break;
     }
     case Token::Kind::Minus: {
@@ -571,15 +571,21 @@ public:
         value = builder->CreateFSub(L, R);
         break;
       }
-      value = builder->CreateSub(L, R, L->getName() + "_minus_" + R->getName());
+      value = builder->CreateSub(L, R);
       break;
     }
     case Token::Kind::DoubleEquals: {
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
-      value =
-          builder->CreateICmpEQ(L, R, L->getName() + "_equals_" + R->getName());
+      value = builder->CreateICmpEQ(L, R);
+      break;
+    }
+    case Token::Kind::ExclamationMarkEquals: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
+      value = builder->CreateICmpNE(L, R);
       break;
     }
     case Token::Kind::LessThan: {
@@ -587,6 +593,27 @@ public:
       llvm::Value *R = value;
 
       value = builder->CreateICmpSLT(L, R);
+      break;
+    }
+    case Token::Kind::GreaterThan: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
+      value = builder->CreateICmpSGT(L, R);
+      break;
+    }
+    case Token::Kind::LessThanEquals: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
+      value = builder->CreateICmpSLE(L, R);
+      break;
+    }
+    case Token::Kind::GreaterThanEquals: {
+      node.rhs->accept(*this);
+      llvm::Value *R = value;
+
+      value = builder->CreateICmpSGE(L, R);
       break;
     }
     case Token::Kind::AmpersandAmpersand: {
