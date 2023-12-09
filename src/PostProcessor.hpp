@@ -1,5 +1,8 @@
 #pragma once
 
+#include <filesystem>
+
+#include "File.hpp"
 #include "Node.hpp"
 #include "SymbolTable.hpp"
 #include "Type.hpp"

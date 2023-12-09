@@ -434,16 +434,15 @@ public:
     builder->CreateCondBr(conditionValue, thenBB, elseBB);
 
     builder->SetInsertPoint(thenBB);
-
     node.ifTrue->accept(*this);
     llvm::Value *thenValue = value;
     if (!thenValue)
       throw std::runtime_error("Error: unexpected error");
 
+    thenBB = builder->GetInsertBlock();
     if (!thenBB->getTerminator()) {
       builder->CreateBr(mergeBB);
     }
-    thenBB = builder->GetInsertBlock();
 
     function->insert(function->end(), elseBB);
     builder->SetInsertPoint(elseBB);
@@ -790,6 +789,7 @@ public:
     }
 
     if (node.name == "main") {
+      mainBlock = builder->GetInsertBlock();
       builder->SetInsertPoint(mainBlock->getTerminator());
       builder->CreateCall(llvmModule->getFunction("beforeExit"), {});
     }

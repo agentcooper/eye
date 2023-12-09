@@ -42,6 +42,26 @@ char *i64_to_string(const void *env, const int value) {
   return s;
 }
 
+int char_to_i64(const void *env, const char value) { return value - '0'; }
+
+char *readFile(const void *env, const char *filePath) {
+  FILE *f = fopen(filePath, "rb");
+  if (!f) {
+    printf("[Runtime] Can't open file!\n");
+    return nullptr;
+  }
+  fseek(f, 0, SEEK_END);
+  long fsize = ftell(f);
+  fseek(f, 0, SEEK_SET);
+
+  char *string = (char *)GarbageCollector::allocate(fsize + 1);
+  fread(string, fsize, 1, f);
+  fclose(f);
+
+  string[fsize] = 0;
+  return string;
+}
+
 size_t string_length(const void *env, const char *s) { return strlen(s); }
 
 void *allocate(const size_t bytes) {

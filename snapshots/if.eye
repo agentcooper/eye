@@ -1,14 +1,24 @@
 function main(): i64 {
   if (1 == 1) {
-    print(3);
+    print("OK");
   } else {
-    print(4);
+    print("FAIL");
   }
 
   if (1 == 2) {
-    print(3);
+    print("FAIL");
   } else {
-    print(4);
+    print("OK");
   }
+
+  if (true) {
+    print(0);
+    if (true) {
+      print(1);
+    }
+    print(2);
+  }
+  print(3);
+
   return 0;
 }

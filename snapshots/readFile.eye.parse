@@ -1,0 +1,20 @@
+SourceFile
+├─ FunctionDeclaration(test)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     ├─ LetStatement(input)
+│     │  ├─ type: Null
+│     │  └─ expression: CallExpression(readFile)
+│     │                 └─ StringLiteral(input/hello.txt)
+│     ├─ ExpressionStatement
+│     │  └─ expression: CallExpression(print)
+│     │                 └─ Identifier(input)
+│     └─ ReturnStatement
+│        └─ expression: NumericLiteral(0)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      └─ ReturnStatement
+         └─ expression: CallExpression(test)

@@ -1,0 +1,126 @@
+SourceFile
+├─ FunctionDeclaration(isDigit)
+│  ├─ Parameter(c)
+│  │  └─ TypeReference
+│  │     └─ Identifier(char)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(boolean)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: BinaryExpression(AmpersandAmpersand)
+│                       ├─ lhs: BinaryExpression(GreaterThanEquals)
+│                       │       ├─ lhs: Identifier(c)
+│                       │       └─ rhs: CharLiteral(0)
+│                       └─ rhs: BinaryExpression(LessThanEquals)
+│                               ├─ lhs: Identifier(c)
+│                               └─ rhs: CharLiteral(9)
+├─ FunctionDeclaration(not)
+│  ├─ Parameter(b)
+│  │  └─ TypeReference
+│  │     └─ Identifier(boolean)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(boolean)
+│  └─ Block
+│     ├─ IfStatement
+│     │  ├─ condition: Identifier(b)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: BooleanLiteral(false)
+│     └─ ReturnStatement
+│        └─ expression: BooleanLiteral(true)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(input)
+      │  ├─ type: Null
+      │  └─ expression: CallExpression(readFile)
+      │                 └─ StringLiteral(input/advent-of-code-2023-1.txt)
+      ├─ LetStatement(sum)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ LetStatement(firstDigit)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ LetStatement(lastDigit)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ LetStatement(foundFirstDigit)
+      │  ├─ type: Null
+      │  └─ expression: BooleanLiteral(false)
+      ├─ LetStatement(inputLength)
+      │  ├─ type: Null
+      │  └─ expression: CallExpression(string_length)
+      │                 └─ Identifier(input)
+      ├─ ForStatement
+      │  ├─ initializer: LetStatement(i)
+      │  │               ├─ type: Null
+      │  │               └─ expression: NumericLiteral(0)
+      │  ├─ condition: BinaryExpression(LessThan)
+      │  │             ├─ lhs: Identifier(i)
+      │  │             └─ rhs: Identifier(inputLength)
+      │  ├─ incrementer: BinaryExpression(Equals)
+      │  │               ├─ lhs: Identifier(i)
+      │  │               └─ rhs: BinaryExpression(Plus)
+      │  │                       ├─ lhs: Identifier(i)
+      │  │                       └─ rhs: NumericLiteral(1)
+      │  ├─ body: Block
+      │  │        ├─ LetStatement(c)
+      │  │        │  ├─ type: Null
+      │  │        │  └─ expression: ElementAccessExpression
+      │  │        │                 ├─ expression: Identifier(input)
+      │  │        │                 └─ argument: Identifier(i)
+      │  │        ├─ IfStatement
+      │  │        │  ├─ condition: CallExpression(isDigit)
+      │  │        │  │             └─ Identifier(c)
+      │  │        │  └─ ifTrue: Block
+      │  │        │             ├─ LetStatement(digit)
+      │  │        │             │  ├─ type: Null
+      │  │        │             │  └─ expression: CallExpression(char_to_i64)
+      │  │        │             │                 └─ Identifier(c)
+      │  │        │             ├─ IfStatement
+      │  │        │             │  ├─ condition: CallExpression(not)
+      │  │        │             │  │             └─ Identifier(foundFirstDigit)
+      │  │        │             │  └─ ifTrue: Block
+      │  │        │             │             ├─ ExpressionStatement
+      │  │        │             │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │             │                 ├─ lhs: Identifier(firstDigit)
+      │  │        │             │             │                 └─ rhs: Identifier(digit)
+      │  │        │             │             └─ ExpressionStatement
+      │  │        │             │                └─ expression: BinaryExpression(Equals)
+      │  │        │             │                               ├─ lhs: Identifier(foundFirstDigit)
+      │  │        │             │                               └─ rhs: BooleanLiteral(true)
+      │  │        │             └─ ExpressionStatement
+      │  │        │                └─ expression: BinaryExpression(Equals)
+      │  │        │                               ├─ lhs: Identifier(lastDigit)
+      │  │        │                               └─ rhs: Identifier(digit)
+      │  │        └─ IfStatement
+      │  │           ├─ condition: BinaryExpression(BarBar)
+      │  │           │             ├─ lhs: BinaryExpression(DoubleEquals)
+      │  │           │             │       ├─ lhs: Identifier(c)
+      │  │           │             │       └─ rhs: CharLiteral(\n)
+      │  │           │             └─ rhs: BinaryExpression(DoubleEquals)
+      │  │           │                     ├─ lhs: Identifier(i)
+      │  │           │                     └─ rhs: BinaryExpression(Minus)
+      │  │           │                             ├─ lhs: Identifier(inputLength)
+      │  │           │                             └─ rhs: NumericLiteral(1)
+      │  │           └─ ifTrue: Block
+      │  │                      ├─ ExpressionStatement
+      │  │                      │  └─ expression: BinaryExpression(Equals)
+      │  │                      │                 ├─ lhs: Identifier(sum)
+      │  │                      │                 └─ rhs: BinaryExpression(Plus)
+      │  │                      │                         ├─ lhs: BinaryExpression(Plus)
+      │  │                      │                         │       ├─ lhs: Identifier(sum)
+      │  │                      │                         │       └─ rhs: BinaryExpression(Asterisk)
+      │  │                      │                         │               ├─ lhs: Identifier(firstDigit)
+      │  │                      │                         │               └─ rhs: NumericLiteral(10)
+      │  │                      │                         └─ rhs: Identifier(lastDigit)
+      │  │                      └─ ExpressionStatement
+      │  │                         └─ expression: BinaryExpression(Equals)
+      │  │                                        ├─ lhs: Identifier(foundFirstDigit)
+      │  │                                        └─ rhs: BooleanLiteral(false)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(sum)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

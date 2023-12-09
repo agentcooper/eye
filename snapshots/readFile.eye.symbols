@@ -1,0 +1,9 @@
+Table 'global'
+main: () => i64
+test: () => i64
+
+  Table 'test'
+  input: string
+
+  Table 'main'
+

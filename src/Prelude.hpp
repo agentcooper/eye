@@ -14,5 +14,8 @@ std::string getPrelude() {
   result += "declare function string_length(s: string): i64;\n";
 
   result += "declare function i64_to_string(n: i64): string;\n";
+  result += "declare function char_to_i64(c: char): i64;\n";
+
+  result += "declare function readFile(filePath: string): string;\n";
   return result;
 }

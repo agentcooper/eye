@@ -10,11 +10,11 @@ SourceFile
       │  ├─ ifTrue: Block
       │  │          └─ ExpressionStatement
       │  │             └─ expression: CallExpression(print)
-      │  │                            └─ NumericLiteral(3)
+      │  │                            └─ StringLiteral(OK)
       │  └─ ifFalse: Block
       │              └─ ExpressionStatement
       │                 └─ expression: CallExpression(print)
-      │                                └─ NumericLiteral(4)
+      │                                └─ StringLiteral(FAIL)
       ├─ IfStatement
       │  ├─ condition: BinaryExpression(DoubleEquals)
       │  │             ├─ lhs: NumericLiteral(1)
@@ -22,10 +22,28 @@ SourceFile
       │  ├─ ifTrue: Block
       │  │          └─ ExpressionStatement
       │  │             └─ expression: CallExpression(print)
-      │  │                            └─ NumericLiteral(3)
+      │  │                            └─ StringLiteral(FAIL)
       │  └─ ifFalse: Block
       │              └─ ExpressionStatement
       │                 └─ expression: CallExpression(print)
-      │                                └─ NumericLiteral(4)
+      │                                └─ StringLiteral(OK)
+      ├─ IfStatement
+      │  ├─ condition: BooleanLiteral(true)
+      │  └─ ifTrue: Block
+      │             ├─ ExpressionStatement
+      │             │  └─ expression: CallExpression(print)
+      │             │                 └─ NumericLiteral(0)
+      │             ├─ IfStatement
+      │             │  ├─ condition: BooleanLiteral(true)
+      │             │  └─ ifTrue: Block
+      │             │             └─ ExpressionStatement
+      │             │                └─ expression: CallExpression(print)
+      │             │                               └─ NumericLiteral(1)
+      │             └─ ExpressionStatement
+      │                └─ expression: CallExpression(print)
+      │                               └─ NumericLiteral(2)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ NumericLiteral(3)
       └─ ReturnStatement
          └─ expression: NumericLiteral(0)

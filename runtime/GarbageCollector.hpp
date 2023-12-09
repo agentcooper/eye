@@ -46,6 +46,7 @@ void *allocate(const size_t bytes) {
         bytes, " bytes...");
 
   if (totalBytesAllocated + bytes >= maximumBytes) {
+    // printf("[Runtime] Threshold exceeded");
     run();
   }
 
@@ -148,6 +149,8 @@ void markAndSweep() {
 }
 
 void run() {
+  // printf("[Runtime] Running GC\n");
+
   // push registers to the stack
   jmp_buf jb;
   setjmp(jb);

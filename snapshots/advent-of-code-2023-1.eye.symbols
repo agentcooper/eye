@@ -1,0 +1,24 @@
+Table 'global'
+isDigit: (char) => boolean
+main: () => i64
+not: (boolean) => boolean
+
+  Table 'isDigit'
+  c: char
+
+  Table 'not'
+  b: boolean
+
+  Table 'main'
+  firstDigit: i64
+  foundFirstDigit: boolean
+  input: string
+  inputLength: i64
+  lastDigit: i64
+  sum: i64
+
+    Table 'for0'
+    c: char
+    digit: i64
+    i: i64
+
