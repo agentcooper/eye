@@ -12,5 +12,7 @@ std::string getPrelude() {
 
   result += "declare function joinStrings(s1: string, s2: string): string;\n";
   result += "declare function string_length(s: string): i64;\n";
+
+  result += "declare function i64_to_string(n: i64): string;\n";
   return result;
 }

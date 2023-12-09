@@ -14,6 +14,7 @@ public:
 private:
   SymbolTableVisitor &symbolTableVisitor;
   size_t arrowFunctionExpressionIndex = 0;
+  size_t forScopeIndex = 0;
 
   std::vector<std::unique_ptr<Node>>
   visit(std::vector<std::unique_ptr<Node>> &nodes) {
@@ -85,9 +86,14 @@ private:
   };
 
   void visit(ForStatementNode &node) override {
+    std::string scopeName = "for" + std::to_string(forScopeIndex++);
+    symbolTableVisitor.enterScope(scopeName);
+
     value = std::make_unique<ForStatementNode>(
         visit(node.initializer), visit(node.condition), visit(node.incrementer),
         visit(node.body));
+
+    symbolTableVisitor.exitScope();
   };
 
   void visit(ElementAccessExpressionNode &node) override {
@@ -97,6 +103,7 @@ private:
 
   void visit(BinaryExpressionNode &node) override {
     if (node.op == Token::Kind::Plus) {
+
       auto t1 = symbolTableVisitor.getType(node.lhs.get());
       auto t2 = symbolTableVisitor.getType(node.rhs.get());
 
@@ -107,6 +114,21 @@ private:
         arguments.push_back(visit(node.rhs));
         value = std::make_unique<CallExpressionNode>("joinStrings",
                                                      std::move(arguments));
+        return;
+      }
+
+      if (isPrimitiveType(*t1, PrimitiveType::stringType) &&
+          isPrimitiveType(*t2, PrimitiveType::i64Type)) {
+        std::vector<std::unique_ptr<Node>> arguments{};
+        arguments.push_back(visit(node.rhs));
+        auto newRHS = std::make_unique<CallExpressionNode>(
+            "i64_to_string", std::move(arguments));
+
+        std::unique_ptr<Node> newBinary =
+            std::make_unique<BinaryExpressionNode>(node.op, visit(node.lhs),
+                                                   std::move(newRHS));
+        newBinary->accept(symbolTableVisitor);
+        value = visit(newBinary);
         return;
       }
     }

@@ -1,13 +1,19 @@
-function main(): i64 {
-  let s = "abc\ndef";
+function text(): i64 {
+  let s = "abc\ndef\nghi";
   print(s);
 
   let l = string_length(s);
-  print(l);
+  print("Length: " + l);
 
-  if (s[3] == '\n') {
-    print("Newline char at 3");
+  for (let i = 0; i < l; i = i + 1) {
+    if (s[i] == '\n') {
+      print("Found line break at index " + i);
+    }
   }
 
   return 0;
+}
+
+function main(): i64 {
+  return text();
 }

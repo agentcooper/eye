@@ -1,4 +1,6 @@
 abc
 def
-7
-Newline char at 3
+ghi
+Length: 11
+Found line break at index 3
+Found line break at index 7

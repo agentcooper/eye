@@ -1,7 +1,13 @@
 Table 'global'
 main: () => i64
+text: () => i64
 
-  Table 'main'
+  Table 'text'
   l: i64
   s: string
+
+    Table 'for0'
+    i: i64
+
+  Table 'main'
 

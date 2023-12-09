@@ -34,6 +34,14 @@ char *joinStrings(const void *env, const char *s1, const char *s2) {
   return result;
 }
 
+char *i64_to_string(const void *env, const int value) {
+  const int number_of_digits = log10(abs(value)) + 1;
+  const int number_of_chars = number_of_digits + 1 + (value < 0 ? 1 : 0);
+  char *s = (char *)GarbageCollector::allocate(sizeof(char) * number_of_chars);
+  snprintf(s, number_of_chars, "%d", value);
+  return s;
+}
+
 size_t string_length(const void *env, const char *s) { return strlen(s); }
 
 void *allocate(const size_t bytes) {

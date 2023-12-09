@@ -174,7 +174,8 @@ private:
 
     auto llvmType = buildLLVMType(*symbol->type);
 
-    if (isLocal) {
+    // TODO: improve look-up for non-closure symbols from upper scopes
+    if (isLocal || namedValues.contains(name)) {
       auto V = namedValues.at(name);
       if (V == nullptr) {
         throw std::runtime_error("Can't find value: " + name);
