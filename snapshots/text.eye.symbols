@@ -1,0 +1,7 @@
+Table 'global'
+main: () => i64
+
+  Table 'main'
+  l: i64
+  s: string
+

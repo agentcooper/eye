@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <map>
+#include <regex>
 #include <vector>
 
 #include "Lexer.hpp"
@@ -311,13 +312,19 @@ public:
     case Token::Kind::Char: {
       std::string value{currentToken.lexeme()};
       getNextToken();
+      if (value[1] == '\\' && value[2] == 'n') {
+        return std::make_unique<CharLiteralNode>('\n');
+      }
       return std::make_unique<CharLiteralNode>(value[1]);
     }
     case Token::Kind::String: {
       std::string value{currentToken.lexeme()};
       getNextToken();
-      return std::make_unique<StringLiteralNode>(
-          value.substr(1, value.size() - 2));
+
+      auto rawValue = value.substr(1, value.size() - 2);
+      auto escapedValue =
+          std::regex_replace(rawValue, std::regex(R"(\\n)"), "\n");
+      return std::make_unique<StringLiteralNode>(escapedValue);
     }
     case Token::Kind::LeftCurly: {
       return parseObjectLiteral();

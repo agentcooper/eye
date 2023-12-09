@@ -62,7 +62,10 @@ private:
 
   void visit(CharLiteralNode &node) override {
     printPrefix();
-    std::cout << "CharLiteral(" << node.value << ")" << std::endl;
+
+    std::cout << "CharLiteral("
+              << (node.value == '\n' ? "\\n" : std::string(1, node.value))
+              << ")" << std::endl;
   }
 
   void visit(ObjectLiteralNode &node) override {

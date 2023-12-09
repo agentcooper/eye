@@ -14,6 +14,7 @@
 #include "Type.hpp"
 
 struct Symbol {
+  bool isInternal;
   std::string name;
   std::shared_ptr<Type> type;
 
@@ -27,6 +28,15 @@ class SymbolTable {
   std::map<std::string, Symbol> data;
 
 public:
+  bool allInternal() const {
+    auto all = getAll();
+    if (all.empty()) {
+      return false;
+    }
+    return std::all_of(all.cbegin(), all.cend(),
+                       [](const Symbol &symbol) { return symbol.isInternal; });
+  }
+
   void addSymbol(const Symbol &symbol) { data[symbol.name] = symbol; }
 
   std::optional<Symbol> get(const std::string &name) const {
@@ -55,6 +65,9 @@ public:
 
   void print(int level) const {
     for (const auto &elem : data) {
+      if (elem.second.isInternal) {
+        continue;
+      }
       std::cout << std::string(level * 2, ' ');
       std::cout << elem.second.name << ": " << typeToString(*elem.second.type)
                 << std::endl;
@@ -100,6 +113,9 @@ public:
   }
 
   void print(int level = 0) const {
+    if (symbolTable.allInternal()) {
+      return;
+    }
     std::cout << std::string(level * 2, ' ') << "Table '" << name << "'"
               << std::endl;
     symbolTable.print(level);
@@ -112,6 +128,12 @@ public:
 
 class SymbolTableVisitor : public Visitor {
 private:
+  enum class SymbolTableVisitorMode {
+    Public,
+    Internal,
+  };
+  SymbolTableVisitorMode mode;
+
   std::map<Node *, std::shared_ptr<Type>> nodeToType;
 
   void setType(const Node &node, const std::shared_ptr<Type> &type) {
@@ -124,6 +146,11 @@ public:
 
   size_t arrowFunctionExpressionIndex = 0;
   size_t forScopeIndex = 0;
+
+  void setInternalMode(bool flag) {
+    mode = flag ? SymbolTableVisitorMode::Internal
+                : SymbolTableVisitorMode::Public;
+  }
 
   void enterScope(std::string name) {
     auto it =
@@ -257,6 +284,13 @@ public:
     }
   };
 
+  Symbol createSymbol(const std::string &name,
+                      const std::shared_ptr<Type> &type) const {
+    return Symbol{.name = name,
+                  .type = type,
+                  .isInternal = mode == SymbolTableVisitorMode::Internal};
+  }
+
   void visit(LetStatementNode &node) override {
     if (node.type) {
       node.type->accept(*this);
@@ -265,7 +299,7 @@ public:
 
     auto type =
         node.type ? getType(node.type.get()) : getType(node.expression.get());
-    Symbol symbol{.name = node.name, .type = type};
+    Symbol symbol = createSymbol(node.name, type);
 
     currentScope->symbolTable.addSymbol(symbol);
   }
@@ -307,7 +341,7 @@ public:
   };
 
   void visit(ParameterNode &node) override {
-    Symbol symbol{.name = node.name, .type = typeNodeToType(node.type.get())};
+    Symbol symbol = createSymbol(node.name, typeNodeToType(node.type.get()));
     currentScope->symbolTable.addSymbol(symbol);
   };
 
@@ -336,7 +370,7 @@ public:
   }
 
   void visit(InterfaceDeclarationNode &node) override {
-    Symbol symbol{.name = node.name, .type = typeNodeToType(&node)};
+    Symbol symbol = createSymbol(node.name, typeNodeToType(&node));
     currentScope->symbolTable.addSymbol(symbol);
   }
 
@@ -347,7 +381,7 @@ public:
     }
     auto functionType = std::make_shared<Type>(FunctionType{
         typeNodeToType(node.returnType.get()), std::move(parameters)});
-    Symbol symbol{.name = node.name, .type = std::move(functionType)};
+    Symbol symbol = createSymbol(node.name, std::move(functionType));
     currentScope->symbolTable.addSymbol(symbol);
 
     createScopeAndEnter(node.name);
@@ -369,7 +403,10 @@ public:
     }
   };
 
-  void createSymbolsFromSourceFile(SourceFileNode &node) { node.accept(*this); }
+  void createSymbolsFromSourceFile(SourceFileNode &node,
+                                   bool markSymbolsAsInternal = false) {
+    node.accept(*this);
+  }
 
   void print() { globalScope.print(0); }
 };

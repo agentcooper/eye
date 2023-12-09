@@ -34,6 +34,8 @@ char *joinStrings(const void *env, const char *s1, const char *s2) {
   return result;
 }
 
+size_t string_length(const void *env, const char *s) { return strlen(s); }
+
 void *allocate(const size_t bytes) {
   void *memory = GarbageCollector::allocate(bytes);
   return memory;

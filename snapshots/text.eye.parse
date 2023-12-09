@@ -1,0 +1,31 @@
+SourceFile
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(s)
+      │  ├─ type: Null
+      │  └─ expression: StringLiteral(abc
+def)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(s)
+      ├─ LetStatement(l)
+      │  ├─ type: Null
+      │  └─ expression: CallExpression(string_length)
+      │                 └─ Identifier(s)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(l)
+      ├─ IfStatement
+      │  ├─ condition: BinaryExpression(DoubleEquals)
+      │  │             ├─ lhs: ElementAccessExpression
+      │  │             │       ├─ expression: Identifier(s)
+      │  │             │       └─ argument: NumericLiteral(3)
+      │  │             └─ rhs: CharLiteral(\n)
+      │  └─ ifTrue: Block
+      │             └─ ExpressionStatement
+      │                └─ expression: CallExpression(print)
+      │                               └─ StringLiteral(Newline char at 3)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

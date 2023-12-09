@@ -63,14 +63,17 @@ int main(int argc, const char *argv[]) {
 
   // TODO: pick a better name, ScopeCollection?
   SymbolTableVisitor symbolTableVisitor;
+
+  symbolTableVisitor.setInternalMode(true);
+  symbolTableVisitor.createSymbolsFromSourceFile(*prelude);
+  symbolTableVisitor.setInternalMode(false);
+
   symbolTableVisitor.createSymbolsFromSourceFile(*sourceFile);
 
   if (command == "symbols") {
     symbolTableVisitor.print();
     return 0;
   }
-
-  symbolTableVisitor.createSymbolsFromSourceFile(*prelude);
 
   PostProcessor postProcessor{*sourceFile, symbolTableVisitor};
   auto modifiedSourceFile = postProcessor.run();
