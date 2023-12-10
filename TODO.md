@@ -2,7 +2,7 @@
 
 - [x] Properly parse function types
 - [x] Make sure the classic LISP example with pair/car/cdr works
-- [ ] Support `//` comments
+- [x] Support `//` comments
 - [x] Support double type
 - [x] Support boolean type
 - [x] Support structs

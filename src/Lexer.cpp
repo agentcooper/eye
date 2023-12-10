@@ -30,10 +30,27 @@ bool isIdentifierChar(char c) noexcept {
 }
 
 Token Lexer::getNextToken() noexcept {
+start:
   while (isSpace(peek())) {
     get();
   }
+
+  // handle comments
   auto c = peek();
+  if (c == '/') {
+    get();
+    c = peek();
+    if (c == '/') {
+      get();
+      while (peek() != '\n') {
+        c = get();
+      }
+      goto start;
+    } else {
+      return single(Token::Kind::Slash);
+    }
+  }
+
   if (isDigit(c)) {
     return parseNumber();
   }
@@ -156,8 +173,6 @@ Token Lexer::getNextToken() noexcept {
     return single(Token::Kind::Equals);
   case '*':
     return single(Token::Kind::Asterisk);
-  case '/':
-    return single(Token::Kind::Slash);
   case '%':
     return single(Token::Kind::Percent);
   }
