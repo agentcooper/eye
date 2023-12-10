@@ -1,0 +1,30 @@
+SourceFile
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(a)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(42)
+      ├─ LetStatement(b)
+      │  ├─ type: Null
+      │  └─ expression: UnaryExpression(Minus)
+      │                 └─ Identifier(a)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(a)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(b)
+      ├─ LetStatement(f)
+      │  ├─ type: Null
+      │  └─ expression: BooleanLiteral(true)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(f)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ UnaryExpression(ExclamationMark)
+      │                    └─ Identifier(f)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

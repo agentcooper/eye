@@ -104,6 +104,11 @@ private:
         visit(node.expression), visit(node.argumentExpression));
   };
 
+  void visit(UnaryExpressionNode &node) override {
+    value =
+        std::make_unique<UnaryExpressionNode>(node.op, visit(node.expression));
+  }
+
   void visit(BinaryExpressionNode &node) override {
     if (node.op == Token::Kind::Plus) {
 

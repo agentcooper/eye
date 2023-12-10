@@ -2,14 +2,10 @@ Table 'global'
 isDigit: (char) => boolean
 main: () => i64
 match: (string, i64, string) => boolean
-not: (boolean) => boolean
 parseDigit: (string, i64, boolean) => i64
 
   Table 'isDigit'
   c: char
-
-  Table 'not'
-  b: boolean
 
   Table 'match'
   query: string

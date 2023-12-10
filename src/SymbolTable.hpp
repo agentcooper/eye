@@ -239,6 +239,11 @@ public:
     setType(node, std::make_shared<Type>(PrimitiveType::charType));
   };
 
+  void visit(UnaryExpressionNode &node) override {
+    node.expression->accept(*this);
+    setType(node, getType(node.expression.get()));
+  }
+
   void visit(BinaryExpressionNode &node) override {
     node.lhs->accept(*this);
 

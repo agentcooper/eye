@@ -147,6 +147,13 @@ private:
     accept(*node.argumentExpression, true, "argument");
   };
 
+  void visit(UnaryExpressionNode &node) override {
+    printPrefix();
+    std::cout << "UnaryExpression(" << kindToString(node.op) << ")"
+              << std::endl;
+    accept(*node.expression, true);
+  };
+
   void visit(BinaryExpressionNode &node) override {
     printPrefix();
     std::cout << "BinaryExpression(" << kindToString(node.op) << ")"

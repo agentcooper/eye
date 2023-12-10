@@ -14,20 +14,6 @@ SourceFile
 │                       └─ rhs: BinaryExpression(LessThanEquals)
 │                               ├─ lhs: Identifier(c)
 │                               └─ rhs: CharLiteral(9)
-├─ FunctionDeclaration(not)
-│  ├─ Parameter(b)
-│  │  └─ TypeReference
-│  │     └─ Identifier(boolean)
-│  ├─ returnType: TypeReference
-│  │              └─ Identifier(boolean)
-│  └─ Block
-│     ├─ IfStatement
-│     │  ├─ condition: Identifier(b)
-│     │  └─ ifTrue: Block
-│     │             └─ ReturnStatement
-│     │                └─ expression: BooleanLiteral(false)
-│     └─ ReturnStatement
-│        └─ expression: BooleanLiteral(true)
 ├─ FunctionDeclaration(match)
 │  ├─ Parameter(s)
 │  │  └─ TypeReference
@@ -95,11 +81,12 @@ SourceFile
 │     │                                  ├─ expression: Identifier(s)
 │     │                                  └─ argument: Identifier(index)
 │     ├─ IfStatement
-│     │  ├─ condition: CallExpression(not)
+│     │  ├─ condition: UnaryExpression(ExclamationMark)
 │     │  │             └─ Identifier(parseStringDigits)
 │     │  └─ ifTrue: Block
 │     │             └─ ReturnStatement
-│     │                └─ expression: NumericLiteral(777)
+│     │                └─ expression: UnaryExpression(Minus)
+│     │                               └─ NumericLiteral(1)
 │     ├─ IfStatement
 │     │  ├─ condition: CallExpression(match)
 │     │  │             ├─ Identifier(s)
@@ -173,7 +160,8 @@ SourceFile
 │     │             └─ ReturnStatement
 │     │                └─ expression: NumericLiteral(9)
 │     └─ ReturnStatement
-│        └─ expression: NumericLiteral(777)
+│        └─ expression: UnaryExpression(Minus)
+│                       └─ NumericLiteral(1)
 └─ FunctionDeclaration(main)
    ├─ returnType: TypeReference
    │              └─ Identifier(i64)
@@ -228,10 +216,11 @@ SourceFile
       │  │        ├─ IfStatement
       │  │        │  ├─ condition: BinaryExpression(ExclamationMarkEquals)
       │  │        │  │             ├─ lhs: Identifier(digit)
-      │  │        │  │             └─ rhs: NumericLiteral(777)
+      │  │        │  │             └─ rhs: UnaryExpression(Minus)
+      │  │        │  │                     └─ NumericLiteral(1)
       │  │        │  └─ ifTrue: Block
       │  │        │             ├─ IfStatement
-      │  │        │             │  ├─ condition: CallExpression(not)
+      │  │        │             │  ├─ condition: UnaryExpression(ExclamationMark)
       │  │        │             │  │             └─ Identifier(foundFirstDigit)
       │  │        │             │  └─ ifTrue: Block
       │  │        │             │             ├─ ExpressionStatement

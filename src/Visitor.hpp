@@ -25,6 +25,7 @@ struct SourceFileNode;
 struct StringLiteralNode;
 struct StructTypeNode;
 struct TypeReferenceNode;
+struct UnaryExpressionNode;
 
 class Visitor {
 public:
@@ -53,6 +54,7 @@ public:
   virtual void visit(StringLiteralNode &node) = 0;
   virtual void visit(StructTypeNode &node) = 0;
   virtual void visit(TypeReferenceNode &node) = 0;
+  virtual void visit(UnaryExpressionNode &node) = 0;
 
   virtual ~Visitor() = default;
 };

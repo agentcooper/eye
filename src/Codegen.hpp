@@ -471,6 +471,27 @@ public:
                                    expressionValue, {argumentValue}));
   }
 
+  void visit(UnaryExpressionNode &node) override {
+    node.expression->accept(*this);
+    auto expressionValue = value;
+
+    switch (node.op) {
+    case Token::Kind::Minus: {
+      value = builder->CreateNSWSub(
+          llvm::Constant::getNullValue(expressionValue->getType()),
+          expressionValue);
+      break;
+    }
+    case Token::Kind::ExclamationMark: {
+      value = builder->CreateNot(expressionValue);
+      break;
+    }
+    default:
+      throw std::runtime_error("Error: unknown unary operator: " +
+                               std::string(kindToString(node.op)));
+    }
+  }
+
   void visit(BinaryExpressionNode &node) override {
     node.lhs->accept(*this);
     llvm::Value *L = value;

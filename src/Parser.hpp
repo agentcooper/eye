@@ -290,6 +290,9 @@ public:
     TRACE_METHOD;
 
     switch (currentToken.kind()) {
+    case Token::Kind::Minus:
+    case Token::Kind::ExclamationMark:
+      return parseUnaryExpression();
     case Token::Kind::True:
     case Token::Kind::False: {
       std::string value{currentToken.lexeme()};
@@ -336,6 +339,16 @@ public:
       throw std::runtime_error(
           "Unexpected token when parsing primary expression.");
     }
+  }
+
+  std::unique_ptr<Node> parseUnaryExpression() {
+    TRACE_METHOD;
+
+    Token::Kind op = currentToken.kind();
+    getNextToken();
+
+    auto expression = parseExpression();
+    return std::make_unique<UnaryExpressionNode>(op, std::move(expression));
   }
 
   std::unique_ptr<Node> parseExpression() {

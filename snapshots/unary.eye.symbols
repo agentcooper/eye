@@ -1,0 +1,8 @@
+Table 'global'
+main: () => i64
+
+  Table 'main'
+  a: i64
+  b: i64
+  f: boolean
+

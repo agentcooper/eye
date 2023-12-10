@@ -174,6 +174,16 @@ struct ElementAccessExpressionNode : public Node {
   void accept(Visitor &v) override { v.visit(*this); }
 };
 
+struct UnaryExpressionNode : public Node {
+  Token::Kind op;
+  std::unique_ptr<Node> expression;
+
+  UnaryExpressionNode(Token::Kind op, std::unique_ptr<Node> expression)
+      : op(op), expression(std::move(expression)) {}
+
+  void accept(Visitor &v) override { v.visit(*this); }
+};
+
 struct BinaryExpressionNode : public Node {
   Token::Kind op;
   std::unique_ptr<Node> lhs;

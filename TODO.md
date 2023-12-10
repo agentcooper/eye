@@ -15,7 +15,7 @@
 - [x] String indexing
 - [x] Library function for reading files
 - [ ] Command-line arguments
-- [ ] Unary operators, e.g. unary minus and boolean negation
+- [x] Unary operators, e.g. unary minus and boolean negation
 
 ## Infrastructure
 
