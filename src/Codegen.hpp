@@ -35,6 +35,10 @@ struct LLVMTypeVisitor {
     }
   }
 
+  llvm::Type *operator()(const PointerType &type) const {
+    return llvm::Type::getInt8PtrTy(context);
+  }
+
   llvm::Type *operator()(const TypeReference &type) const {
     auto symbol = symbolTableVisitor.globalScope.lookup(type.name);
     if (!symbol) {
@@ -220,7 +224,7 @@ private:
     llvm::Function *TheFunction = builder->GetInsertBlock()->getParent();
     auto alloca =
         createEntryBlockAlloca(TheFunction, name, type->getPointerTo());
-    auto call = builder->CreateCall(llvmModule->getFunction("allocate"),
+    auto call = builder->CreateCall(llvmModule->getFunction("__allocate"),
                                     {llvm::ConstantInt::get(int64Type, size)});
     builder->CreateStore(call, alloca);
     return alloca;
@@ -249,7 +253,7 @@ private:
     auto returnType =
         llvm::FunctionType::get(int64Type->getPointerTo(), {int64Type}, false);
     llvm::Function::Create(returnType, llvm::Function::ExternalLinkage,
-                           "allocate", llvmModule.get());
+                           "__allocate", llvmModule.get());
   }
 
 public:
@@ -352,6 +356,12 @@ public:
   }
 
   void visit(IdentifierNode &node) override {
+    if (node.name == "null") {
+      value =
+          llvm::Constant::getNullValue(llvm::Type::getInt8PtrTy(*llvmContext));
+      return;
+    }
+
     auto moduleFunction = llvmModule->getFunction(node.name);
     if (moduleFunction) {
       value = allocateClosure(moduleFunction, {}, nullptr);
@@ -476,6 +486,12 @@ public:
     auto expressionValue = value;
 
     switch (node.op) {
+    case Token::Kind::Asterisk: {
+      auto expressionType = symbolTableVisitor.getType(node.expression.get());
+      value =
+          builder->CreateLoad(buildLLVMType(expressionType), expressionValue);
+      break;
+    }
     case Token::Kind::Minus: {
       value = builder->CreateNSWSub(
           llvm::Constant::getNullValue(expressionValue->getType()),
@@ -664,6 +680,14 @@ public:
   }
 
   void visit(CallExpressionNode &node) override {
+    if (node.callee == "sizeof") {
+      node.arguments.front()->accept(*this);
+      value = llvm::ConstantInt::get(
+          int64Type,
+          llvmModule->getDataLayout().getTypeAllocSize(value->getType()));
+      return;
+    }
+
     std::vector<llvm::Value *> arguments;
     for (unsigned i = 0, e = node.arguments.size(); i != e; ++i) {
       node.arguments[i]->accept(*this);

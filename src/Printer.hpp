@@ -80,7 +80,11 @@ private:
   void visit(TypeReferenceNode &node) override {
     printPrefix();
     std::cout << "TypeReference" << std::endl;
-    accept(*node.typeName, true);
+    accept(*node.typeName, node.typeParameters.empty());
+    for (const auto &typeParameter : node.typeParameters) {
+      auto isLast = &typeParameter == &node.typeParameters.back();
+      accept(*typeParameter, isLast);
+    }
   };
 
   void visit(FunctionTypeNode &node) override {

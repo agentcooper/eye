@@ -17,5 +17,7 @@ std::string getPrelude() {
   result += "declare function char_to_i64(c: char): i64;\n";
 
   result += "declare function readFile(filePath: string): string;\n";
+
+  result += "declare function allocate(size: i64): Pointer<void>;\n";
   return result;
 }

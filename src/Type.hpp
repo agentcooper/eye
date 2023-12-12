@@ -12,6 +12,7 @@
 
 class TypeReference;
 class FunctionType;
+class PointerType;
 class StructType;
 enum class PrimitiveType {
   i64Type,
@@ -22,14 +23,25 @@ enum class PrimitiveType {
   voidType,
   unknownType
 };
-using Type =
-    std::variant<PrimitiveType, TypeReference, FunctionType, StructType>;
+using Type = std::variant<PrimitiveType, TypeReference, FunctionType,
+                          StructType, PointerType>;
 
 class TypeReference {
 public:
   const std::string name;
+  std::vector<std::shared_ptr<Type>> typeParameters;
 
   TypeReference(const std::string &name) : name(name){};
+  TypeReference(const std::string &name,
+                std::vector<std::shared_ptr<Type>> typeParameters)
+      : name(name), typeParameters(std::move(typeParameters)){};
+};
+
+class PointerType {
+public:
+  std::shared_ptr<Type> type;
+
+  PointerType(std::shared_ptr<Type> type) : type(type){};
 };
 
 class FunctionType {

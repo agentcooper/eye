@@ -1,0 +1,39 @@
+Table 'global'
+List: {value: i64, next: Pointer<List>}
+forEach: (Pointer<List>, (i64) => void) => i64
+main: () => i64
+pair: (i64, Pointer<List>) => Pointer<List>
+reduce: (Pointer<List>, i64, (i64, i64) => i64) => i64
+
+  Table 'pair'
+  n: Pointer<List>
+  p: Pointer<{value: i64, next: Pointer<List>}>
+  v: i64
+
+  Table 'forEach'
+  f: (i64) => void
+  list: Pointer<List>
+
+    Table 'for0'
+    current: Pointer<{value: i64, next: Pointer<List>}>
+
+  Table 'reduce'
+  f: (i64, i64) => i64
+  list: Pointer<List>
+  result: i64
+  start: i64
+
+    Table 'for1'
+    current: Pointer<{value: i64, next: Pointer<List>}>
+
+  Table 'main'
+  list: Pointer<List>
+  sum: i64
+
+    Table 'anonymous0'
+    n: i64
+
+    Table 'anonymous1'
+    acc: i64
+    n: i64
+

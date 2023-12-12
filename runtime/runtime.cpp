@@ -64,7 +64,12 @@ char *readFile(const void *env, const char *filePath) {
 
 size_t string_length(const void *env, const char *s) { return strlen(s); }
 
-void *allocate(const size_t bytes) {
+void *__allocate(const size_t bytes) {
+  void *memory = GarbageCollector::allocate(bytes);
+  return memory;
+}
+
+void *allocate(const void *env, const size_t bytes) {
   void *memory = GarbageCollector::allocate(bytes);
   return memory;
 }

@@ -1,0 +1,194 @@
+SourceFile
+├─ InterfaceDeclaration(List)
+│  ├─ PropertySignature(value)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  └─ PropertySignature(next)
+│     └─ TypeReference
+│        ├─ Identifier(Pointer)
+│        └─ TypeReference
+│           └─ Identifier(List)
+├─ FunctionDeclaration(pair)
+│  ├─ Parameter(v)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ Parameter(n)
+│  │  └─ TypeReference
+│  │     ├─ Identifier(Pointer)
+│  │     └─ TypeReference
+│  │        └─ Identifier(List)
+│  ├─ returnType: TypeReference
+│  │              ├─ Identifier(Pointer)
+│  │              └─ TypeReference
+│  │                 └─ Identifier(List)
+│  └─ Block
+│     ├─ LetStatement(p)
+│     │  ├─ type: TypeReference
+│     │  │        ├─ Identifier(Pointer)
+│     │  │        └─ TypeReference
+│     │  │           └─ Identifier(List)
+│     │  └─ expression: CallExpression(allocate)
+│     │                 └─ CallExpression(sizeof)
+│     │                    └─ Identifier(List)
+│     ├─ ExpressionStatement
+│     │  └─ expression: BinaryExpression(Equals)
+│     │                 ├─ lhs: BinaryExpression(Dot)
+│     │                 │       ├─ lhs: UnaryExpression(Asterisk)
+│     │                 │       │       └─ Identifier(p)
+│     │                 │       └─ rhs: Identifier(value)
+│     │                 └─ rhs: Identifier(v)
+│     ├─ ExpressionStatement
+│     │  └─ expression: BinaryExpression(Equals)
+│     │                 ├─ lhs: BinaryExpression(Dot)
+│     │                 │       ├─ lhs: UnaryExpression(Asterisk)
+│     │                 │       │       └─ Identifier(p)
+│     │                 │       └─ rhs: Identifier(next)
+│     │                 └─ rhs: Identifier(n)
+│     └─ ReturnStatement
+│        └─ expression: Identifier(p)
+├─ FunctionDeclaration(forEach)
+│  ├─ Parameter(list)
+│  │  └─ TypeReference
+│  │     ├─ Identifier(Pointer)
+│  │     └─ TypeReference
+│  │        └─ Identifier(List)
+│  ├─ Parameter(f)
+│  │  └─ FunctionType
+│  │     ├─ Parameter(current)
+│  │     │  └─ TypeReference
+│  │     │     └─ Identifier(i64)
+│  │     └─ returnType: TypeReference
+│  │                    └─ Identifier(void)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     ├─ ForStatement
+│     │  ├─ initializer: LetStatement(current)
+│     │  │               ├─ type: TypeReference
+│     │  │               │        ├─ Identifier(Pointer)
+│     │  │               │        └─ TypeReference
+│     │  │               │           └─ Identifier(List)
+│     │  │               └─ expression: Identifier(list)
+│     │  ├─ condition: BinaryExpression(ExclamationMarkEquals)
+│     │  │             ├─ lhs: Identifier(current)
+│     │  │             └─ rhs: Identifier(null)
+│     │  ├─ incrementer: BinaryExpression(Equals)
+│     │  │               ├─ lhs: Identifier(current)
+│     │  │               └─ rhs: BinaryExpression(Dot)
+│     │  │                       ├─ lhs: UnaryExpression(Asterisk)
+│     │  │                       │       └─ Identifier(current)
+│     │  │                       └─ rhs: Identifier(next)
+│     │  ├─ body: Block
+│     │  │        └─ ExpressionStatement
+│     │  │           └─ expression: CallExpression(f)
+│     │  │                          └─ BinaryExpression(Dot)
+│     │  │                             ├─ lhs: UnaryExpression(Asterisk)
+│     │  │                             │       └─ Identifier(current)
+│     │  │                             └─ rhs: Identifier(value)
+│     └─ ReturnStatement
+│        └─ expression: NumericLiteral(0)
+├─ FunctionDeclaration(reduce)
+│  ├─ Parameter(list)
+│  │  └─ TypeReference
+│  │     ├─ Identifier(Pointer)
+│  │     └─ TypeReference
+│  │        └─ Identifier(List)
+│  ├─ Parameter(start)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ Parameter(f)
+│  │  └─ FunctionType
+│  │     ├─ Parameter(acc)
+│  │     │  └─ TypeReference
+│  │     │     └─ Identifier(i64)
+│  │     ├─ Parameter(current)
+│  │     │  └─ TypeReference
+│  │     │     └─ Identifier(i64)
+│  │     └─ returnType: TypeReference
+│  │                    └─ Identifier(i64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     ├─ LetStatement(result)
+│     │  ├─ type: Null
+│     │  └─ expression: Identifier(start)
+│     ├─ ForStatement
+│     │  ├─ initializer: LetStatement(current)
+│     │  │               ├─ type: TypeReference
+│     │  │               │        ├─ Identifier(Pointer)
+│     │  │               │        └─ TypeReference
+│     │  │               │           └─ Identifier(List)
+│     │  │               └─ expression: Identifier(list)
+│     │  ├─ condition: BinaryExpression(ExclamationMarkEquals)
+│     │  │             ├─ lhs: Identifier(current)
+│     │  │             └─ rhs: Identifier(null)
+│     │  ├─ incrementer: BinaryExpression(Equals)
+│     │  │               ├─ lhs: Identifier(current)
+│     │  │               └─ rhs: BinaryExpression(Dot)
+│     │  │                       ├─ lhs: UnaryExpression(Asterisk)
+│     │  │                       │       └─ Identifier(current)
+│     │  │                       └─ rhs: Identifier(next)
+│     │  ├─ body: Block
+│     │  │        └─ ExpressionStatement
+│     │  │           └─ expression: BinaryExpression(Equals)
+│     │  │                          ├─ lhs: Identifier(result)
+│     │  │                          └─ rhs: CallExpression(f)
+│     │  │                                  ├─ Identifier(result)
+│     │  │                                  └─ BinaryExpression(Dot)
+│     │  │                                     ├─ lhs: UnaryExpression(Asterisk)
+│     │  │                                     │       └─ Identifier(current)
+│     │  │                                     └─ rhs: Identifier(value)
+│     └─ ReturnStatement
+│        └─ expression: Identifier(result)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(list)
+      │  ├─ type: Null
+      │  └─ expression: CallExpression(pair)
+      │                 ├─ NumericLiteral(1)
+      │                 └─ CallExpression(pair)
+      │                    ├─ NumericLiteral(2)
+      │                    └─ CallExpression(pair)
+      │                       ├─ NumericLiteral(3)
+      │                       └─ CallExpression(pair)
+      │                          ├─ NumericLiteral(4)
+      │                          └─ Identifier(null)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(forEach)
+      │                 ├─ Identifier(list)
+      │                 └─ ArrowFunction
+      │                    ├─ Parameter(n)
+      │                    │  └─ TypeReference
+      │                    │     └─ Identifier(i64)
+      │                    ├─ returnType: TypeReference
+      │                    │              └─ Identifier(void)
+      │                    └─ Block
+      │                       └─ ExpressionStatement
+      │                          └─ expression: CallExpression(print)
+      │                                         └─ Identifier(n)
+      ├─ LetStatement(sum)
+      │  ├─ type: Null
+      │  └─ expression: CallExpression(reduce)
+      │                 ├─ Identifier(list)
+      │                 ├─ NumericLiteral(0)
+      │                 └─ ArrowFunction
+      │                    ├─ Parameter(acc)
+      │                    │  └─ TypeReference
+      │                    │     └─ Identifier(i64)
+      │                    ├─ Parameter(n)
+      │                    │  └─ TypeReference
+      │                    │     └─ Identifier(i64)
+      │                    ├─ returnType: TypeReference
+      │                    │              └─ Identifier(i64)
+      │                    └─ Block
+      │                       └─ ReturnStatement
+      │                          └─ expression: BinaryExpression(Plus)
+      │                                         ├─ lhs: Identifier(acc)
+      │                                         └─ rhs: Identifier(n)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(sum)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

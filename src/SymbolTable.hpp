@@ -182,6 +182,11 @@ public:
       : globalScope("global", nullptr), currentScope(&globalScope) {}
 
   void visit(TypeReferenceNode &node) override {
+    if (node.typeName->name == "Pointer") {
+      auto symbol = currentScope->get("List");
+      setType(node, std::make_shared<Type>(PointerType(symbol.type)));
+      return;
+    }
     auto symbol = currentScope->get(node.typeName->name);
     setType(node, symbol.type);
   }
@@ -207,6 +212,12 @@ public:
   }
 
   void visit(IdentifierNode &node) override {
+    if (node.name == "null") {
+      setType(node, std::make_shared<Type>(PointerType(
+                        std::make_shared<Type>(PrimitiveType::voidType))));
+      return;
+    }
+
     auto symbol = currentScope->get(node.name);
     if (TypeReference *typeReference =
             std::get_if<TypeReference>(&*symbol.type)) {
@@ -241,6 +252,17 @@ public:
 
   void visit(UnaryExpressionNode &node) override {
     node.expression->accept(*this);
+
+    if (node.op == Token::Kind::Asterisk) {
+      PointerType *pointerType =
+          std::get_if<PointerType>(&*getType(node.expression.get()));
+      if (!pointerType) {
+        throw std::runtime_error("Expected pointer type");
+      }
+      setType(node, pointerType->type);
+      return;
+    }
+
     setType(node, getType(node.expression.get()));
   }
 
@@ -282,6 +304,8 @@ public:
               std::get_if<FunctionType>(&*symbol->type)) {
         setType(node, functionType->returnType);
       }
+    } else if (node.callee == "sizeof") {
+      setType(node, std::make_shared<Type>(PrimitiveType::i64Type));
     } else if (node.callee == "print") {
       // TODO
     } else {
@@ -301,7 +325,6 @@ public:
       node.type->accept(*this);
     }
     node.expression->accept(*this);
-
     auto type =
         node.type ? getType(node.type.get()) : getType(node.expression.get());
     Symbol symbol = createSymbol(node.name, type);
@@ -377,6 +400,14 @@ public:
   void visit(InterfaceDeclarationNode &node) override {
     Symbol symbol = createSymbol(node.name, typeNodeToType(&node));
     currentScope->symbolTable.addSymbol(symbol);
+
+    // std::vector<std::shared_ptr<Type>> parameters;
+    // auto functionType = std::make_shared<Type>(
+    //     FunctionType{std::make_shared<Type>(PointerType(symbol.type)),
+    //                  std::move(parameters)});
+
+    // Symbol xsymbol = createSymbol("newList", functionType);
+    // currentScope->symbolTable.addSymbol(xsymbol);
   }
 
   void visit(FunctionDeclarationNode &node) override {

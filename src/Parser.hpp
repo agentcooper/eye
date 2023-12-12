@@ -90,9 +90,22 @@ public:
       std::string name{currentToken.lexeme()};
       getNextToken(); // eat identifier
       auto identifierNode = std::make_unique<IdentifierNode>(name);
-      auto typeReferenceNode =
-          std::make_unique<TypeReferenceNode>(std::move(identifierNode));
-      return typeReferenceNode;
+
+      if (currentToken.kind() == Token::Kind::LessThan) {
+        getNextToken();
+
+        // TODO: support multiple parameters
+        std::vector<std::unique_ptr<Node>> typeParameters;
+        auto type = parseType();
+        typeParameters.push_back(std::move(type));
+
+        getNextToken(); // eat '>'
+
+        return std::make_unique<TypeReferenceNode>(std::move(identifierNode),
+                                                   std::move(typeParameters));
+      }
+
+      return std::make_unique<TypeReferenceNode>(std::move(identifierNode));
     }
 
     if (currentToken.kind() == Token::Kind::LeftParen) {
@@ -291,6 +304,7 @@ public:
 
     switch (currentToken.kind()) {
     case Token::Kind::Minus:
+    case Token::Kind::Asterisk:
     case Token::Kind::ExclamationMark:
       return parseUnaryExpression();
     case Token::Kind::True:

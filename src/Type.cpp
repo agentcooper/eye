@@ -33,6 +33,13 @@ struct TypePrinterVisitor {
     result += " => " + std::visit(*this, *type.returnType);
     return result;
   }
+  std::string operator()(const PointerType &type) {
+    std::string result;
+    result += "Pointer<";
+    result += std::visit(*this, *type.type);
+    result += ">";
+    return result;
+  }
   std::string operator()(const StructType &type) {
     std::string result;
     result += "{";
@@ -81,6 +88,10 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
     }
     if (typeReferenceNode->typeName->name == "void") {
       return std::make_shared<Type>(PrimitiveType::voidType);
+    }
+    if (typeReferenceNode->typeName->name == "Pointer") {
+      auto t = typeNodeToType(typeReferenceNode->typeParameters[0].get());
+      return std::make_shared<Type>(PointerType(std::move(t)));
     }
     return std::make_shared<Type>(
         TypeReference(typeReferenceNode->typeName->name));

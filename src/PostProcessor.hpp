@@ -146,6 +146,18 @@ private:
   };
 
   void visit(CallExpressionNode &node) override {
+    // if (node.callee == "sizeof") {
+    //   auto *identifier =
+    //       dynamic_cast<IdentifierNode *>(node.arguments.front().get());
+    //   std::cout << identifier->name << std::endl;
+
+    //   auto firstArgumentType =
+    //       symbolTableVisitor.getType(node.arguments.front().get());
+
+    //   value = std::make_unique<NumericLiteralNode>(1000, false);
+    //   return;
+    // }
+
     if (node.callee == "print") {
       // @TODO: this make it impossible to pass `print` function as an argument
       auto firstArgumentType =
