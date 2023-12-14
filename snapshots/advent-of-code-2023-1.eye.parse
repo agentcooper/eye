@@ -35,11 +35,9 @@ SourceFile
 │     │  │             ├─ lhs: Identifier(i)
 │     │  │             └─ rhs: CallExpression(string_length)
 │     │  │                     └─ Identifier(query)
-│     │  ├─ incrementer: BinaryExpression(Equals)
+│     │  ├─ incrementer: BinaryExpression(PlusEquals)
 │     │  │               ├─ lhs: Identifier(i)
-│     │  │               └─ rhs: BinaryExpression(Plus)
-│     │  │                       ├─ lhs: Identifier(i)
-│     │  │                       └─ rhs: NumericLiteral(1)
+│     │  │               └─ rhs: NumericLiteral(1)
 │     │  ├─ body: Block
 │     │  │        └─ IfStatement
 │     │  │           ├─ condition: BinaryExpression(ExclamationMarkEquals)
@@ -196,11 +194,9 @@ SourceFile
       │  ├─ condition: BinaryExpression(LessThan)
       │  │             ├─ lhs: Identifier(i)
       │  │             └─ rhs: Identifier(inputLength)
-      │  ├─ incrementer: BinaryExpression(Equals)
+      │  ├─ incrementer: BinaryExpression(PlusEquals)
       │  │               ├─ lhs: Identifier(i)
-      │  │               └─ rhs: BinaryExpression(Plus)
-      │  │                       ├─ lhs: Identifier(i)
-      │  │                       └─ rhs: NumericLiteral(1)
+      │  │               └─ rhs: NumericLiteral(1)
       │  ├─ body: Block
       │  │        ├─ LetStatement(c)
       │  │        │  ├─ type: Null
@@ -247,14 +243,12 @@ SourceFile
       │  │           │                             └─ rhs: NumericLiteral(1)
       │  │           └─ ifTrue: Block
       │  │                      ├─ ExpressionStatement
-      │  │                      │  └─ expression: BinaryExpression(Equals)
+      │  │                      │  └─ expression: BinaryExpression(PlusEquals)
       │  │                      │                 ├─ lhs: Identifier(sum)
       │  │                      │                 └─ rhs: BinaryExpression(Plus)
-      │  │                      │                         ├─ lhs: BinaryExpression(Plus)
-      │  │                      │                         │       ├─ lhs: Identifier(sum)
-      │  │                      │                         │       └─ rhs: BinaryExpression(Asterisk)
-      │  │                      │                         │               ├─ lhs: Identifier(firstDigit)
-      │  │                      │                         │               └─ rhs: NumericLiteral(10)
+      │  │                      │                         ├─ lhs: BinaryExpression(Asterisk)
+      │  │                      │                         │       ├─ lhs: Identifier(firstDigit)
+      │  │                      │                         │       └─ rhs: NumericLiteral(10)
       │  │                      │                         └─ rhs: Identifier(lastDigit)
       │  │                      └─ ExpressionStatement
       │  │                         └─ expression: BinaryExpression(Equals)

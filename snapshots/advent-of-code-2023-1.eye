@@ -3,7 +3,7 @@ function isDigit(c: char): boolean {
 }
 
 function match(s: string, start: i64, query: string): boolean {
-  for (let i = 0; i < string_length(query); i = i + 1) {
+  for (let i = 0; i < string_length(query); i += 1) {
     if (s[start + i] != query[i]) {
       return false;
     }
@@ -59,7 +59,7 @@ function main(): i64 {
 
   let inputLength = string_length(input);
 
-  for (let i = 0; i < inputLength; i = i + 1) {
+  for (let i = 0; i < inputLength; i += 1) {
     let c = input[i];
 
     let digit = parseDigit(input, i, parseStringDigits);
@@ -72,7 +72,7 @@ function main(): i64 {
     }
 
     if (c == '\n' || i == inputLength - 1) {
-      sum = sum + firstDigit * 10 + lastDigit;
+      sum += firstDigit * 10 + lastDigit;
       foundFirstDigit = false;
     }
   }

@@ -34,7 +34,7 @@ function main(): i64 {
   let game_max_green = 0;
   let game_max_blue = 0;
 
-  for (let i = 0; i < input_length; i = i + 1) {
+  for (let i = 0; i < input_length; i += 1) {
     let c = input[i];
 
     if (is_digit(c)) {
@@ -48,15 +48,15 @@ function main(): i64 {
 
     if (c == ',' || c == ';' || c == '\n') {
       if (lastChar == 'd') {
-        red = red + number;
+        red += number;
         game_max_red = max(red, game_max_red);
       }
       if (lastChar == 'e') {
-        blue = blue + number;
+        blue += number;
         game_max_blue = max(blue, game_max_blue);
       }
       if (lastChar == 'n') {
-        green = green + number;
+        green += number;
         game_max_green = max(green, game_max_green);
       }
       number = 0;
@@ -74,9 +74,9 @@ function main(): i64 {
 
     if (c == '\n' || i == input_length - 1) {
       if (is_possible) {
-        answer1 = answer1 + game_id;
+        answer1 += game_id;
       }
-      answer2 = answer2 + game_max_red * game_max_green * game_max_blue;
+      answer2 += game_max_red * game_max_green * game_max_blue;
 
       red = 0;
       green = 0;

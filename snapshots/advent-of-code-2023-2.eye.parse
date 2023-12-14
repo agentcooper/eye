@@ -97,11 +97,9 @@ SourceFile
       │  ├─ condition: BinaryExpression(LessThan)
       │  │             ├─ lhs: Identifier(i)
       │  │             └─ rhs: Identifier(input_length)
-      │  ├─ incrementer: BinaryExpression(Equals)
+      │  ├─ incrementer: BinaryExpression(PlusEquals)
       │  │               ├─ lhs: Identifier(i)
-      │  │               └─ rhs: BinaryExpression(Plus)
-      │  │                       ├─ lhs: Identifier(i)
-      │  │                       └─ rhs: NumericLiteral(1)
+      │  │               └─ rhs: NumericLiteral(1)
       │  ├─ body: Block
       │  │        ├─ LetStatement(c)
       │  │        │  ├─ type: Null
@@ -153,11 +151,9 @@ SourceFile
       │  │        │             │  │             └─ rhs: CharLiteral(d)
       │  │        │             │  └─ ifTrue: Block
       │  │        │             │             ├─ ExpressionStatement
-      │  │        │             │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │             │  └─ expression: BinaryExpression(PlusEquals)
       │  │        │             │             │                 ├─ lhs: Identifier(red)
-      │  │        │             │             │                 └─ rhs: BinaryExpression(Plus)
-      │  │        │             │             │                         ├─ lhs: Identifier(red)
-      │  │        │             │             │                         └─ rhs: Identifier(number)
+      │  │        │             │             │                 └─ rhs: Identifier(number)
       │  │        │             │             └─ ExpressionStatement
       │  │        │             │                └─ expression: BinaryExpression(Equals)
       │  │        │             │                               ├─ lhs: Identifier(game_max_red)
@@ -170,11 +166,9 @@ SourceFile
       │  │        │             │  │             └─ rhs: CharLiteral(e)
       │  │        │             │  └─ ifTrue: Block
       │  │        │             │             ├─ ExpressionStatement
-      │  │        │             │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │             │  └─ expression: BinaryExpression(PlusEquals)
       │  │        │             │             │                 ├─ lhs: Identifier(blue)
-      │  │        │             │             │                 └─ rhs: BinaryExpression(Plus)
-      │  │        │             │             │                         ├─ lhs: Identifier(blue)
-      │  │        │             │             │                         └─ rhs: Identifier(number)
+      │  │        │             │             │                 └─ rhs: Identifier(number)
       │  │        │             │             └─ ExpressionStatement
       │  │        │             │                └─ expression: BinaryExpression(Equals)
       │  │        │             │                               ├─ lhs: Identifier(game_max_blue)
@@ -187,11 +181,9 @@ SourceFile
       │  │        │             │  │             └─ rhs: CharLiteral(n)
       │  │        │             │  └─ ifTrue: Block
       │  │        │             │             ├─ ExpressionStatement
-      │  │        │             │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │             │  └─ expression: BinaryExpression(PlusEquals)
       │  │        │             │             │                 ├─ lhs: Identifier(green)
-      │  │        │             │             │                 └─ rhs: BinaryExpression(Plus)
-      │  │        │             │             │                         ├─ lhs: Identifier(green)
-      │  │        │             │             │                         └─ rhs: Identifier(number)
+      │  │        │             │             │                 └─ rhs: Identifier(number)
       │  │        │             │             └─ ExpressionStatement
       │  │        │             │                └─ expression: BinaryExpression(Equals)
       │  │        │             │                               ├─ lhs: Identifier(game_max_green)
@@ -255,21 +247,17 @@ SourceFile
       │  │        │             │  ├─ condition: Identifier(is_possible)
       │  │        │             │  └─ ifTrue: Block
       │  │        │             │             └─ ExpressionStatement
-      │  │        │             │                └─ expression: BinaryExpression(Equals)
+      │  │        │             │                └─ expression: BinaryExpression(PlusEquals)
       │  │        │             │                               ├─ lhs: Identifier(answer1)
-      │  │        │             │                               └─ rhs: BinaryExpression(Plus)
-      │  │        │             │                                       ├─ lhs: Identifier(answer1)
-      │  │        │             │                                       └─ rhs: Identifier(game_id)
+      │  │        │             │                               └─ rhs: Identifier(game_id)
       │  │        │             ├─ ExpressionStatement
-      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │  └─ expression: BinaryExpression(PlusEquals)
       │  │        │             │                 ├─ lhs: Identifier(answer2)
-      │  │        │             │                 └─ rhs: BinaryExpression(Plus)
-      │  │        │             │                         ├─ lhs: Identifier(answer2)
-      │  │        │             │                         └─ rhs: BinaryExpression(Asterisk)
-      │  │        │             │                                 ├─ lhs: BinaryExpression(Asterisk)
-      │  │        │             │                                 │       ├─ lhs: Identifier(game_max_red)
-      │  │        │             │                                 │       └─ rhs: Identifier(game_max_green)
-      │  │        │             │                                 └─ rhs: Identifier(game_max_blue)
+      │  │        │             │                 └─ rhs: BinaryExpression(Asterisk)
+      │  │        │             │                         ├─ lhs: BinaryExpression(Asterisk)
+      │  │        │             │                         │       ├─ lhs: Identifier(game_max_red)
+      │  │        │             │                         │       └─ rhs: Identifier(game_max_green)
+      │  │        │             │                         └─ rhs: Identifier(game_max_blue)
       │  │        │             ├─ ExpressionStatement
       │  │        │             │  └─ expression: BinaryExpression(Equals)
       │  │        │             │                 ├─ lhs: Identifier(red)
