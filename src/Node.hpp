@@ -13,6 +13,15 @@ public:
   virtual void accept(class Visitor &v) = 0;
 };
 
+struct LiteralTypeNode : public Node {
+  std::unique_ptr<Node> literal;
+
+  LiteralTypeNode(std::unique_ptr<Node> literal)
+      : literal(std::move(literal)) {}
+
+  void accept(Visitor &v) override { v.visit(*this); }
+};
+
 struct TypeReferenceNode : public Node {
   std::unique_ptr<IdentifierNode> typeName;
   std::vector<std::unique_ptr<Node>> typeParameters;

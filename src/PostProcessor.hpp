@@ -45,6 +45,10 @@ private:
     value = std::make_unique<BooleanLiteralNode>(node.value);
   }
 
+  void visit(LiteralTypeNode &node) override {
+    value = std::make_unique<LiteralTypeNode>(std::move(node.literal));
+  }
+
   void visit(CharLiteralNode &node) override {
     value = std::make_unique<CharLiteralNode>(node.value);
   }

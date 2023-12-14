@@ -187,6 +187,10 @@ public:
       setType(node, std::make_shared<Type>(PointerType(symbol.type)));
       return;
     }
+    if (node.typeName->name == "Array") {
+      setType(node, typeNodeToType(&node));
+      return;
+    }
     auto symbol = currentScope->get(node.typeName->name);
     setType(node, symbol.type);
   }
@@ -195,6 +199,10 @@ public:
 
   void visit(BooleanLiteralNode &node) override {
     setType(node, std::make_shared<Type>(PrimitiveType::booleanType));
+  }
+
+  void visit(LiteralTypeNode &node) override {
+    setType(node, std::make_shared<Type>(PrimitiveType::i64Type));
   }
 
   void visit(NumericLiteralNode &node) override {
@@ -246,6 +254,13 @@ public:
   void visit(ElementAccessExpressionNode &node) override {
     node.expression->accept(*this);
     node.argumentExpression->accept(*this);
+
+    ArrayType *arrayType =
+        std::get_if<ArrayType>(&*getType(node.expression.get()));
+    if (arrayType) {
+      setType(node, arrayType->type);
+      return;
+    }
 
     setType(node, std::make_shared<Type>(PrimitiveType::charType));
   };
@@ -324,7 +339,9 @@ public:
     if (node.type) {
       node.type->accept(*this);
     }
-    node.expression->accept(*this);
+    if (node.expression) {
+      node.expression->accept(*this);
+    }
     auto type =
         node.type ? getType(node.type.get()) : getType(node.expression.get());
     Symbol symbol = createSymbol(node.name, type);

@@ -39,6 +39,10 @@ struct LLVMTypeVisitor {
     return llvm::Type::getInt8PtrTy(context);
   }
 
+  llvm::Type *operator()(const ArrayType &type) const {
+    return llvm::ArrayType::get(std::visit(*this, *type.type), type.size);
+  }
+
   llvm::Type *operator()(const TypeReference &type) const {
     auto symbol = symbolTableVisitor.globalScope.lookup(type.name);
     if (!symbol) {
@@ -270,6 +274,8 @@ public:
 
   void visit(TypeReferenceNode &node) override {}
 
+  void visit(LiteralTypeNode &node) override {}
+
   void visit(FunctionTypeNode &node) override {}
 
   void visit(BooleanLiteralNode &node) override {
@@ -376,10 +382,15 @@ public:
     auto type = buildLLVMType(*symbol.type);
 
     llvm::Function *TheFunction = builder->GetInsertBlock()->getParent();
-    node.expression->accept(*this);
 
     llvm::AllocaInst *alloca =
         createEntryBlockAlloca(TheFunction, node.name, type);
+    namedValues[node.name] = alloca;
+
+    if (!node.expression) {
+      return;
+    }
+    node.expression->accept(*this);
 
     if (llvm::AllocaInst *rightAlloca = dyn_cast<llvm::AllocaInst>(value)) {
       namedValues[node.name] = rightAlloca;
@@ -469,11 +480,28 @@ public:
   };
 
   void visit(ElementAccessExpressionNode &node) override {
+    auto expressionType = symbolTableVisitor.getType(node.expression.get());
+    ArrayType *arrayType = std::get_if<ArrayType>(&*expressionType);
+
+    auto p = isWrite;
+
+    isWrite = arrayType != nullptr;
     node.expression->accept(*this);
+    isWrite = p;
     auto expressionValue = value;
 
     node.argumentExpression->accept(*this);
     auto argumentValue = value;
+
+    if (arrayType) {
+      auto gep = builder->CreateInBoundsGEP(
+          buildLLVMType(*arrayType), expressionValue,
+          {llvm::ConstantInt::get(int64Type, 0), argumentValue});
+      value = isWrite ? gep
+                      : value = builder->CreateLoad(
+                            buildLLVMType(*arrayType->type), gep);
+      return;
+    }
 
     value = builder->CreateLoad(
         llvm::Type::getInt8Ty(*llvmContext),

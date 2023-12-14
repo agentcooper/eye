@@ -1,0 +1,48 @@
+SourceFile
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(arr)
+      │  └─ type: TypeReference
+      │           ├─ Identifier(Array)
+      │           ├─ TypeReference
+      │           │  └─ Identifier(string)
+      │           └─ LiteralType
+      │              └─ NumericLiteral(3)
+      │  └─ expression: Null
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(Equals)
+      │                 ├─ lhs: ElementAccessExpression
+      │                 │       ├─ expression: Identifier(arr)
+      │                 │       └─ argument: NumericLiteral(0)
+      │                 └─ rhs: StringLiteral(aaa)
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(Equals)
+      │                 ├─ lhs: ElementAccessExpression
+      │                 │       ├─ expression: Identifier(arr)
+      │                 │       └─ argument: NumericLiteral(1)
+      │                 └─ rhs: StringLiteral(bbb)
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(Equals)
+      │                 ├─ lhs: ElementAccessExpression
+      │                 │       ├─ expression: Identifier(arr)
+      │                 │       └─ argument: NumericLiteral(2)
+      │                 └─ rhs: StringLiteral(ccc)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ ElementAccessExpression
+      │                    ├─ expression: Identifier(arr)
+      │                    └─ argument: NumericLiteral(0)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ ElementAccessExpression
+      │                    ├─ expression: Identifier(arr)
+      │                    └─ argument: NumericLiteral(1)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ ElementAccessExpression
+      │                    ├─ expression: Identifier(arr)
+      │                    └─ argument: NumericLiteral(2)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

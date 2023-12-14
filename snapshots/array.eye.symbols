@@ -1,0 +1,6 @@
+Table 'global'
+main: () => i64
+
+  Table 'main'
+  arr: Array<string, 3>
+

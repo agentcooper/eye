@@ -15,6 +15,7 @@ struct IdentifierNode;
 struct IfStatementNode;
 struct InterfaceDeclarationNode;
 struct LetStatementNode;
+struct LiteralTypeNode;
 struct NumericLiteralNode;
 struct ObjectLiteralNode;
 struct ParameterNode;
@@ -44,6 +45,7 @@ public:
   virtual void visit(IfStatementNode &node) = 0;
   virtual void visit(InterfaceDeclarationNode &node) = 0;
   virtual void visit(LetStatementNode &node) = 0;
+  virtual void visit(LiteralTypeNode &node) = 0;
   virtual void visit(NumericLiteralNode &node) = 0;
   virtual void visit(ObjectLiteralNode &node) = 0;
   virtual void visit(ParameterNode &node) = 0;

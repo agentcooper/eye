@@ -77,6 +77,12 @@ private:
     }
   }
 
+  void visit(LiteralTypeNode &node) override {
+    printPrefix();
+    std::cout << "LiteralType" << std::endl;
+    accept(*node.literal, true);
+  };
+
   void visit(TypeReferenceNode &node) override {
     printPrefix();
     std::cout << "TypeReference" << std::endl;
@@ -130,8 +136,8 @@ private:
     printPrefix();
     std::cout << "LetStatement(" << node.name << ")" << std::endl;
 
-    maybeAccept(node.type.get(), false, "type");
-    accept(*node.expression, true, "expression");
+    maybeAccept(node.type.get(), node.expression == nullptr, "type");
+    maybeAccept(node.expression.get(), true, "expression");
   };
 
   void visit(ForStatementNode &node) override {

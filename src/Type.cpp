@@ -40,6 +40,14 @@ struct TypePrinterVisitor {
     result += ">";
     return result;
   }
+  std::string operator()(const ArrayType &type) {
+    std::string result;
+    result += "Array<";
+    result += std::visit(*this, *type.type);
+    result += ", " + std::to_string(type.size);
+    result += ">";
+    return result;
+  }
   std::string operator()(const StructType &type) {
     std::string result;
     result += "{";
@@ -92,6 +100,24 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
     if (typeReferenceNode->typeName->name == "Pointer") {
       auto t = typeNodeToType(typeReferenceNode->typeParameters[0].get());
       return std::make_shared<Type>(PointerType(std::move(t)));
+    }
+    if (typeReferenceNode->typeName->name == "Array") {
+      auto t = typeNodeToType(typeReferenceNode->typeParameters[0].get());
+
+      auto literalNode = dynamic_cast<LiteralTypeNode *>(
+          typeReferenceNode->typeParameters[1].get());
+      if (!literalNode) {
+        throw std::runtime_error("Expected literal node");
+      }
+
+      auto numericLiteralNode =
+          dynamic_cast<NumericLiteralNode *>(literalNode->literal.get());
+      if (!numericLiteralNode) {
+        throw std::runtime_error("Expected numeric literal node");
+      }
+
+      return std::make_shared<Type>(
+          ArrayType(std::move(t), (int)numericLiteralNode->value));
     }
     return std::make_shared<Type>(
         TypeReference(typeReferenceNode->typeName->name));

@@ -96,13 +96,8 @@ public:
       auto identifierNode = std::make_unique<IdentifierNode>(name);
 
       if (currentToken.kind() == Token::Kind::LessThan) {
-        getNextToken();
-
-        // TODO: support multiple parameters
-        std::vector<std::unique_ptr<Node>> typeParameters;
-        auto type = parseType();
-        typeParameters.push_back(std::move(type));
-
+        getNextToken(); // eat '<'
+        auto typeParameters = parseTypeParameters();
         getNextToken(); // eat '>'
 
         return std::make_unique<TypeReferenceNode>(std::move(identifierNode),
@@ -136,7 +131,8 @@ public:
       return std::make_unique<StructTypeNode>(std::move(members));
     }
 
-    throw std::runtime_error("Can't parse type");
+    auto literal = parsePrimary();
+    return std::make_unique<LiteralTypeNode>(std::move(literal));
   }
 
   std::unique_ptr<Node> parseArrowFunction() {
@@ -452,6 +448,7 @@ public:
     TRACE_METHOD;
 
     std::unique_ptr<Node> type = nullptr;
+    std::unique_ptr<Node> expression = nullptr;
 
     getNextToken(); // eat 'let'
 
@@ -464,10 +461,10 @@ public:
       type = parseType();
     }
 
-    expect(Token::Kind::Equals);
-    getNextToken();
-
-    auto expression = parseExpression();
+    if (currentToken.kind() == Token::Kind::Equals) {
+      getNextToken();
+      expression = parseExpression();
+    }
 
     expect(Token::Kind::Semicolon);
     getNextToken();
@@ -560,6 +557,27 @@ public:
 
     return std::make_unique<PropertySignatureNode>(argumentName,
                                                    std::move(type));
+  }
+
+  std::vector<std::unique_ptr<Node>> parseTypeParameters() {
+    TRACE_METHOD;
+
+    std::vector<std::unique_ptr<Node>> parameters;
+    if (currentToken.kind() != Token::Kind::LessThan) {
+      while (true) {
+        auto type = parseType();
+        parameters.push_back(std::move(type));
+
+        if (currentToken.kind() == Token::Kind::GreaterThan)
+          break;
+
+        if (currentToken.kind() != Token::Kind::Comma)
+          throw std::runtime_error("Bad");
+
+        getNextToken();
+      }
+    }
+    return parameters;
   }
 
   std::vector<std::unique_ptr<ParameterNode>> parseParameters() {

@@ -13,6 +13,7 @@
 class TypeReference;
 class FunctionType;
 class PointerType;
+class ArrayType;
 class StructType;
 enum class PrimitiveType {
   i64Type,
@@ -24,7 +25,7 @@ enum class PrimitiveType {
   unknownType
 };
 using Type = std::variant<PrimitiveType, TypeReference, FunctionType,
-                          StructType, PointerType>;
+                          StructType, PointerType, ArrayType>;
 
 class TypeReference {
 public:
@@ -35,6 +36,14 @@ public:
   TypeReference(const std::string &name,
                 std::vector<std::shared_ptr<Type>> typeParameters)
       : name(name), typeParameters(std::move(typeParameters)){};
+};
+
+class ArrayType {
+public:
+  std::shared_ptr<Type> type;
+  const size_t size;
+
+  ArrayType(std::shared_ptr<Type> type, size_t size) : type(type), size(size){};
 };
 
 class PointerType {
