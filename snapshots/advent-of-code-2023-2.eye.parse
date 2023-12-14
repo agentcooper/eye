@@ -1,0 +1,320 @@
+SourceFile
+├─ FunctionDeclaration(is_digit)
+│  ├─ Parameter(c)
+│  │  └─ TypeReference
+│  │     └─ Identifier(char)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(boolean)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: BinaryExpression(AmpersandAmpersand)
+│                       ├─ lhs: BinaryExpression(GreaterThanEquals)
+│                       │       ├─ lhs: Identifier(c)
+│                       │       └─ rhs: CharLiteral(0)
+│                       └─ rhs: BinaryExpression(LessThanEquals)
+│                               ├─ lhs: Identifier(c)
+│                               └─ rhs: CharLiteral(9)
+├─ FunctionDeclaration(max)
+│  ├─ Parameter(a)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ Parameter(b)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     ├─ IfStatement
+│     │  ├─ condition: BinaryExpression(GreaterThan)
+│     │  │             ├─ lhs: Identifier(a)
+│     │  │             └─ rhs: Identifier(b)
+│     │  └─ ifTrue: Block
+│     │             └─ ReturnStatement
+│     │                └─ expression: Identifier(a)
+│     └─ ReturnStatement
+│        └─ expression: Identifier(b)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(input)
+      │  ├─ type: Null
+      │  └─ expression: CallExpression(readFile)
+      │                 └─ StringLiteral(input/advent-of-code-2023-2.txt)
+      ├─ LetStatement(input_length)
+      │  ├─ type: Null
+      │  └─ expression: CallExpression(string_length)
+      │                 └─ Identifier(input)
+      ├─ LetStatement(answer1)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ LetStatement(answer2)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ LetStatement(max_red)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(12)
+      ├─ LetStatement(max_green)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(13)
+      ├─ LetStatement(max_blue)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(14)
+      ├─ LetStatement(game_id)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ LetStatement(is_possible)
+      │  ├─ type: Null
+      │  └─ expression: BooleanLiteral(true)
+      ├─ LetStatement(number)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ LetStatement(red)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ LetStatement(green)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ LetStatement(blue)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ LetStatement(lastChar)
+      │  ├─ type: Null
+      │  └─ expression: CharLiteral(')
+      ├─ LetStatement(game_max_red)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ LetStatement(game_max_green)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ LetStatement(game_max_blue)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(0)
+      ├─ ForStatement
+      │  ├─ initializer: LetStatement(i)
+      │  │               ├─ type: Null
+      │  │               └─ expression: NumericLiteral(0)
+      │  ├─ condition: BinaryExpression(LessThan)
+      │  │             ├─ lhs: Identifier(i)
+      │  │             └─ rhs: Identifier(input_length)
+      │  ├─ incrementer: BinaryExpression(Equals)
+      │  │               ├─ lhs: Identifier(i)
+      │  │               └─ rhs: BinaryExpression(Plus)
+      │  │                       ├─ lhs: Identifier(i)
+      │  │                       └─ rhs: NumericLiteral(1)
+      │  ├─ body: Block
+      │  │        ├─ LetStatement(c)
+      │  │        │  ├─ type: Null
+      │  │        │  └─ expression: ElementAccessExpression
+      │  │        │                 ├─ expression: Identifier(input)
+      │  │        │                 └─ argument: Identifier(i)
+      │  │        ├─ IfStatement
+      │  │        │  ├─ condition: CallExpression(is_digit)
+      │  │        │  │             └─ Identifier(c)
+      │  │        │  └─ ifTrue: Block
+      │  │        │             └─ ExpressionStatement
+      │  │        │                └─ expression: BinaryExpression(Equals)
+      │  │        │                               ├─ lhs: Identifier(number)
+      │  │        │                               └─ rhs: BinaryExpression(Plus)
+      │  │        │                                       ├─ lhs: BinaryExpression(Asterisk)
+      │  │        │                                       │       ├─ lhs: Identifier(number)
+      │  │        │                                       │       └─ rhs: NumericLiteral(10)
+      │  │        │                                       └─ rhs: CallExpression(char_to_i64)
+      │  │        │                                               └─ Identifier(c)
+      │  │        ├─ IfStatement
+      │  │        │  ├─ condition: BinaryExpression(DoubleEquals)
+      │  │        │  │             ├─ lhs: Identifier(c)
+      │  │        │  │             └─ rhs: CharLiteral(:)
+      │  │        │  └─ ifTrue: Block
+      │  │        │             ├─ ExpressionStatement
+      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │                 ├─ lhs: Identifier(game_id)
+      │  │        │             │                 └─ rhs: Identifier(number)
+      │  │        │             └─ ExpressionStatement
+      │  │        │                └─ expression: BinaryExpression(Equals)
+      │  │        │                               ├─ lhs: Identifier(number)
+      │  │        │                               └─ rhs: NumericLiteral(0)
+      │  │        ├─ IfStatement
+      │  │        │  ├─ condition: BinaryExpression(BarBar)
+      │  │        │  │             ├─ lhs: BinaryExpression(BarBar)
+      │  │        │  │             │       ├─ lhs: BinaryExpression(DoubleEquals)
+      │  │        │  │             │       │       ├─ lhs: Identifier(c)
+      │  │        │  │             │       │       └─ rhs: CharLiteral(,)
+      │  │        │  │             │       └─ rhs: BinaryExpression(DoubleEquals)
+      │  │        │  │             │               ├─ lhs: Identifier(c)
+      │  │        │  │             │               └─ rhs: CharLiteral(;)
+      │  │        │  │             └─ rhs: BinaryExpression(DoubleEquals)
+      │  │        │  │                     ├─ lhs: Identifier(c)
+      │  │        │  │                     └─ rhs: CharLiteral(\n)
+      │  │        │  └─ ifTrue: Block
+      │  │        │             ├─ IfStatement
+      │  │        │             │  ├─ condition: BinaryExpression(DoubleEquals)
+      │  │        │             │  │             ├─ lhs: Identifier(lastChar)
+      │  │        │             │  │             └─ rhs: CharLiteral(d)
+      │  │        │             │  └─ ifTrue: Block
+      │  │        │             │             ├─ ExpressionStatement
+      │  │        │             │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │             │                 ├─ lhs: Identifier(red)
+      │  │        │             │             │                 └─ rhs: BinaryExpression(Plus)
+      │  │        │             │             │                         ├─ lhs: Identifier(red)
+      │  │        │             │             │                         └─ rhs: Identifier(number)
+      │  │        │             │             └─ ExpressionStatement
+      │  │        │             │                └─ expression: BinaryExpression(Equals)
+      │  │        │             │                               ├─ lhs: Identifier(game_max_red)
+      │  │        │             │                               └─ rhs: CallExpression(max)
+      │  │        │             │                                       ├─ Identifier(red)
+      │  │        │             │                                       └─ Identifier(game_max_red)
+      │  │        │             ├─ IfStatement
+      │  │        │             │  ├─ condition: BinaryExpression(DoubleEquals)
+      │  │        │             │  │             ├─ lhs: Identifier(lastChar)
+      │  │        │             │  │             └─ rhs: CharLiteral(e)
+      │  │        │             │  └─ ifTrue: Block
+      │  │        │             │             ├─ ExpressionStatement
+      │  │        │             │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │             │                 ├─ lhs: Identifier(blue)
+      │  │        │             │             │                 └─ rhs: BinaryExpression(Plus)
+      │  │        │             │             │                         ├─ lhs: Identifier(blue)
+      │  │        │             │             │                         └─ rhs: Identifier(number)
+      │  │        │             │             └─ ExpressionStatement
+      │  │        │             │                └─ expression: BinaryExpression(Equals)
+      │  │        │             │                               ├─ lhs: Identifier(game_max_blue)
+      │  │        │             │                               └─ rhs: CallExpression(max)
+      │  │        │             │                                       ├─ Identifier(blue)
+      │  │        │             │                                       └─ Identifier(game_max_blue)
+      │  │        │             ├─ IfStatement
+      │  │        │             │  ├─ condition: BinaryExpression(DoubleEquals)
+      │  │        │             │  │             ├─ lhs: Identifier(lastChar)
+      │  │        │             │  │             └─ rhs: CharLiteral(n)
+      │  │        │             │  └─ ifTrue: Block
+      │  │        │             │             ├─ ExpressionStatement
+      │  │        │             │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │             │                 ├─ lhs: Identifier(green)
+      │  │        │             │             │                 └─ rhs: BinaryExpression(Plus)
+      │  │        │             │             │                         ├─ lhs: Identifier(green)
+      │  │        │             │             │                         └─ rhs: Identifier(number)
+      │  │        │             │             └─ ExpressionStatement
+      │  │        │             │                └─ expression: BinaryExpression(Equals)
+      │  │        │             │                               ├─ lhs: Identifier(game_max_green)
+      │  │        │             │                               └─ rhs: CallExpression(max)
+      │  │        │             │                                       ├─ Identifier(green)
+      │  │        │             │                                       └─ Identifier(game_max_green)
+      │  │        │             └─ ExpressionStatement
+      │  │        │                └─ expression: BinaryExpression(Equals)
+      │  │        │                               ├─ lhs: Identifier(number)
+      │  │        │                               └─ rhs: NumericLiteral(0)
+      │  │        ├─ IfStatement
+      │  │        │  ├─ condition: BinaryExpression(BarBar)
+      │  │        │  │             ├─ lhs: BinaryExpression(DoubleEquals)
+      │  │        │  │             │       ├─ lhs: Identifier(c)
+      │  │        │  │             │       └─ rhs: CharLiteral(;)
+      │  │        │  │             └─ rhs: BinaryExpression(DoubleEquals)
+      │  │        │  │                     ├─ lhs: Identifier(c)
+      │  │        │  │                     └─ rhs: CharLiteral(\n)
+      │  │        │  └─ ifTrue: Block
+      │  │        │             ├─ IfStatement
+      │  │        │             │  ├─ condition: BinaryExpression(BarBar)
+      │  │        │             │  │             ├─ lhs: BinaryExpression(BarBar)
+      │  │        │             │  │             │       ├─ lhs: BinaryExpression(GreaterThan)
+      │  │        │             │  │             │       │       ├─ lhs: Identifier(red)
+      │  │        │             │  │             │       │       └─ rhs: Identifier(max_red)
+      │  │        │             │  │             │       └─ rhs: BinaryExpression(GreaterThan)
+      │  │        │             │  │             │               ├─ lhs: Identifier(green)
+      │  │        │             │  │             │               └─ rhs: Identifier(max_green)
+      │  │        │             │  │             └─ rhs: BinaryExpression(GreaterThan)
+      │  │        │             │  │                     ├─ lhs: Identifier(blue)
+      │  │        │             │  │                     └─ rhs: Identifier(max_blue)
+      │  │        │             │  └─ ifTrue: Block
+      │  │        │             │             └─ ExpressionStatement
+      │  │        │             │                └─ expression: BinaryExpression(Equals)
+      │  │        │             │                               ├─ lhs: Identifier(is_possible)
+      │  │        │             │                               └─ rhs: BooleanLiteral(false)
+      │  │        │             ├─ ExpressionStatement
+      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │                 ├─ lhs: Identifier(red)
+      │  │        │             │                 └─ rhs: NumericLiteral(0)
+      │  │        │             ├─ ExpressionStatement
+      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │                 ├─ lhs: Identifier(green)
+      │  │        │             │                 └─ rhs: NumericLiteral(0)
+      │  │        │             └─ ExpressionStatement
+      │  │        │                └─ expression: BinaryExpression(Equals)
+      │  │        │                               ├─ lhs: Identifier(blue)
+      │  │        │                               └─ rhs: NumericLiteral(0)
+      │  │        ├─ IfStatement
+      │  │        │  ├─ condition: BinaryExpression(BarBar)
+      │  │        │  │             ├─ lhs: BinaryExpression(DoubleEquals)
+      │  │        │  │             │       ├─ lhs: Identifier(c)
+      │  │        │  │             │       └─ rhs: CharLiteral(\n)
+      │  │        │  │             └─ rhs: BinaryExpression(DoubleEquals)
+      │  │        │  │                     ├─ lhs: Identifier(i)
+      │  │        │  │                     └─ rhs: BinaryExpression(Minus)
+      │  │        │  │                             ├─ lhs: Identifier(input_length)
+      │  │        │  │                             └─ rhs: NumericLiteral(1)
+      │  │        │  └─ ifTrue: Block
+      │  │        │             ├─ IfStatement
+      │  │        │             │  ├─ condition: Identifier(is_possible)
+      │  │        │             │  └─ ifTrue: Block
+      │  │        │             │             └─ ExpressionStatement
+      │  │        │             │                └─ expression: BinaryExpression(Equals)
+      │  │        │             │                               ├─ lhs: Identifier(answer1)
+      │  │        │             │                               └─ rhs: BinaryExpression(Plus)
+      │  │        │             │                                       ├─ lhs: Identifier(answer1)
+      │  │        │             │                                       └─ rhs: Identifier(game_id)
+      │  │        │             ├─ ExpressionStatement
+      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │                 ├─ lhs: Identifier(answer2)
+      │  │        │             │                 └─ rhs: BinaryExpression(Plus)
+      │  │        │             │                         ├─ lhs: Identifier(answer2)
+      │  │        │             │                         └─ rhs: BinaryExpression(Asterisk)
+      │  │        │             │                                 ├─ lhs: BinaryExpression(Asterisk)
+      │  │        │             │                                 │       ├─ lhs: Identifier(game_max_red)
+      │  │        │             │                                 │       └─ rhs: Identifier(game_max_green)
+      │  │        │             │                                 └─ rhs: Identifier(game_max_blue)
+      │  │        │             ├─ ExpressionStatement
+      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │                 ├─ lhs: Identifier(red)
+      │  │        │             │                 └─ rhs: NumericLiteral(0)
+      │  │        │             ├─ ExpressionStatement
+      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │                 ├─ lhs: Identifier(green)
+      │  │        │             │                 └─ rhs: NumericLiteral(0)
+      │  │        │             ├─ ExpressionStatement
+      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │                 ├─ lhs: Identifier(blue)
+      │  │        │             │                 └─ rhs: NumericLiteral(0)
+      │  │        │             ├─ ExpressionStatement
+      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │                 ├─ lhs: Identifier(game_max_red)
+      │  │        │             │                 └─ rhs: NumericLiteral(0)
+      │  │        │             ├─ ExpressionStatement
+      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │                 ├─ lhs: Identifier(game_max_green)
+      │  │        │             │                 └─ rhs: NumericLiteral(0)
+      │  │        │             ├─ ExpressionStatement
+      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │                 ├─ lhs: Identifier(game_max_blue)
+      │  │        │             │                 └─ rhs: NumericLiteral(0)
+      │  │        │             ├─ ExpressionStatement
+      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │                 ├─ lhs: Identifier(number)
+      │  │        │             │                 └─ rhs: NumericLiteral(0)
+      │  │        │             ├─ ExpressionStatement
+      │  │        │             │  └─ expression: BinaryExpression(Equals)
+      │  │        │             │                 ├─ lhs: Identifier(game_id)
+      │  │        │             │                 └─ rhs: NumericLiteral(0)
+      │  │        │             └─ ExpressionStatement
+      │  │        │                └─ expression: BinaryExpression(Equals)
+      │  │        │                               ├─ lhs: Identifier(is_possible)
+      │  │        │                               └─ rhs: BooleanLiteral(true)
+      │  │        └─ ExpressionStatement
+      │  │           └─ expression: BinaryExpression(Equals)
+      │  │                          ├─ lhs: Identifier(lastChar)
+      │  │                          └─ rhs: Identifier(c)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(answer1)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(answer2)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

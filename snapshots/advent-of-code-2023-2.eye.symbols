@@ -1,0 +1,35 @@
+Table 'global'
+is_digit: (char) => boolean
+main: () => i64
+max: (i64, i64) => i64
+
+  Table 'is_digit'
+  c: char
+
+  Table 'max'
+  a: i64
+  b: i64
+
+  Table 'main'
+  answer1: i64
+  answer2: i64
+  blue: i64
+  game_id: i64
+  game_max_blue: i64
+  game_max_green: i64
+  game_max_red: i64
+  green: i64
+  input: string
+  input_length: i64
+  is_possible: boolean
+  lastChar: char
+  max_blue: i64
+  max_green: i64
+  max_red: i64
+  number: i64
+  red: i64
+
+    Table 'for0'
+    c: char
+    i: i64
+

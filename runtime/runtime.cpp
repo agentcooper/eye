@@ -34,7 +34,11 @@ char *joinStrings(const void *env, const char *s1, const char *s2) {
   return result;
 }
 
-char *i64_to_string(const void *env, const int value) {
+const char *i64_to_string(const void *env, const int value) {
+  static const char *s0 = "0";
+  if (value == 0) {
+    return s0;
+  }
   const int number_of_digits = log10(abs(value)) + 1;
   const int number_of_chars = number_of_digits + 1 + (value < 0 ? 1 : 0);
   char *s = (char *)GarbageCollector::allocate(sizeof(char) * number_of_chars);
