@@ -11,14 +11,14 @@ reduce: (Pointer<List>, i64, (i64, i64) => i64) => i64
   v: i64
 
   Table 'forEach'
-  f: (i64) => void
+  callback: (i64) => void
   list: Pointer<List>
 
     Table 'for0'
     current: Pointer<{value: i64, next: Pointer<List>}>
 
   Table 'reduce'
-  f: (i64, i64) => i64
+  callback: (i64, i64) => i64
   list: Pointer<List>
   result: i64
   start: i64

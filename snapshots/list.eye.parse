@@ -52,7 +52,7 @@ SourceFile
 │  │     ├─ Identifier(Pointer)
 │  │     └─ TypeReference
 │  │        └─ Identifier(List)
-│  ├─ Parameter(f)
+│  ├─ Parameter(callback)
 │  │  └─ FunctionType
 │  │     ├─ Parameter(current)
 │  │     │  └─ TypeReference
@@ -80,7 +80,7 @@ SourceFile
 │     │  │                       └─ rhs: Identifier(next)
 │     │  ├─ body: Block
 │     │  │        └─ ExpressionStatement
-│     │  │           └─ expression: CallExpression(f)
+│     │  │           └─ expression: CallExpression(callback)
 │     │  │                          └─ BinaryExpression(Dot)
 │     │  │                             ├─ lhs: UnaryExpression(Asterisk)
 │     │  │                             │       └─ Identifier(current)
@@ -96,7 +96,7 @@ SourceFile
 │  ├─ Parameter(start)
 │  │  └─ TypeReference
 │  │     └─ Identifier(i64)
-│  ├─ Parameter(f)
+│  ├─ Parameter(callback)
 │  │  └─ FunctionType
 │  │     ├─ Parameter(acc)
 │  │     │  └─ TypeReference
@@ -132,7 +132,7 @@ SourceFile
 │     │  │        └─ ExpressionStatement
 │     │  │           └─ expression: BinaryExpression(Equals)
 │     │  │                          ├─ lhs: Identifier(result)
-│     │  │                          └─ rhs: CallExpression(f)
+│     │  │                          └─ rhs: CallExpression(callback)
 │     │  │                                  ├─ Identifier(result)
 │     │  │                                  └─ BinaryExpression(Dot)
 │     │  │                                     ├─ lhs: UnaryExpression(Asterisk)
@@ -189,6 +189,8 @@ SourceFile
       │                                         └─ rhs: Identifier(n)
       ├─ ExpressionStatement
       │  └─ expression: CallExpression(print)
-      │                 └─ Identifier(sum)
+      │                 └─ BinaryExpression(Plus)
+      │                    ├─ lhs: StringLiteral(Sum is )
+      │                    └─ rhs: Identifier(sum)
       └─ ReturnStatement
          └─ expression: NumericLiteral(0)
