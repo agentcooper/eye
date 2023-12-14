@@ -39,12 +39,14 @@ SourceFile
       │  ├─ type: Null
       │  └─ expression: StringLiteral( World)
       ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(PlusEquals)
+      │                 ├─ lhs: Identifier(s2)
+      │                 └─ rhs: StringLiteral(!)
+      ├─ ExpressionStatement
       │  └─ expression: CallExpression(print)
       │                 └─ BinaryExpression(Plus)
-      │                    ├─ lhs: BinaryExpression(Plus)
-      │                    │       ├─ lhs: Identifier(s1)
-      │                    │       └─ rhs: Identifier(s2)
-      │                    └─ rhs: StringLiteral(!)
+      │                    ├─ lhs: Identifier(s1)
+      │                    └─ rhs: Identifier(s2)
       ├─ LetStatement(_)
       │  ├─ type: Null
       │  └─ expression: CallExpression(cleanUpRegistersForGC)

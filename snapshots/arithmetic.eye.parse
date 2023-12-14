@@ -34,5 +34,33 @@ SourceFile
       │                 └─ BinaryExpression(Percent)
       │                    ├─ lhs: Identifier(a)
       │                    └─ rhs: Identifier(b)
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(PlusEquals)
+      │                 ├─ lhs: Identifier(a)
+      │                 └─ rhs: NumericLiteral(32)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(a)
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(AsteriskEquals)
+      │                 ├─ lhs: Identifier(a)
+      │                 └─ rhs: NumericLiteral(2)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(a)
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(SlashEquals)
+      │                 ├─ lhs: Identifier(a)
+      │                 └─ rhs: NumericLiteral(2)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(a)
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(MinusEquals)
+      │                 ├─ lhs: Identifier(a)
+      │                 └─ rhs: NumericLiteral(1)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(a)
       └─ ReturnStatement
          └─ expression: NumericLiteral(0)

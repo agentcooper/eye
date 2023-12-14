@@ -55,7 +55,11 @@ public:
 
     setPrecedence(Token::Kind::BarBar, 12);
 
-    setPrecedence(Token::Kind::Equals, 15);
+    setPrecedence(Token::Kind::Equals, 14);
+    setPrecedence(Token::Kind::PlusEquals, 14);
+    setPrecedence(Token::Kind::MinusEquals, 14);
+    setPrecedence(Token::Kind::AsteriskEquals, 14);
+    setPrecedence(Token::Kind::SlashEquals, 14);
   };
 
   const Token &peekToken() { return nextToken; }

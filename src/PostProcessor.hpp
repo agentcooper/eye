@@ -110,6 +110,33 @@ private:
   }
 
   void visit(BinaryExpressionNode &node) override {
+    auto extractArithmeticOperator =
+        [](Token::Kind kind) -> std::optional<Token::Kind> {
+      switch (kind) {
+      case Token::Kind::PlusEquals:
+        return Token::Kind::Plus;
+      case Token::Kind::MinusEquals:
+        return Token::Kind::Minus;
+      case Token::Kind::AsteriskEquals:
+        return Token::Kind::Asterisk;
+      case Token::Kind::SlashEquals:
+        return Token::Kind::Slash;
+      default:
+        return {};
+      }
+    };
+
+    if (auto op = extractArithmeticOperator(node.op)) {
+      auto newRHS = std::make_unique<BinaryExpressionNode>(*op, visit(node.lhs),
+                                                           visit(node.rhs));
+      std::unique_ptr<Node> newBinary = std::make_unique<BinaryExpressionNode>(
+          Token::Kind::Equals, visit(node.lhs), std::move(newRHS));
+
+      newBinary->accept(symbolTableVisitor);
+      value = visit(newBinary);
+      return;
+    }
+
     if (node.op == Token::Kind::Plus) {
 
       auto t1 = symbolTableVisitor.getType(node.lhs.get());

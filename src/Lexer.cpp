@@ -46,6 +46,8 @@ start:
         c = get();
       }
       goto start;
+    } else if (c == '=') {
+      return single(Token::Kind::SlashEquals);
     } else {
       return single(Token::Kind::Slash);
     }
@@ -134,8 +136,18 @@ start:
   case '}':
     return single(Token::Kind::RightCurly);
   case '+':
+    if (*(m_source + 1) == '=') {
+      auto token = Token(Token::Kind::PlusEquals, m_source, 2);
+      m_source += 2;
+      return token;
+    }
     return single(Token::Kind::Plus);
   case '-':
+    if (*(m_source + 1) == '=') {
+      auto token = Token(Token::Kind::MinusEquals, m_source, 2);
+      m_source += 2;
+      return token;
+    }
     return single(Token::Kind::Minus);
   case ',':
     return single(Token::Kind::Comma);
@@ -172,6 +184,11 @@ start:
     }
     return single(Token::Kind::Equals);
   case '*':
+    if (*(m_source + 1) == '=') {
+      auto token = Token(Token::Kind::AsteriskEquals, m_source, 2);
+      m_source += 2;
+      return token;
+    }
     return single(Token::Kind::Asterisk);
   case '%':
     return single(Token::Kind::Percent);

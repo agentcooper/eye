@@ -9,8 +9,12 @@ const char *kindToString(const Token::Kind kind) {
     return "FloatingPoint";
   case Plus:
     return "Plus";
+  case PlusEquals:
+    return "PlusEquals";
   case Minus:
     return "Minus";
+  case MinusEquals:
+    return "MinusEquals";
   case LeftParen:
     return "LeftParen";
   case RightParen:
@@ -33,8 +37,12 @@ const char *kindToString(const Token::Kind kind) {
     return "Dot";
   case Asterisk:
     return "Asterisk";
+  case AsteriskEquals:
+    return "AsteriskEquals";
   case Slash:
     return "Slash";
+  case SlashEquals:
+    return "SlashEquals";
   case Percent:
     return "Percent";
   case Identifier:
