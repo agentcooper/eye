@@ -490,8 +490,11 @@ public:
     isWrite = p;
     auto expressionValue = value;
 
+    auto _isWrite = isWrite;
+    isWrite = false;
     node.argumentExpression->accept(*this);
     auto argumentValue = value;
+    isWrite = _isWrite;
 
     if (arrayType) {
       auto gep = builder->CreateInBoundsGEP(

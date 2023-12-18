@@ -5,9 +5,9 @@ function main(): i64 {
   arr[1] = "bbb";
   arr[2] = "ccc";
 
-  print(arr[0]);
-  print(arr[1]);
-  print(arr[2]);
+  for (let i = 0; i < 3; i += 1) {
+    print(arr[i]);
+  }
 
   return 0;
 }
