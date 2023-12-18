@@ -9,6 +9,8 @@ std::string getPrelude() {
   result += "declare function print_boolean(b: boolean): void;\n";
   result += "declare function print_char(c: char): void;\n";
   result += "declare function print_string(s: string): void;\n";
+  result += "declare function print_string_char(s: string, terminator: char): "
+            "void;\n";
 
   result += "declare function joinStrings(s1: string, s2: string): string;\n";
   result += "declare function string_length(s: string): i64;\n";

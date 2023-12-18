@@ -191,10 +191,14 @@ private:
 
     if (node.callee == "print") {
       // @TODO: this make it impossible to pass `print` function as an argument
-      auto firstArgumentType =
-          symbolTableVisitor.getType(node.arguments.front().get());
-      value = std::make_unique<CallExpressionNode>(
-          "print_" + typeToString(*firstArgumentType), visit(node.arguments));
+      std::string fullName = node.callee;
+      for (const auto &argument : node.arguments) {
+        auto type = symbolTableVisitor.getType(argument.get());
+        fullName += "_" + typeToString(*type);
+      }
+
+      value =
+          std::make_unique<CallExpressionNode>(fullName, visit(node.arguments));
       return;
     }
 

@@ -24,7 +24,13 @@ void print_boolean(const void *env, const bool b) {
 
 void print_char(const void *env, const char c) { printf("%c\n", c); }
 
-void print_string(const void *env, const char *s) { printf("%s\n", s); }
+void print_string(const void *env, const char *s, const char terminator) {
+  printf("%s\n", s);
+}
+
+void print_string_char(const void *env, const char *s, const char terminator) {
+  printf("%s%c", s, terminator);
+}
 
 char *joinStrings(const void *env, const char *s1, const char *s2) {
   char *result =

@@ -283,19 +283,6 @@ public:
       return std::make_unique<CallExpressionNode>(name, std::move(arguments));
     }
 
-    if (currentToken.kind() == Token::Kind::LeftSquareBracket) {
-      getNextToken(); // eat '['
-
-      auto identifier = std::make_unique<IdentifierNode>(name);
-
-      auto argumentExpression = parseExpression();
-
-      getNextToken(); // eat ']'
-
-      return std::make_unique<ElementAccessExpressionNode>(
-          std::move(identifier), std::move(argumentExpression));
-    }
-
     return std::make_unique<IdentifierNode>(name);
   }
 
@@ -369,8 +356,24 @@ public:
     TRACE_METHOD;
 
     auto lhs = parsePrimary();
-    if (!lhs)
+    if (!lhs) {
       return nullptr;
+    }
+
+    while (true) {
+      if (currentToken.kind() == Token::Kind::LeftSquareBracket) {
+        getNextToken(); // eat '['
+
+        auto argumentExpression = parseExpression();
+
+        getNextToken(); // eat ']'
+
+        lhs = std::make_unique<ElementAccessExpressionNode>(
+            std::move(lhs), std::move(argumentExpression));
+      } else {
+        break;
+      }
+    }
 
     return parseBinaryExpression(0, std::move(lhs));
   }
