@@ -2,5 +2,11 @@ Table 'global'
 main: () => i64
 
   Table 'main'
-  arr: Array<string, 3>
+  map: Array<Array<string, 5>, 5>
+
+    Table 'for0'
+    y: i64
+
+      Table 'for1'
+      x: i64
 

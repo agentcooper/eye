@@ -238,7 +238,7 @@ public:
       Token::Kind BinOp = currentToken.kind();
       getNextToken(); // eat operator
 
-      auto RHS = parsePrimary();
+      auto RHS = parsePrimaryPlus();
       if (!RHS)
         return nullptr;
 
@@ -352,7 +352,7 @@ public:
     return std::make_unique<UnaryExpressionNode>(op, std::move(expression));
   }
 
-  std::unique_ptr<Node> parseExpression() {
+  std::unique_ptr<Node> parsePrimaryPlus() {
     TRACE_METHOD;
 
     auto lhs = parsePrimary();
@@ -373,6 +373,17 @@ public:
       } else {
         break;
       }
+    }
+
+    return lhs;
+  }
+
+  std::unique_ptr<Node> parseExpression() {
+    TRACE_METHOD;
+
+    auto lhs = parsePrimaryPlus();
+    if (!lhs) {
+      return nullptr;
     }
 
     return parseBinaryExpression(0, std::move(lhs));
