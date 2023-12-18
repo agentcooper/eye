@@ -1,33 +1,4 @@
 SourceFile
-├─ FunctionDeclaration(cleanUpRegistersForGC)
-│  ├─ Parameter(a)
-│  │  └─ TypeReference
-│  │     └─ Identifier(i64)
-│  ├─ Parameter(b)
-│  │  └─ TypeReference
-│  │     └─ Identifier(i64)
-│  ├─ Parameter(c)
-│  │  └─ TypeReference
-│  │     └─ Identifier(i64)
-│  ├─ Parameter(d)
-│  │  └─ TypeReference
-│  │     └─ Identifier(i64)
-│  ├─ Parameter(e)
-│  │  └─ TypeReference
-│  │     └─ Identifier(i64)
-│  ├─ returnType: TypeReference
-│  │              └─ Identifier(i64)
-│  └─ Block
-│     └─ ReturnStatement
-│        └─ expression: BinaryExpression(Plus)
-│                       ├─ lhs: BinaryExpression(Plus)
-│                       │       ├─ lhs: BinaryExpression(Plus)
-│                       │       │       ├─ lhs: BinaryExpression(Plus)
-│                       │       │       │       ├─ lhs: Identifier(a)
-│                       │       │       │       └─ rhs: Identifier(b)
-│                       │       │       └─ rhs: Identifier(c)
-│                       │       └─ rhs: Identifier(d)
-│                       └─ rhs: Identifier(e)
 └─ FunctionDeclaration(main)
    ├─ returnType: TypeReference
    │              └─ Identifier(i64)
@@ -47,13 +18,5 @@ SourceFile
       │                 └─ BinaryExpression(Plus)
       │                    ├─ lhs: Identifier(s1)
       │                    └─ rhs: Identifier(s2)
-      ├─ LetStatement(_)
-      │  ├─ type: Null
-      │  └─ expression: CallExpression(cleanUpRegistersForGC)
-      │                 ├─ NumericLiteral(1)
-      │                 ├─ NumericLiteral(2)
-      │                 ├─ NumericLiteral(3)
-      │                 ├─ NumericLiteral(4)
-      │                 └─ NumericLiteral(5)
       └─ ReturnStatement
          └─ expression: NumericLiteral(0)

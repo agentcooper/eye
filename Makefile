@@ -1,5 +1,5 @@
 CPP = g++
-CPPFLAGS = -Wall -Wextra -Wno-unused-parameter -Wnon-virtual-dtor -pedantic -Wimplicit-fallthrough -std=c++20
+CPPFLAGS = -g -Wall -Wextra -Wno-unused-parameter -Wnon-virtual-dtor -pedantic -Wimplicit-fallthrough -std=c++20
 ifeq ($(DEBUG), 1)
     CPPFLAGS += -DDEBUG
 endif
