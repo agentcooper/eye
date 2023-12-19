@@ -183,8 +183,8 @@ public:
 
   void visit(TypeReferenceNode &node) override {
     if (node.typeName->name == "Pointer") {
-      auto symbol = currentScope->get("List");
-      setType(node, std::make_shared<Type>(PointerType(symbol.type)));
+      auto type = typeNodeToType(node.typeParameters.front().get());
+      setType(node, std::make_shared<Type>(PointerType(type)));
       return;
     }
     if (node.typeName->name == "Array") {
@@ -220,6 +220,11 @@ public:
   }
 
   void visit(IdentifierNode &node) override {
+    if (node.name == "i64") {
+      setType(node, std::make_shared<Type>(PrimitiveType::i64Type));
+      return;
+    }
+
     if (node.name == "null") {
       setType(node, std::make_shared<Type>(PointerType(
                         std::make_shared<Type>(PrimitiveType::voidType))));
@@ -262,6 +267,13 @@ public:
       return;
     }
 
+    PointerType *pointerType =
+        std::get_if<PointerType>(&*getType(node.expression.get()));
+    if (pointerType) {
+      setType(node, pointerType->type);
+      return;
+    }
+
     setType(node, std::make_shared<Type>(PrimitiveType::charType));
   };
 
@@ -281,6 +293,21 @@ public:
     setType(node, getType(node.expression.get()));
   }
 
+  StructType *asStruct(Type *type) {
+    TypeReference *typeReference = std::get_if<TypeReference>(&*type);
+    if (typeReference) {
+      auto symbol = currentScope->get(typeReference->name);
+      return asStruct(symbol.type.get());
+    }
+
+    StructType *structType = std::get_if<StructType>(&*type);
+    if (structType) {
+      return structType;
+    }
+
+    throw std::runtime_error("Could not cast type to struct");
+  }
+
   void visit(BinaryExpressionNode &node) override {
     node.lhs->accept(*this);
 
@@ -296,11 +323,7 @@ public:
     }
 
     auto lhsType = getType(node.lhs.get());
-    StructType *structType = std::get_if<StructType>(&*lhsType);
-    if (!structType) {
-      throw std::runtime_error("2 Expected struct type, but got " +
-                               typeToString(*lhsType));
-    }
+    StructType *structType = asStruct(lhsType.get());
     for (const auto &property : structType->properties) {
       if (property.first == rhsIdentifier->name) {
         setType(node, property.second);

@@ -1,0 +1,14 @@
+Table 'global'
+Coord: {x: i64, y: i64}
+main: () => i64
+
+  Table 'main'
+  arr: Pointer<Coord>
+  size: i64
+
+    Table 'for0'
+    i: i64
+
+    Table 'for1'
+    i: i64
+

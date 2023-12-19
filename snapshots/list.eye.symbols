@@ -7,7 +7,7 @@ reduce: (Pointer<List>, i64, (i64, i64) => i64) => i64
 
   Table 'pair'
   n: Pointer<List>
-  p: Pointer<{value: i64, next: Pointer<List>}>
+  p: Pointer<List>
   v: i64
 
   Table 'forEach'
@@ -15,7 +15,7 @@ reduce: (Pointer<List>, i64, (i64, i64) => i64) => i64
   list: Pointer<List>
 
     Table 'for0'
-    current: Pointer<{value: i64, next: Pointer<List>}>
+    current: Pointer<List>
 
   Table 'reduce'
   callback: (i64, i64) => i64
@@ -24,7 +24,7 @@ reduce: (Pointer<List>, i64, (i64, i64) => i64) => i64
   start: i64
 
     Table 'for1'
-    current: Pointer<{value: i64, next: Pointer<List>}>
+    current: Pointer<List>
 
   Table 'main'
   list: Pointer<List>

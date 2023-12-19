@@ -506,10 +506,12 @@ public:
       return;
     }
 
-    value = builder->CreateLoad(
-        llvm::Type::getInt8Ty(*llvmContext),
-        builder->CreateInBoundsGEP(llvm::Type::getInt8Ty(*llvmContext),
-                                   expressionValue, {argumentValue}));
+    PointerType *pointerType = std::get_if<PointerType>(&*expressionType);
+    auto type = pointerType != nullptr ? buildLLVMType(*pointerType->type)
+                                       : llvm::Type::getInt8Ty(*llvmContext);
+    auto gep =
+        builder->CreateInBoundsGEP(type, expressionValue, {argumentValue});
+    value = isWrite ? gep : builder->CreateLoad(type, gep);
   }
 
   void visit(UnaryExpressionNode &node) override {
@@ -573,12 +575,7 @@ public:
 
       auto lhsType = symbolTableVisitor.getType(node.lhs.get());
 
-      StructType *structType = std::get_if<StructType>(&*lhsType);
-      if (!structType) {
-        throw std::runtime_error("1 Expected struct type, but got " +
-                                 typeToString(*lhsType));
-      }
-
+      StructType *structType = symbolTableVisitor.asStruct(lhsType.get());
       auto gep = builder->CreateStructGEP(
           buildLLVMType(*lhsType), L,
           findIndex(*structType, rightIdentifierNode->name));
@@ -712,10 +709,10 @@ public:
 
   void visit(CallExpressionNode &node) override {
     if (node.callee == "sizeof") {
-      node.arguments.front()->accept(*this);
+      auto type = symbolTableVisitor.getType(node.arguments.front().get());
       value = llvm::ConstantInt::get(
           int64Type,
-          llvmModule->getDataLayout().getTypeAllocSize(value->getType()));
+          llvmModule->getDataLayout().getTypeAllocSize(buildLLVMType(*type)));
       return;
     }
 

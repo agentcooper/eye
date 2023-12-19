@@ -1,0 +1,84 @@
+SourceFile
+├─ InterfaceDeclaration(Coord)
+│  ├─ PropertySignature(x)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  └─ PropertySignature(y)
+│     └─ TypeReference
+│        └─ Identifier(i64)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(size)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(10)
+      ├─ LetStatement(arr)
+      │  ├─ type: TypeReference
+      │  │        ├─ Identifier(Pointer)
+      │  │        └─ TypeReference
+      │  │           └─ Identifier(Coord)
+      │  └─ expression: CallExpression(allocate)
+      │                 └─ BinaryExpression(Asterisk)
+      │                    ├─ lhs: CallExpression(sizeof)
+      │                    │       └─ Identifier(Coord)
+      │                    └─ rhs: Identifier(size)
+      ├─ ForStatement
+      │  ├─ initializer: LetStatement(i)
+      │  │               ├─ type: Null
+      │  │               └─ expression: NumericLiteral(0)
+      │  ├─ condition: BinaryExpression(LessThan)
+      │  │             ├─ lhs: Identifier(i)
+      │  │             └─ rhs: Identifier(size)
+      │  ├─ incrementer: BinaryExpression(PlusEquals)
+      │  │               ├─ lhs: Identifier(i)
+      │  │               └─ rhs: NumericLiteral(1)
+      │  ├─ body: Block
+      │  │        ├─ ExpressionStatement
+      │  │        │  └─ expression: BinaryExpression(Equals)
+      │  │        │                 ├─ lhs: BinaryExpression(Dot)
+      │  │        │                 │       ├─ lhs: ElementAccessExpression
+      │  │        │                 │       │       ├─ expression: Identifier(arr)
+      │  │        │                 │       │       └─ argument: Identifier(i)
+      │  │        │                 │       └─ rhs: Identifier(x)
+      │  │        │                 └─ rhs: Identifier(i)
+      │  │        └─ ExpressionStatement
+      │  │           └─ expression: BinaryExpression(Equals)
+      │  │                          ├─ lhs: BinaryExpression(Dot)
+      │  │                          │       ├─ lhs: ElementAccessExpression
+      │  │                          │       │       ├─ expression: Identifier(arr)
+      │  │                          │       │       └─ argument: Identifier(i)
+      │  │                          │       └─ rhs: Identifier(y)
+      │  │                          └─ rhs: Identifier(i)
+      ├─ ForStatement
+      │  ├─ initializer: LetStatement(i)
+      │  │               ├─ type: Null
+      │  │               └─ expression: NumericLiteral(0)
+      │  ├─ condition: BinaryExpression(LessThan)
+      │  │             ├─ lhs: Identifier(i)
+      │  │             └─ rhs: Identifier(size)
+      │  ├─ incrementer: BinaryExpression(PlusEquals)
+      │  │               ├─ lhs: Identifier(i)
+      │  │               └─ rhs: NumericLiteral(1)
+      │  ├─ body: Block
+      │  │        └─ ExpressionStatement
+      │  │           └─ expression: CallExpression(print)
+      │  │                          └─ BinaryExpression(Plus)
+      │  │                             ├─ lhs: BinaryExpression(Plus)
+      │  │                             │       ├─ lhs: BinaryExpression(Plus)
+      │  │                             │       │       ├─ lhs: BinaryExpression(Plus)
+      │  │                             │       │       │       ├─ lhs: StringLiteral(()
+      │  │                             │       │       │       └─ rhs: BinaryExpression(Dot)
+      │  │                             │       │       │               ├─ lhs: ElementAccessExpression
+      │  │                             │       │       │               │       ├─ expression: Identifier(arr)
+      │  │                             │       │       │               │       └─ argument: Identifier(i)
+      │  │                             │       │       │               └─ rhs: Identifier(x)
+      │  │                             │       │       └─ rhs: StringLiteral(, )
+      │  │                             │       └─ rhs: BinaryExpression(Dot)
+      │  │                             │               ├─ lhs: ElementAccessExpression
+      │  │                             │               │       ├─ expression: Identifier(arr)
+      │  │                             │               │       └─ argument: Identifier(i)
+      │  │                             │               └─ rhs: Identifier(y)
+      │  │                             └─ rhs: StringLiteral())
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)
