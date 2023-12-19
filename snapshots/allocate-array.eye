@@ -1,19 +1,20 @@
-interface Coord {
-  x: i64,
-  y: i64
-}
-
 function main(): i64 {
-  let size = 10;
-  let arr: Pointer<Coord> = allocate(sizeof(Coord) * size);
+  let width = 5;
+  let height = 10;
 
-  for (let i = 0; i < size; i += 1) {
-    arr[i].x = i;
-    arr[i].y = i;
+  let map: Pointer<Pointer<string>> = allocate(8 * height);
+
+  for (let y = 0; y < height; y += 1) {
+    map[y] = allocate(8 * width);
+    for (let x = 0; x < width; x += 1) {
+      map[y][x] = "(" + x + "," + y + ")";
+    }
   }
 
-  for (let i = 0; i < size; i += 1) {
-    print("(" + arr[i].x + ", " + arr[i].y + ")");
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      print(map[y][x]);
+    }
   }
 
   return 0;

@@ -12,7 +12,7 @@
 
 namespace GarbageCollector {
 
-constexpr size_t maximumBytes = 1024;
+constexpr size_t maximumBytes = 2 * 1000 * 1000;
 
 intptr_t *stackPointer;
 intptr_t *stackStartPointer;
@@ -130,6 +130,8 @@ void sweep() {
       ++it;
     } else {
       totalSweeped += 1;
+      // printf("[Runtime] Freeing %zu bytes at %p\n", it->second.size,
+      //        (void *)it->first);
       free(it->first);
       totalBytesAllocated -= it->second.size;
       it = allocations.erase(it);

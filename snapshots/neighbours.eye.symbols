@@ -1,0 +1,23 @@
+Table 'global'
+Coord: {x: i64, y: i64}
+Size: {width: i64, height: i64}
+get_neighbours: (Coord, Size, (Coord) => void) => i64
+main: () => i64
+
+  Table 'get_neighbours'
+  callback: (Coord) => void
+  coord: Coord
+  size: Size
+
+    Table 'for0'
+    x: i64
+
+      Table 'for1'
+      n: {x: i64, y: i64}
+      y: i64
+
+  Table 'main'
+
+    Table 'anonymous0'
+    n: Coord
+

@@ -295,7 +295,8 @@ public:
   }
 
   void visit(StringLiteralNode &node) override {
-    value = builder->CreateGlobalStringPtr(llvm::StringRef(node.text));
+    value =
+        builder->CreateGlobalStringPtr(llvm::StringRef(node.text), "global_s");
   }
 
   void visit(ArrowFunctionExpressionNode &node) override {
@@ -542,28 +543,26 @@ public:
   }
 
   void visit(BinaryExpressionNode &node) override {
-    node.lhs->accept(*this);
-    llvm::Value *L = value;
-
     switch (node.op) {
     case Token::Kind::Equals: {
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
+      auto _isWrite = isWrite;
       isWrite = true;
       node.lhs->accept(*this);
-      isWrite = false;
+      llvm::Value *L = value;
+      isWrite = _isWrite;
 
       builder->CreateStore(R, value);
       value = L;
       break;
     }
     case Token::Kind::Dot: {
-      auto prevIsWrite = isWrite;
-
+      auto _isWrite = isWrite;
       isWrite = true;
       node.lhs->accept(*this);
-      isWrite = prevIsWrite;
+      isWrite = _isWrite;
       llvm::Value *L = value;
 
       IdentifierNode *rightIdentifierNode =
@@ -585,6 +584,9 @@ public:
       break;
     }
     case Token::Kind::Asterisk: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
@@ -596,6 +598,9 @@ public:
       break;
     }
     case Token::Kind::Slash: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
@@ -607,6 +612,9 @@ public:
       break;
     }
     case Token::Kind::Percent: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
@@ -618,6 +626,9 @@ public:
       break;
     }
     case Token::Kind::Plus: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
@@ -629,6 +640,9 @@ public:
       break;
     }
     case Token::Kind::Minus: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
@@ -640,6 +654,9 @@ public:
       break;
     }
     case Token::Kind::DoubleEquals: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
@@ -647,6 +664,9 @@ public:
       break;
     }
     case Token::Kind::ExclamationMarkEquals: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
@@ -654,6 +674,9 @@ public:
       break;
     }
     case Token::Kind::LessThan: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
@@ -661,6 +684,9 @@ public:
       break;
     }
     case Token::Kind::GreaterThan: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
@@ -668,6 +694,9 @@ public:
       break;
     }
     case Token::Kind::LessThanEquals: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
@@ -675,6 +704,9 @@ public:
       break;
     }
     case Token::Kind::GreaterThanEquals: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
@@ -682,6 +714,9 @@ public:
       break;
     }
     case Token::Kind::AmpersandAmpersand: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 
@@ -689,6 +724,9 @@ public:
       break;
     }
     case Token::Kind::BarBar: {
+      node.lhs->accept(*this);
+      llvm::Value *L = value;
+
       node.rhs->accept(*this);
       llvm::Value *R = value;
 

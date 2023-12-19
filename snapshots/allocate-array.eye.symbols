@@ -1,14 +1,20 @@
 Table 'global'
-Coord: {x: i64, y: i64}
 main: () => i64
 
   Table 'main'
-  arr: Pointer<Coord>
-  size: i64
+  height: i64
+  map: Pointer<Pointer<string>>
+  width: i64
 
     Table 'for0'
-    i: i64
+    y: i64
 
-    Table 'for1'
-    i: i64
+      Table 'for1'
+      x: i64
+
+    Table 'for2'
+    y: i64
+
+      Table 'for3'
+      x: i64
 

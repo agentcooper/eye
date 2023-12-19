@@ -1,0 +1,156 @@
+SourceFile
+├─ InterfaceDeclaration(Size)
+│  ├─ PropertySignature(width)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  └─ PropertySignature(height)
+│     └─ TypeReference
+│        └─ Identifier(i64)
+├─ InterfaceDeclaration(Coord)
+│  ├─ PropertySignature(x)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  └─ PropertySignature(y)
+│     └─ TypeReference
+│        └─ Identifier(i64)
+├─ FunctionDeclaration(get_neighbours)
+│  ├─ Parameter(coord)
+│  │  └─ TypeReference
+│  │     └─ Identifier(Coord)
+│  ├─ Parameter(size)
+│  │  └─ TypeReference
+│  │     └─ Identifier(Size)
+│  ├─ Parameter(callback)
+│  │  └─ FunctionType
+│  │     ├─ Parameter(coord)
+│  │     │  └─ TypeReference
+│  │     │     └─ Identifier(Coord)
+│  │     └─ returnType: TypeReference
+│  │                    └─ Identifier(void)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(i64)
+│  └─ Block
+│     ├─ ForStatement
+│     │  ├─ initializer: LetStatement(x)
+│     │  │               ├─ type: Null
+│     │  │               └─ expression: BinaryExpression(Minus)
+│     │  │                              ├─ lhs: BinaryExpression(Dot)
+│     │  │                              │       ├─ lhs: Identifier(coord)
+│     │  │                              │       └─ rhs: Identifier(x)
+│     │  │                              └─ rhs: NumericLiteral(1)
+│     │  ├─ condition: BinaryExpression(LessThanEquals)
+│     │  │             ├─ lhs: Identifier(x)
+│     │  │             └─ rhs: BinaryExpression(Plus)
+│     │  │                     ├─ lhs: BinaryExpression(Dot)
+│     │  │                     │       ├─ lhs: Identifier(coord)
+│     │  │                     │       └─ rhs: Identifier(x)
+│     │  │                     └─ rhs: NumericLiteral(1)
+│     │  ├─ incrementer: BinaryExpression(PlusEquals)
+│     │  │               ├─ lhs: Identifier(x)
+│     │  │               └─ rhs: NumericLiteral(1)
+│     │  ├─ body: Block
+│     │  │        └─ ForStatement
+│     │  │           ├─ initializer: LetStatement(y)
+│     │  │           │               ├─ type: Null
+│     │  │           │               └─ expression: BinaryExpression(Minus)
+│     │  │           │                              ├─ lhs: BinaryExpression(Dot)
+│     │  │           │                              │       ├─ lhs: Identifier(coord)
+│     │  │           │                              │       └─ rhs: Identifier(y)
+│     │  │           │                              └─ rhs: NumericLiteral(1)
+│     │  │           ├─ condition: BinaryExpression(LessThanEquals)
+│     │  │           │             ├─ lhs: Identifier(y)
+│     │  │           │             └─ rhs: BinaryExpression(Plus)
+│     │  │           │                     ├─ lhs: BinaryExpression(Dot)
+│     │  │           │                     │       ├─ lhs: Identifier(coord)
+│     │  │           │                     │       └─ rhs: Identifier(y)
+│     │  │           │                     └─ rhs: NumericLiteral(1)
+│     │  │           ├─ incrementer: BinaryExpression(PlusEquals)
+│     │  │           │               ├─ lhs: Identifier(y)
+│     │  │           │               └─ rhs: NumericLiteral(1)
+│     │  │           ├─ body: Block
+│     │  │           │        └─ IfStatement
+│     │  │           │           ├─ condition: UnaryExpression(ExclamationMark)
+│     │  │           │           │             └─ BinaryExpression(AmpersandAmpersand)
+│     │  │           │           │                ├─ lhs: BinaryExpression(DoubleEquals)
+│     │  │           │           │                │       ├─ lhs: Identifier(x)
+│     │  │           │           │                │       └─ rhs: BinaryExpression(Dot)
+│     │  │           │           │                │               ├─ lhs: Identifier(coord)
+│     │  │           │           │                │               └─ rhs: Identifier(x)
+│     │  │           │           │                └─ rhs: BinaryExpression(DoubleEquals)
+│     │  │           │           │                        ├─ lhs: Identifier(y)
+│     │  │           │           │                        └─ rhs: BinaryExpression(Dot)
+│     │  │           │           │                                ├─ lhs: Identifier(coord)
+│     │  │           │           │                                └─ rhs: Identifier(y)
+│     │  │           │           └─ ifTrue: Block
+│     │  │           │                      ├─ LetStatement(n)
+│     │  │           │                      │  ├─ type: TypeReference
+│     │  │           │                      │  │        └─ Identifier(Coord)
+│     │  │           │                      │  └─ expression: ObjectLiteral
+│     │  │           │                      │                 ├─ PropertyAssignment(x)
+│     │  │           │                      │                 │  └─ Identifier(x)
+│     │  │           │                      │                 └─ PropertyAssignment(y)
+│     │  │           │                      │                    └─ Identifier(y)
+│     │  │           │                      └─ IfStatement
+│     │  │           │                         ├─ condition: BinaryExpression(AmpersandAmpersand)
+│     │  │           │                         │             ├─ lhs: BinaryExpression(AmpersandAmpersand)
+│     │  │           │                         │             │       ├─ lhs: BinaryExpression(AmpersandAmpersand)
+│     │  │           │                         │             │       │       ├─ lhs: BinaryExpression(GreaterThanEquals)
+│     │  │           │                         │             │       │       │       ├─ lhs: Identifier(x)
+│     │  │           │                         │             │       │       │       └─ rhs: NumericLiteral(0)
+│     │  │           │                         │             │       │       └─ rhs: BinaryExpression(LessThan)
+│     │  │           │                         │             │       │               ├─ lhs: Identifier(x)
+│     │  │           │                         │             │       │               └─ rhs: BinaryExpression(Dot)
+│     │  │           │                         │             │       │                       ├─ lhs: Identifier(size)
+│     │  │           │                         │             │       │                       └─ rhs: Identifier(width)
+│     │  │           │                         │             │       └─ rhs: BinaryExpression(GreaterThanEquals)
+│     │  │           │                         │             │               ├─ lhs: Identifier(y)
+│     │  │           │                         │             │               └─ rhs: NumericLiteral(0)
+│     │  │           │                         │             └─ rhs: BinaryExpression(LessThan)
+│     │  │           │                         │                     ├─ lhs: Identifier(y)
+│     │  │           │                         │                     └─ rhs: BinaryExpression(Dot)
+│     │  │           │                         │                             ├─ lhs: Identifier(size)
+│     │  │           │                         │                             └─ rhs: Identifier(height)
+│     │  │           │                         └─ ifTrue: Block
+│     │  │           │                                    └─ ExpressionStatement
+│     │  │           │                                       └─ expression: CallExpression(callback)
+│     │  │           │                                                      └─ Identifier(n)
+│     └─ ReturnStatement
+│        └─ expression: NumericLiteral(0)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(get_neighbours)
+      │                 ├─ ObjectLiteral
+      │                 │  ├─ PropertyAssignment(x)
+      │                 │  │  └─ NumericLiteral(1)
+      │                 │  └─ PropertyAssignment(y)
+      │                 │     └─ NumericLiteral(0)
+      │                 ├─ ObjectLiteral
+      │                 │  ├─ PropertyAssignment(width)
+      │                 │  │  └─ NumericLiteral(100)
+      │                 │  └─ PropertyAssignment(height)
+      │                 │     └─ NumericLiteral(100)
+      │                 └─ ArrowFunction
+      │                    ├─ Parameter(n)
+      │                    │  └─ TypeReference
+      │                    │     └─ Identifier(Coord)
+      │                    ├─ returnType: TypeReference
+      │                    │              └─ Identifier(void)
+      │                    └─ Block
+      │                       └─ ExpressionStatement
+      │                          └─ expression: CallExpression(print)
+      │                                         └─ BinaryExpression(Plus)
+      │                                            ├─ lhs: BinaryExpression(Plus)
+      │                                            │       ├─ lhs: BinaryExpression(Plus)
+      │                                            │       │       ├─ lhs: StringLiteral()
+      │                                            │       │       └─ rhs: BinaryExpression(Dot)
+      │                                            │       │               ├─ lhs: Identifier(n)
+      │                                            │       │               └─ rhs: Identifier(x)
+      │                                            │       └─ rhs: StringLiteral( )
+      │                                            └─ rhs: BinaryExpression(Dot)
+      │                                                    ├─ lhs: Identifier(n)
+      │                                                    └─ rhs: Identifier(y)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

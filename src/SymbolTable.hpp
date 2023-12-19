@@ -225,6 +225,11 @@ public:
       return;
     }
 
+    if (node.name == "string") {
+      setType(node, std::make_shared<Type>(PrimitiveType::stringType));
+      return;
+    }
+
     if (node.name == "null") {
       setType(node, std::make_shared<Type>(PointerType(
                         std::make_shared<Type>(PrimitiveType::voidType))));
