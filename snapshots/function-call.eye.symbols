@@ -2,6 +2,12 @@ Table 'global'
 bar: (i64) => i64
 foo: (i64, i64) => i64
 main: () => i64
+missingReturn: () => void
+nothingInReturn: () => void
+
+  Table 'missingReturn'
+
+  Table 'nothingInReturn'
 
   Table 'bar'
   x: i64

@@ -60,33 +60,31 @@ SourceFile
 │  │     └─ returnType: TypeReference
 │  │                    └─ Identifier(void)
 │  ├─ returnType: TypeReference
-│  │              └─ Identifier(i64)
+│  │              └─ Identifier(void)
 │  └─ Block
-│     ├─ ForStatement
-│     │  ├─ initializer: LetStatement(current)
-│     │  │               ├─ type: TypeReference
-│     │  │               │        ├─ Identifier(Pointer)
-│     │  │               │        └─ TypeReference
-│     │  │               │           └─ Identifier(List)
-│     │  │               └─ expression: Identifier(list)
-│     │  ├─ condition: BinaryExpression(ExclamationMarkEquals)
-│     │  │             ├─ lhs: Identifier(current)
-│     │  │             └─ rhs: Identifier(null)
-│     │  ├─ incrementer: BinaryExpression(Equals)
-│     │  │               ├─ lhs: Identifier(current)
-│     │  │               └─ rhs: BinaryExpression(Dot)
-│     │  │                       ├─ lhs: UnaryExpression(Asterisk)
-│     │  │                       │       └─ Identifier(current)
-│     │  │                       └─ rhs: Identifier(next)
-│     │  ├─ body: Block
-│     │  │        └─ ExpressionStatement
-│     │  │           └─ expression: CallExpression(callback)
-│     │  │                          └─ BinaryExpression(Dot)
-│     │  │                             ├─ lhs: UnaryExpression(Asterisk)
-│     │  │                             │       └─ Identifier(current)
-│     │  │                             └─ rhs: Identifier(value)
-│     └─ ReturnStatement
-│        └─ expression: NumericLiteral(0)
+│     └─ ForStatement
+│        ├─ initializer: LetStatement(current)
+│        │               ├─ type: TypeReference
+│        │               │        ├─ Identifier(Pointer)
+│        │               │        └─ TypeReference
+│        │               │           └─ Identifier(List)
+│        │               └─ expression: Identifier(list)
+│        ├─ condition: BinaryExpression(ExclamationMarkEquals)
+│        │             ├─ lhs: Identifier(current)
+│        │             └─ rhs: Identifier(null)
+│        ├─ incrementer: BinaryExpression(Equals)
+│        │               ├─ lhs: Identifier(current)
+│        │               └─ rhs: BinaryExpression(Dot)
+│        │                       ├─ lhs: UnaryExpression(Asterisk)
+│        │                       │       └─ Identifier(current)
+│        │                       └─ rhs: Identifier(next)
+│        ├─ body: Block
+│        │        └─ ExpressionStatement
+│        │           └─ expression: CallExpression(callback)
+│        │                          └─ BinaryExpression(Dot)
+│        │                             ├─ lhs: UnaryExpression(Asterisk)
+│        │                             │       └─ Identifier(current)
+│        │                             └─ rhs: Identifier(value)
 ├─ FunctionDeclaration(reduce)
 │  ├─ Parameter(list)
 │  │  └─ TypeReference

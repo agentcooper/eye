@@ -1,4 +1,14 @@
 SourceFile
+├─ FunctionDeclaration(missingReturn)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(void)
+│  └─ Block
+├─ FunctionDeclaration(nothingInReturn)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(void)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: Null
 ├─ FunctionDeclaration(bar)
 │  ├─ Parameter(x)
 │  │  └─ TypeReference
@@ -6,6 +16,10 @@ SourceFile
 │  ├─ returnType: TypeReference
 │  │              └─ Identifier(i64)
 │  └─ Block
+│     ├─ ExpressionStatement
+│     │  └─ expression: CallExpression(nothingInReturn)
+│     ├─ ExpressionStatement
+│     │  └─ expression: CallExpression(missingReturn)
 │     └─ ReturnStatement
 │        └─ expression: BinaryExpression(Plus)
 │                       ├─ lhs: Identifier(x)

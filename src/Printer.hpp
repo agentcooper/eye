@@ -110,7 +110,7 @@ private:
   void visit(ReturnStatementNode &node) override {
     printPrefix();
     std::cout << "ReturnStatement" << std::endl;
-    accept(*node.expression, true, "expression");
+    maybeAccept(node.expression.get(), true, "expression");
   };
 
   void visit(ExpressionStatementNode &node) override {

@@ -10,12 +10,10 @@ function pair(v: i64, n: Pointer<List>): Pointer<List> {
   return p;
 }
 
-function forEach(list: Pointer<List>, callback: (current: i64) => void): i64 {
+function forEach(list: Pointer<List>, callback: (current: i64) => void): void {
   for (let current: Pointer<List> = list; current != null; current = (*current).next) {
     callback((*current).value);
   }
-  // TODO: handle missing return
-  return 0;
 }
 
 function reduce(list: Pointer<List>, start: i64, callback: (acc: i64, current: i64) => i64): i64 {

@@ -246,7 +246,9 @@ public:
   };
 
   void visit(ReturnStatementNode &node) override {
-    node.expression->accept(*this);
+    if (node.expression) {
+      node.expression->accept(*this);
+    }
   };
 
   void visit(ExpressionStatementNode &node) override {

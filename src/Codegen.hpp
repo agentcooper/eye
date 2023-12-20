@@ -433,8 +433,12 @@ public:
   };
 
   void visit(ReturnStatementNode &node) override {
-    node.expression->accept(*this);
-    builder->CreateRet(value);
+    if (node.expression) {
+      node.expression->accept(*this);
+      builder->CreateRet(value);
+      return;
+    }
+    builder->CreateRetVoid();
   };
 
   void visit(ExpressionStatementNode &node) override {
@@ -895,6 +899,7 @@ public:
 
     node.body->accept(*this);
 
+    mainBlock = builder->GetInsertBlock();
     if (!mainBlock->getTerminator()) {
       builder->CreateRetVoid();
     }

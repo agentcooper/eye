@@ -1,4 +1,14 @@
+function missingReturn(): void {
+}
+
+function nothingInReturn(): void {
+  return;
+}
+
 function bar(x: i64): i64 {
+  nothingInReturn();
+  missingReturn();
+
   return x + 1;
 }
 

@@ -393,6 +393,11 @@ public:
     TRACE_METHOD;
 
     getNextToken(); // eat 'return'
+    if (currentToken.kind() == Token::Kind::Semicolon) {
+      getNextToken();
+      return std::make_unique<ReturnStatementNode>(nullptr);
+    }
+
     auto expression = parseExpression();
 
     expect(Token::Kind::Semicolon);

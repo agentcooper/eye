@@ -1,6 +1,6 @@
 Table 'global'
 List: {value: i64, next: Pointer<List>}
-forEach: (Pointer<List>, (i64) => void) => i64
+forEach: (Pointer<List>, (i64) => void) => void
 main: () => i64
 pair: (i64, Pointer<List>) => Pointer<List>
 reduce: (Pointer<List>, i64, (i64, i64) => i64) => i64
