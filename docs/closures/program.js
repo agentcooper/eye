@@ -1,20 +1,22 @@
+// node program.js
+
 function makeCounter(initialValue) {
   let counter = initialValue;
 
-  function inc() {
-    counter += 1;
+  function inc(by) {
+    counter += by;
     return counter;
   }
 
   function reset() {
-    counter = 0;
+    counter = initialValue;
   }
 
   return { inc, reset };
 }
 
-let { inc, reset } = makeCounter(10);
-console.log(inc()); // 11
-console.log(inc()); // 12
+let { inc, reset } = makeCounter(0);
+console.log(inc(42)); // 42
+console.log(inc(42)); // 84
 reset();
-console.log(inc()); // 1
+console.log(inc(1)); // 1
