@@ -22,7 +22,6 @@ fn make_counter(initial: u32) -> Counter {
 
 fn main() {
   let mut counter = make_counter(0);
-
   println!("{}", (counter.inc)(42)); // 42
   println!("{}", (counter.inc)(42)); // 84
   (counter.reset)();
