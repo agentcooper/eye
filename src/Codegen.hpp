@@ -526,8 +526,16 @@ public:
     switch (node.op) {
     case Token::Kind::Asterisk: {
       auto expressionType = symbolTableVisitor.getType(node.expression.get());
-      value =
-          builder->CreateLoad(buildLLVMType(expressionType), expressionValue);
+
+      PointerType *pointerType = std::get_if<PointerType>(&*expressionType);
+      if (!pointerType) {
+        throw std::runtime_error("Expected pointer type");
+      }
+
+      value = isWrite ? builder->CreateLoad(buildLLVMType(*pointerType),
+                                            expressionValue)
+                      : builder->CreateLoad(buildLLVMType(*pointerType->type),
+                                            expressionValue);
       break;
     }
     case Token::Kind::Minus: {

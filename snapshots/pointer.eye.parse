@@ -1,0 +1,81 @@
+SourceFile
+├─ InterfaceDeclaration(Color)
+│  ├─ PropertySignature(r)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  ├─ PropertySignature(g)
+│  │  └─ TypeReference
+│  │     └─ Identifier(i64)
+│  └─ PropertySignature(b)
+│     └─ TypeReference
+│        └─ Identifier(i64)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(n)
+      │  ├─ type: TypeReference
+      │  │        ├─ Identifier(Pointer)
+      │  │        └─ TypeReference
+      │  │           └─ Identifier(i64)
+      │  └─ expression: CallExpression(allocate)
+      │                 └─ CallExpression(sizeof)
+      │                    └─ Identifier(i64)
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(Equals)
+      │                 ├─ lhs: UnaryExpression(Asterisk)
+      │                 │       └─ Identifier(n)
+      │                 └─ rhs: NumericLiteral(666)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ UnaryExpression(Asterisk)
+      │                    └─ Identifier(n)
+      ├─ LetStatement(s)
+      │  ├─ type: TypeReference
+      │  │        ├─ Identifier(Pointer)
+      │  │        └─ TypeReference
+      │  │           └─ Identifier(Color)
+      │  └─ expression: CallExpression(allocate)
+      │                 └─ CallExpression(sizeof)
+      │                    └─ Identifier(Color)
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(Equals)
+      │                 ├─ lhs: BinaryExpression(Dot)
+      │                 │       ├─ lhs: UnaryExpression(Asterisk)
+      │                 │       │       └─ Identifier(s)
+      │                 │       └─ rhs: Identifier(r)
+      │                 └─ rhs: NumericLiteral(255)
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(Equals)
+      │                 ├─ lhs: BinaryExpression(Dot)
+      │                 │       ├─ lhs: UnaryExpression(Asterisk)
+      │                 │       │       └─ Identifier(s)
+      │                 │       └─ rhs: Identifier(g)
+      │                 └─ rhs: NumericLiteral(255)
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(Equals)
+      │                 ├─ lhs: BinaryExpression(Dot)
+      │                 │       ├─ lhs: UnaryExpression(Asterisk)
+      │                 │       │       └─ Identifier(s)
+      │                 │       └─ rhs: Identifier(b)
+      │                 └─ rhs: NumericLiteral(255)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(Dot)
+      │                    ├─ lhs: UnaryExpression(Asterisk)
+      │                    │       └─ Identifier(s)
+      │                    └─ rhs: Identifier(r)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(Dot)
+      │                    ├─ lhs: UnaryExpression(Asterisk)
+      │                    │       └─ Identifier(s)
+      │                    └─ rhs: Identifier(g)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ BinaryExpression(Dot)
+      │                    ├─ lhs: UnaryExpression(Asterisk)
+      │                    │       └─ Identifier(s)
+      │                    └─ rhs: Identifier(b)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

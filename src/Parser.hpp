@@ -348,7 +348,7 @@ public:
     Token::Kind op = currentToken.kind();
     getNextToken();
 
-    auto expression = parseExpression();
+    auto expression = parsePrimaryPlus();
     return std::make_unique<UnaryExpressionNode>(op, std::move(expression));
   }
 
@@ -517,6 +517,7 @@ public:
       return parseForStatement();
 
     case Token::Kind::LeftParen:
+    case Token::Kind::Asterisk:
     case Token::Kind::Integer:
     case Token::Kind::FloatingPoint:
     case Token::Kind::Identifier:
