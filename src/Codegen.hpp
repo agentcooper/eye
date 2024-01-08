@@ -4,6 +4,7 @@
 #include "LLVM.hpp"
 #include "Node.hpp"
 #include "SymbolTable.hpp"
+#include "Vector.hpp"
 
 #include <iostream>
 #include <map>
@@ -110,16 +111,16 @@ private:
   }
 
   llvm::Value *allocateClosure(llvm::Function *f,
-                               const std::vector<Symbol> closureSymbols,
+                               std::vector<Symbol> capturedSymbols,
                                Scope *scope) {
     debug << "Allocating closure" << std::endl;
 
-    auto envType = getEnvTypeForSymbols(closureSymbols);
+    auto envType = buildEnvTypeForSymbols(capturedSymbols);
     auto closureType = getClosureType();
 
     llvm::AllocaInst *envAlloca;
 
-    if (!closureSymbols.empty()) {
+    if (!capturedSymbols.empty()) {
       int envSize = llvmModule->getDataLayout().getTypeAllocSize(envType);
       envAlloca = scopeEnv.contains(scope)
                       ? scopeEnv[scope]
@@ -128,7 +129,7 @@ private:
 
       auto env = builder->CreateLoad(envType->getPointerTo(), envAlloca, "env");
 
-      for (size_t idx = 0; const auto &symbol : closureSymbols) {
+      for (size_t idx = 0; const auto &symbol : capturedSymbols) {
         if (namedValues.contains(symbol.name)) {
           debug << "Storing " << symbol.name << " at index " << idx
                 << std::endl;
@@ -147,7 +148,7 @@ private:
         builder->CreateLoad(closureType->getPointerTo(), closureAlloca, "xyz");
     builder->CreateStore(f, builder->CreateStructGEP(closureType, closure, 0));
 
-    if (!closureSymbols.empty()) {
+    if (!capturedSymbols.empty()) {
       builder->CreateStore(
           builder->CreateLoad(envType->getPointerTo(), envAlloca, "zzz"),
           builder->CreateStructGEP(closureType, closure, 1));
@@ -156,7 +157,7 @@ private:
     return closure;
   }
 
-  llvm::Type *getEnvTypeForSymbols(const std::vector<Symbol> &symbols) const {
+  llvm::Type *buildEnvTypeForSymbols(const std::vector<Symbol> &symbols) const {
     std::vector<llvm::Type *> types;
     std::transform(
         symbols.cbegin(), symbols.cend(), std::back_inserter(types),
@@ -164,23 +165,42 @@ private:
     return llvm::StructType::get(*llvmContext, types, false);
   }
 
-  llvm::Type *getEnvTypeFromScope(const Scope *scope) const {
-    auto symbols = scope->symbolTable.getAll();
-    return getEnvTypeForSymbols(symbols);
-  }
-
   llvm::Value *localOrEnv(const std::string &name, bool isRef) const {
     bool isLocal = true;
     auto symbol = symbolTableVisitor.currentScope->lookup(name, false);
     if (!symbol.has_value()) {
       isLocal = false;
-      symbol = symbolTableVisitor.currentScope->lookup(name);
+
+      auto p = symbolTableVisitor.currentScope->lookupWithScope(name);
+      if (p.has_value()) {
+        symbol = (*p).first;
+        (*p).second->symbolTable.setCaptured(name, true);
+      }
     }
     if (!symbol) {
       throw std::runtime_error("Could not find the symbol '" + name + "'");
     }
-
     auto llvmType = buildLLVMType(*symbol->type);
+    // std::cout << name << " isCaptured: " << symbol->isCaptured << std::endl;
+    if (isLocal && symbol->isCaptured && namedValues.contains("env") &&
+        scopeEnv.contains(symbolTableVisitor.currentScope)) {
+      // std::cout << "get from captured: " << name << std::endl;
+
+      auto envSymbols = symbolTableVisitor.currentScope->symbolTable.getAll(
+          [](auto symbol) { return symbol.isCaptured; });
+      auto envType = buildEnvTypeForSymbols(envSymbols);
+
+      auto s = symbolTableVisitor.currentScope;
+
+      auto env =
+          builder->CreateLoad(envType->getPointerTo(), scopeEnv.at(s), "mmm");
+      auto index = find_index(
+          envSymbols, [&](auto &symbol) { return symbol.name == name; });
+      assert(index != -1);
+
+      auto gep = builder->CreateStructGEP(envType, env, index, "kkl");
+      return isRef ? gep : builder->CreateLoad(llvmType, gep, "env_" + name);
+    }
 
     // TODO: improve look-up for non-closure symbols from upper scopes
     if (isLocal || namedValues.contains(name)) {
@@ -195,12 +215,16 @@ private:
     }
 
     auto parentScope = symbolTableVisitor.currentScope->parent;
-    auto parentSymbols = parentScope->symbolTable.getAll();
 
-    auto index = parentScope->symbolTable.getIndex(name);
+    auto envSymbols = parentScope->symbolTable.getAll(
+        [](auto symbol) { return symbol.isCaptured; });
+    auto envType = buildEnvTypeForSymbols(envSymbols);
+    auto index = find_index(envSymbols,
+                            [&](auto &symbol) { return symbol.name == name; });
+    assert(index != -1);
+
     debug << "Index of " << name << " is " << index << std::endl;
 
-    auto envType = getEnvTypeFromScope(parentScope);
     auto env = builder->CreateLoad(envType->getPointerTo(),
                                    namedValues.at("env"), "mmm");
     auto gep = builder->CreateStructGEP(envType, env, index, "kkl");
@@ -307,9 +331,6 @@ public:
 
     auto functionType = asFunctionType(*t, voidPointerType);
 
-    std::vector<Symbol> parentSymbols =
-        symbolTableVisitor.currentScope->symbolTable.getAll();
-
     symbolTableVisitor.enterScope(scopeName);
 
     auto *bb = builder->GetInsertBlock();
@@ -358,7 +379,12 @@ public:
     value = function;
     builder->SetInsertPoint(bb);
     symbolTableVisitor.exitScope();
-    value = allocateClosure(function, parentSymbols,
+
+    std::vector<Symbol> capturedSymbols =
+        symbolTableVisitor.currentScope->symbolTable.getAll(
+            [](auto symbol) { return symbol.isSeen && symbol.isCaptured; });
+
+    value = allocateClosure(function, capturedSymbols,
                             symbolTableVisitor.currentScope);
   }
 
@@ -371,7 +397,8 @@ public:
 
     auto moduleFunction = llvmModule->getFunction(node.name);
     if (moduleFunction) {
-      value = allocateClosure(moduleFunction, {}, nullptr);
+      std::vector<Symbol> symbols;
+      value = allocateClosure(moduleFunction, symbols, nullptr);
       return;
     }
 
@@ -380,6 +407,7 @@ public:
 
   void visit(LetStatementNode &node) override {
     auto symbol = symbolTableVisitor.currentScope->lookup(node.name).value();
+
     auto type = buildLLVMType(*symbol.type);
 
     llvm::Function *TheFunction = builder->GetInsertBlock()->getParent();
@@ -399,6 +427,8 @@ public:
       namedValues[node.name] = alloca;
       builder->CreateStore(value, alloca);
     }
+
+    symbolTableVisitor.currentScope->symbolTable.setSeen(symbol.name);
   };
 
   void visit(ForStatementNode &node) override {
@@ -895,6 +925,10 @@ public:
 
     namedValues.clear();
     for (auto &arg : function->args()) {
+      if (arg.getName() != "env") {
+        symbolTableVisitor.currentScope->symbolTable.setSeen(
+            std::string(arg.getName()));
+      }
       llvm::AllocaInst *alloca =
           createEntryBlockAlloca(function, arg.getName(), arg.getType());
       builder->CreateStore(&arg, alloca);

@@ -1,0 +1,12 @@
+Table 'global'
+main: () => i64
+twice: (() => void) => void
+
+  Table 'twice'
+  callback: () => void
+
+  Table 'main'
+  n: i64
+
+    Table 'anonymous0'
+

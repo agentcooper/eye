@@ -1,0 +1,41 @@
+SourceFile
+├─ FunctionDeclaration(twice)
+│  ├─ Parameter(callback)
+│  │  └─ FunctionType
+│  │     └─ returnType: TypeReference
+│  │                    └─ Identifier(void)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(void)
+│  └─ Block
+│     ├─ ExpressionStatement
+│     │  └─ expression: CallExpression(callback)
+│     └─ ExpressionStatement
+│        └─ expression: CallExpression(callback)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ LetStatement(n)
+      │  ├─ type: Null
+      │  └─ expression: NumericLiteral(666)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(twice)
+      │                 └─ ArrowFunction
+      │                    ├─ returnType: TypeReference
+      │                    │              └─ Identifier(void)
+      │                    └─ Block
+      │                       └─ ExpressionStatement
+      │                          └─ expression: BinaryExpression(Equals)
+      │                                         ├─ lhs: Identifier(n)
+      │                                         └─ rhs: BinaryExpression(Plus)
+      │                                                 ├─ lhs: Identifier(n)
+      │                                                 └─ rhs: NumericLiteral(1)
+      ├─ ExpressionStatement
+      │  └─ expression: BinaryExpression(PlusEquals)
+      │                 ├─ lhs: Identifier(n)
+      │                 └─ rhs: NumericLiteral(1)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ Identifier(n)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

@@ -15,6 +15,9 @@
 
 struct Symbol {
   bool isInternal;
+  bool isCaptured;
+  bool isSeen;
+
   std::string name;
   std::shared_ptr<Type> type;
 
@@ -28,6 +31,17 @@ class SymbolTable {
   std::map<std::string, Symbol> data;
 
 public:
+  void setCaptured(std::string symbolName, bool isCaptured) {
+    debug << "Captured " << symbolName << std::endl;
+    assert(data.contains(symbolName));
+    data[symbolName].isCaptured = isCaptured;
+  }
+
+  void setSeen(std::string symbolName) {
+    assert(data.contains(symbolName));
+    data[symbolName].isSeen = true;
+  }
+
   bool allInternal() const {
     auto all = getAll();
     if (all.empty()) {
@@ -55,8 +69,19 @@ public:
     return std::distance(data.begin(), it);
   }
 
+  std::vector<Symbol> getAll(std::function<bool(const Symbol &)> filter) const {
+    std::vector<Symbol> result;
+    for (auto &elem : data) {
+      if (filter(elem.second)) {
+        result.push_back(elem.second);
+      }
+    }
+    return result;
+  }
+
   std::vector<Symbol> getAll() const {
     std::vector<Symbol> result;
+    result.reserve(data.size());
     for (const auto &elem : data) {
       result.push_back(elem.second);
     }
@@ -96,6 +121,20 @@ public:
       throw std::runtime_error("Could not find symbol '" + name + "'");
     }
     return *symbol;
+  }
+
+  std::optional<std::pair<Symbol, Scope *>>
+  lookupWithScope(const std::string &name, bool traverseParent = true) const {
+    if (auto symbol = symbolTable.get(name)) {
+      return std::make_pair(*symbol, (Scope *)this);
+    }
+    if (!traverseParent) {
+      return {};
+    }
+    if (parent) {
+      return parent->lookupWithScope(name);
+    }
+    return {};
   }
 
   std::optional<Symbol> lookup(const std::string &name,
@@ -362,6 +401,7 @@ public:
                       const std::shared_ptr<Type> &type) const {
     return Symbol{.name = name,
                   .type = type,
+                  .isCaptured = false,
                   .isInternal = mode == SymbolTableVisitorMode::Internal};
   }
 
