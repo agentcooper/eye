@@ -868,7 +868,10 @@ public:
       throw std::runtime_error("Expected struct type");
     }
 
-    for (auto index = 0; const auto &property : node.properties) {
+    for (auto index = 0; const auto &propertyNode : node.properties) {
+      auto *property =
+          dynamic_cast<PropertyAssignmentNode *>(propertyNode.get());
+      assert(property);
       property->initializer->accept(*this);
       auto gep = builder->CreateStructGEP(structType, objectLiteralAlloca,
                                           index++, property->name);

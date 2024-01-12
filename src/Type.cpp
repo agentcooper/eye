@@ -128,8 +128,12 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
   if (interfaceDeclarationNode) {
     std::vector<NamedType> members;
     for (const auto &member : interfaceDeclarationNode->members) {
+      auto *propertySignature =
+          dynamic_cast<PropertySignatureNode *>(member.get());
+      assert(propertySignature);
       members.push_back(
-          std::make_pair(member->name, typeNodeToType(member->type.get())));
+          std::make_pair(propertySignature->name,
+                         typeNodeToType(propertySignature->type.get())));
     }
     return std::make_shared<Type>(StructType{members});
   }
@@ -138,8 +142,12 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
   if (structTypeNode) {
     std::vector<NamedType> members;
     for (const auto &member : structTypeNode->members) {
+      auto *propertySignature =
+          dynamic_cast<PropertySignatureNode *>(member.get());
+      assert(propertySignature);
       members.push_back(
-          std::make_pair(member->name, typeNodeToType(member->type.get())));
+          std::make_pair(propertySignature->name,
+                         typeNodeToType(propertySignature->type.get())));
     }
     return std::make_shared<Type>(StructType{members});
   }

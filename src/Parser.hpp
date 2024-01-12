@@ -124,8 +124,7 @@ public:
 
     if (currentToken.kind() == Token::Kind::LeftCurly) {
       getNextToken(); // eat '{'
-      std::vector<std::unique_ptr<PropertySignatureNode>> members =
-          parseMembers();
+      auto members = parseMembers();
       getNextToken(); // eat '}'
       return std::make_unique<StructTypeNode>(std::move(members));
     }
@@ -176,7 +175,7 @@ public:
     return V;
   }
 
-  std::unique_ptr<PropertyAssignmentNode> parsePropertyAssignment() {
+  std::unique_ptr<Node> parsePropertyAssignment() {
     TRACE_METHOD;
     std::string name{currentToken.lexeme()};
     getNextToken();
@@ -190,10 +189,10 @@ public:
                                                     std::move(initializer));
   }
 
-  std::vector<std::unique_ptr<PropertyAssignmentNode>> parseProperties() {
+  std::vector<std::unique_ptr<Node>> parseProperties() {
     TRACE_METHOD;
 
-    std::vector<std::unique_ptr<PropertyAssignmentNode>> properties;
+    std::vector<std::unique_ptr<Node>> properties;
     if (currentToken.kind() != Token::Kind::RightCurly) {
       while (true) {
         auto property = parsePropertyAssignment();
@@ -216,8 +215,7 @@ public:
 
     getNextToken(); // eat '{'
 
-    std::vector<std::unique_ptr<PropertyAssignmentNode>> properties =
-        parseProperties();
+    auto properties = parseProperties();
 
     getNextToken(); // eat '}'
 
@@ -620,10 +618,10 @@ public:
     return parameters;
   }
 
-  std::vector<std::unique_ptr<PropertySignatureNode>> parseMembers() {
+  std::vector<std::unique_ptr<Node>> parseMembers() {
     TRACE_METHOD;
 
-    std::vector<std::unique_ptr<PropertySignatureNode>> members;
+    std::vector<std::unique_ptr<Node>> members;
     if (currentToken.kind() != Token::Kind::RightCurly) {
       while (true) {
         auto member = parsePropertySignature();
@@ -654,8 +652,7 @@ public:
 
     getNextToken(); // eat '{'
 
-    std::vector<std::unique_ptr<PropertySignatureNode>> members =
-        parseMembers();
+    auto members = parseMembers();
 
     getNextToken(); // eat '}'
 

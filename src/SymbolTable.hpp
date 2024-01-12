@@ -447,7 +447,10 @@ public:
 
   void visit(ObjectLiteralNode &node) override {
     std::vector<NamedType> properties;
-    for (const auto &property : node.properties) {
+    for (const auto &propertyNode : node.properties) {
+      auto *property =
+          dynamic_cast<PropertyAssignmentNode *>(propertyNode.get());
+      assert(property);
       property->initializer->accept(*this);
       properties.push_back(
           std::make_pair(property->name, getType(property->initializer.get())));
