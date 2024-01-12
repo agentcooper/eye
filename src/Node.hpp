@@ -23,12 +23,12 @@ struct LiteralTypeNode : public Node {
 };
 
 struct TypeReferenceNode : public Node {
-  std::unique_ptr<IdentifierNode> typeName;
+  std::unique_ptr<Node> typeName;
   std::vector<std::unique_ptr<Node>> typeParameters;
 
-  TypeReferenceNode(std::unique_ptr<IdentifierNode> typeName)
+  TypeReferenceNode(std::unique_ptr<Node> typeName)
       : typeName(std::move(typeName)) {}
-  TypeReferenceNode(std::unique_ptr<IdentifierNode> typeName,
+  TypeReferenceNode(std::unique_ptr<Node> typeName,
                     std::vector<std::unique_ptr<Node>> typeParameters)
       : typeName(std::move(typeName)),
         typeParameters(std::move(typeParameters)) {}

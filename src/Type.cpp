@@ -79,29 +79,33 @@ bool isPrimitiveType(Type &type, PrimitiveType primitiveType) {
 std::shared_ptr<Type> typeNodeToType(Node *node) {
   auto typeReferenceNode = dynamic_cast<TypeReferenceNode *>(node);
   if (typeReferenceNode) {
-    if (typeReferenceNode->typeName->name == "i64") {
+    auto *identifier =
+        dynamic_cast<IdentifierNode *>(typeReferenceNode->typeName.get());
+    assert(identifier);
+
+    if (identifier->name == "i64") {
       return std::make_shared<Type>(PrimitiveType::i64Type);
     }
-    if (typeReferenceNode->typeName->name == "f64") {
+    if (identifier->name == "f64") {
       return std::make_shared<Type>(PrimitiveType::f64Type);
     }
-    if (typeReferenceNode->typeName->name == "boolean") {
+    if (identifier->name == "boolean") {
       return std::make_shared<Type>(PrimitiveType::booleanType);
     }
-    if (typeReferenceNode->typeName->name == "char") {
+    if (identifier->name == "char") {
       return std::make_shared<Type>(PrimitiveType::charType);
     }
-    if (typeReferenceNode->typeName->name == "string") {
+    if (identifier->name == "string") {
       return std::make_shared<Type>(PrimitiveType::stringType);
     }
-    if (typeReferenceNode->typeName->name == "void") {
+    if (identifier->name == "void") {
       return std::make_shared<Type>(PrimitiveType::voidType);
     }
-    if (typeReferenceNode->typeName->name == "Pointer") {
+    if (identifier->name == "Pointer") {
       auto t = typeNodeToType(typeReferenceNode->typeParameters[0].get());
       return std::make_shared<Type>(PointerType(std::move(t)));
     }
-    if (typeReferenceNode->typeName->name == "Array") {
+    if (identifier->name == "Array") {
       auto t = typeNodeToType(typeReferenceNode->typeParameters[0].get());
 
       auto literalNode = dynamic_cast<LiteralTypeNode *>(
@@ -119,8 +123,7 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
       return std::make_shared<Type>(
           ArrayType(std::move(t), (int)numericLiteralNode->value));
     }
-    return std::make_shared<Type>(
-        TypeReference(typeReferenceNode->typeName->name));
+    return std::make_shared<Type>(TypeReference(identifier->name));
   }
 
   auto interfaceDeclarationNode =

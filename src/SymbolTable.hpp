@@ -221,16 +221,19 @@ public:
       : globalScope("global", nullptr), currentScope(&globalScope) {}
 
   void visit(TypeReferenceNode &node) override {
-    if (node.typeName->name == "Pointer") {
+    auto *identifier = dynamic_cast<IdentifierNode *>(node.typeName.get());
+    assert(identifier);
+
+    if (identifier->name == "Pointer") {
       auto type = typeNodeToType(node.typeParameters.front().get());
       setType(node, std::make_shared<Type>(PointerType(type)));
       return;
     }
-    if (node.typeName->name == "Array") {
+    if (identifier->name == "Array") {
       setType(node, typeNodeToType(&node));
       return;
     }
-    auto symbol = currentScope->get(node.typeName->name);
+    auto symbol = currentScope->get(identifier->name);
     setType(node, symbol.type);
   }
 
