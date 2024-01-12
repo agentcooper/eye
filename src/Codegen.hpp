@@ -339,7 +339,8 @@ public:
     std::vector<std::string> names{};
 
     names.push_back("env");
-    for (const auto &parameter : node.parameters) {
+    for (const auto &parameterNode : node.parameters) {
+      auto *parameter = dynamic_cast<ParameterNode *>(parameterNode.get());
       names.push_back(parameter->name);
     }
 
@@ -900,7 +901,8 @@ public:
     std::vector<std::string> names{};
 
     names.push_back("env");
-    for (const auto &parameter : node.parameters) {
+    for (const auto &parameterNode : node.parameters) {
+      auto *parameter = dynamic_cast<ParameterNode *>(parameterNode.get());
       names.push_back(parameter->name);
     }
 

@@ -110,8 +110,7 @@ public:
     if (currentToken.kind() == Token::Kind::LeftParen) {
       getNextToken(); // eat '('
 
-      std::vector<std::unique_ptr<ParameterNode>> parameters =
-          parseParameters();
+      auto parameters = parseParameters();
 
       getNextToken(); // eat ')'
 
@@ -600,10 +599,10 @@ public:
     return parameters;
   }
 
-  std::vector<std::unique_ptr<ParameterNode>> parseParameters() {
+  std::vector<std::unique_ptr<Node>> parseParameters() {
     TRACE_METHOD;
 
-    std::vector<std::unique_ptr<ParameterNode>> parameters;
+    std::vector<std::unique_ptr<Node>> parameters;
     if (currentToken.kind() != Token::Kind::RightParen) {
       while (true) {
         auto parameterNode = parseParameter();
@@ -676,7 +675,7 @@ public:
 
     getNextToken(); // eat '('
 
-    std::vector<std::unique_ptr<ParameterNode>> parameters = parseParameters();
+    auto parameters = parseParameters();
 
     getNextToken(); // eat ')'
 

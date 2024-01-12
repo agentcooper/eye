@@ -147,8 +147,9 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
   auto functionTypeNode = dynamic_cast<FunctionTypeNode *>(node);
   if (functionTypeNode) {
     std::vector<std::shared_ptr<Type>> parameters;
-    for (const auto &paramater : functionTypeNode->parameters) {
-      parameters.push_back(typeNodeToType(paramater->type.get()));
+    for (const auto &parameterNode : functionTypeNode->parameters) {
+      auto *parameter = dynamic_cast<ParameterNode *>(parameterNode.get());
+      parameters.push_back(typeNodeToType(parameter->type.get()));
     }
     return std::make_shared<Type>(
         FunctionType{typeNodeToType(functionTypeNode->returnType.get()),

@@ -46,10 +46,10 @@ struct StructTypeNode : public Node {
 };
 
 struct FunctionTypeNode : public Node {
-  std::vector<std::unique_ptr<ParameterNode>> parameters;
+  std::vector<std::unique_ptr<Node>> parameters;
   std::unique_ptr<Node> returnType;
 
-  FunctionTypeNode(std::vector<std::unique_ptr<ParameterNode>> parameters,
+  FunctionTypeNode(std::vector<std::unique_ptr<Node>> parameters,
                    std::unique_ptr<Node> returnType)
       : parameters(std::move(parameters)), returnType(std::move(returnType)) {}
 
@@ -232,13 +232,13 @@ struct BlockNode : public Node {
 };
 
 struct ArrowFunctionExpressionNode : public Node {
-  std::vector<std::unique_ptr<ParameterNode>> parameters;
+  std::vector<std::unique_ptr<Node>> parameters;
   std::unique_ptr<Node> returnType;
   std::unique_ptr<Node> body;
 
-  ArrowFunctionExpressionNode(
-      std::vector<std::unique_ptr<ParameterNode>> parameters,
-      std::unique_ptr<Node> returnType, std::unique_ptr<Node> body)
+  ArrowFunctionExpressionNode(std::vector<std::unique_ptr<Node>> parameters,
+                              std::unique_ptr<Node> returnType,
+                              std::unique_ptr<Node> body)
       : parameters(std::move(parameters)), returnType(std::move(returnType)),
         body(std::move(body)) {}
 
@@ -269,14 +269,14 @@ struct InterfaceDeclarationNode : public Node {
 
 struct FunctionDeclarationNode : public Node {
   const std::string name;
-  std::vector<std::unique_ptr<ParameterNode>> parameters;
+  std::vector<std::unique_ptr<Node>> parameters;
   std::unique_ptr<Node> returnType;
   std::unique_ptr<Node> body;
 
-  FunctionDeclarationNode(
-      const std::string &name,
-      std::vector<std::unique_ptr<ParameterNode>> parameters,
-      std::unique_ptr<Node> returnType, std::unique_ptr<Node> body)
+  FunctionDeclarationNode(const std::string &name,
+                          std::vector<std::unique_ptr<Node>> parameters,
+                          std::unique_ptr<Node> returnType,
+                          std::unique_ptr<Node> body)
       : name(name), parameters(std::move(parameters)),
         returnType(std::move(returnType)), body(std::move(body)) {}
 

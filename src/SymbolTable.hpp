@@ -462,7 +462,8 @@ public:
 
   void visit(ArrowFunctionExpressionNode &node) override {
     std::vector<std::shared_ptr<Type>> parameters;
-    for (auto &parameter : node.parameters) {
+    for (auto &parameterNode : node.parameters) {
+      auto *parameter = dynamic_cast<ParameterNode *>(parameterNode.get());
       parameters.push_back(typeNodeToType(parameter->type.get()));
     }
     auto functionType = std::make_shared<Type>(FunctionType{
@@ -499,7 +500,8 @@ public:
 
   void visit(FunctionDeclarationNode &node) override {
     std::vector<std::shared_ptr<Type>> parameters;
-    for (auto &parameter : node.parameters) {
+    for (auto &parameterNode : node.parameters) {
+      auto *parameter = dynamic_cast<ParameterNode *>(parameterNode.get());
       parameters.push_back(typeNodeToType(parameter->type.get()));
     }
     auto functionType = std::make_shared<Type>(FunctionType{
