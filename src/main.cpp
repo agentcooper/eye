@@ -14,6 +14,14 @@
 
 void printHelp();
 
+std::unique_ptr<SourceFileNode>
+cloneSourceFile(const SourceFileNode &sourceFile) {
+  auto clone = sourceFile.clone();
+  std::unique_ptr<SourceFileNode> ptr(
+      static_cast<SourceFileNode *>(clone.release()));
+  return ptr;
+}
+
 int main(int argc, const char *argv[]) {
   if (argc <= 2) {
     printHelp();
@@ -23,8 +31,8 @@ int main(int argc, const char *argv[]) {
   const std::string command{argv[1]};
   const std::string filePath{argv[2]};
 
-  const std::set<std::string> availableCommands{"lex", "parse", "symbols",
-                                                "post", "emit"};
+  const std::set<std::string> availableCommands{
+      "lex", "parse", "symbols", "post", "symbols-post", "emit"};
   const std::set<std::string> helpCommands{"-h", "--help", "help"};
 
   if (helpCommands.contains(command)) {
@@ -52,7 +60,10 @@ int main(int argc, const char *argv[]) {
 
   Parser parser{lexer};
   Parser preludeParser{preludeLexer};
-  auto sourceFile = parser.parseSourceFile();
+
+  // just to verify that cloning works properly
+  auto sourceFile = cloneSourceFile(*parser.parseSourceFile());
+
   auto prelude = preludeParser.parseSourceFile();
 
   if (command == "parse") {
@@ -60,6 +71,8 @@ int main(int argc, const char *argv[]) {
     printer.print();
     return 0;
   }
+
+  debug << "Parse OK" << std::endl;
 
   // TODO: pick a better name, ScopeCollection?
   SymbolTableVisitor symbolTableVisitor;
@@ -75,6 +88,8 @@ int main(int argc, const char *argv[]) {
     return 0;
   }
 
+  debug << "Symbols OK" << std::endl;
+
   PostProcessor postProcessor{*sourceFile, symbolTableVisitor};
   auto modifiedSourceFile = postProcessor.run();
 
@@ -88,6 +103,13 @@ int main(int argc, const char *argv[]) {
     modifiedSourceFile->functions.insert(modifiedSourceFile->functions.begin(),
                                          std::move(preludeFunction));
   }
+
+  if (command == "symbols-post") {
+    symbolTableVisitor.print();
+    return 0;
+  }
+
+  debug << "PostProcessor OK" << std::endl;
 
   Codegen codegen{*modifiedSourceFile, symbolTableVisitor};
   return codegen.compile("program.o");

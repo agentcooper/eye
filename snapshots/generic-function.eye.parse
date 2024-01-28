@@ -1,0 +1,36 @@
+SourceFile
+├─ FunctionDeclaration(sum<T>)
+│  ├─ Parameter(a)
+│  │  └─ TypeReference
+│  │     └─ Identifier(T)
+│  ├─ Parameter(b)
+│  │  └─ TypeReference
+│  │     └─ Identifier(T)
+│  ├─ returnType: TypeReference
+│  │              └─ Identifier(T)
+│  └─ Block
+│     └─ ReturnStatement
+│        └─ expression: BinaryExpression(Plus)
+│                       ├─ lhs: Identifier(a)
+│                       └─ rhs: Identifier(b)
+└─ FunctionDeclaration(main)
+   ├─ returnType: TypeReference
+   │              └─ Identifier(i64)
+   └─ Block
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(sum)
+      │                    ├─ NumericLiteral(11)
+      │                    └─ NumericLiteral(22)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(sum)
+      │                    ├─ NumericLiteral(11.1)
+      │                    └─ NumericLiteral(22.2)
+      ├─ ExpressionStatement
+      │  └─ expression: CallExpression(print)
+      │                 └─ CallExpression(sum)
+      │                    ├─ StringLiteral(abc)
+      │                    └─ StringLiteral(def)
+      └─ ReturnStatement
+         └─ expression: NumericLiteral(0)

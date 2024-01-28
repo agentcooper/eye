@@ -668,6 +668,18 @@ public:
     std::string name{currentToken.lexeme()};
 
     getNextToken();
+
+    std::vector<std::string> typeParameters;
+    if (currentToken.kind() == Token::Kind::LessThan) {
+      getNextToken();
+      std::string name{currentToken.lexeme()};
+      typeParameters.push_back(name);
+      getNextToken();
+
+      expect(Token::Kind::GreaterThan);
+      getNextToken();
+    }
+
     expect(Token::Kind::LeftParen);
 
     getNextToken(); // eat '('
@@ -683,13 +695,15 @@ public:
 
     if (isDeclaration) {
       return std::make_unique<FunctionDeclarationNode>(
-          name, std::move(parameters), std::move(returnType), nullptr);
+          name, typeParameters, std::move(parameters), std::move(returnType),
+          nullptr);
     }
 
     auto block = parseBlock();
 
     return std::make_unique<FunctionDeclarationNode>(
-        name, std::move(parameters), std::move(returnType), std::move(block));
+        name, typeParameters, std::move(parameters), std::move(returnType),
+        std::move(block));
   }
 
   std::unique_ptr<SourceFileNode> parseSourceFile() {

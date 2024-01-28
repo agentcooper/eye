@@ -14,16 +14,20 @@
 #include "Type.hpp"
 
 struct Symbol {
-  bool isInternal;
-  bool isCaptured;
-  bool isSeen;
+  bool isInternal = false;
+  bool isCaptured = false;
+  bool isSeen = false;
+
+  // TODO: move to FunctionType
+  bool isGeneric = false;
+  std::vector<std::shared_ptr<Type>> genericTypeInstances;
 
   std::string name;
   std::shared_ptr<Type> type;
 
   void print() const {
-    debug << "Symbol { name = " << name << ", type = " << typeToString(*type)
-          << " }" << std::endl;
+    std::cout << "Symbol { name = " << name
+              << ", type = " << typeToString(*type) << " }" << std::endl;
   }
 };
 
@@ -31,6 +35,13 @@ class SymbolTable {
   std::map<std::string, Symbol> data;
 
 public:
+  void removePublicSymbols() {
+    std::erase_if(data, [](const auto &item) {
+      auto const &[key, value] = item;
+      return !value.isInternal;
+    });
+  }
+
   void setCaptured(std::string symbolName, bool isCaptured) {
     debug << "Captured " << symbolName << std::endl;
     assert(data.contains(symbolName));
@@ -51,7 +62,15 @@ public:
                        [](const Symbol &symbol) { return symbol.isInternal; });
   }
 
+  bool containsSymbol(const std::string &name) const {
+    return data.contains(name);
+  }
+
+  void removeSymbol(const std::string &name) { data.erase(name); }
+
   void addSymbol(const Symbol &symbol) { data[symbol.name] = symbol; }
+
+  Symbol &getRef(const std::string &name) { return data[name]; }
 
   std::optional<Symbol> get(const std::string &name) const {
     auto it = data.find(name);
@@ -109,6 +128,8 @@ public:
 
   Scope(std::string name, Scope *parent) : name(name), parent(parent){};
 
+  bool hasSymbols() const { return !symbolTable.getAll().empty(); }
+
   Scope *createChildScope(std::string name) {
     auto scope = std::make_shared<Scope>(name, this);
     scopes.push_back(scope);
@@ -137,6 +158,19 @@ public:
     return {};
   }
 
+  Symbol &lookupRef(const std::string &name, bool traverseParent = true) {
+    if (symbolTable.containsSymbol(name)) {
+      return symbolTable.getRef(name);
+    }
+    if (!traverseParent) {
+      throw std::runtime_error("Can't find symbol " + name);
+    }
+    if (parent) {
+      return parent->lookupRef(name);
+    }
+    throw std::runtime_error("Can't find symbol " + name);
+  }
+
   std::optional<Symbol> lookup(const std::string &name,
                                bool traverseParent = true) const {
     if (auto symbol = symbolTable.get(name)) {
@@ -149,6 +183,17 @@ public:
       return parent->lookup(name);
     }
     return {};
+  }
+
+  void removePublicSymbols() {
+    symbolTable.removePublicSymbols();
+    for (const auto &scope : scopes) {
+      (*scope).removePublicSymbols();
+    }
+    scopes.erase(
+        std::remove_if(scopes.begin(), scopes.end(),
+                       [](const auto scope) { return !scope->hasSymbols(); }),
+        scopes.end());
   }
 
   void print(int level = 0) const {
@@ -189,6 +234,13 @@ public:
   void setInternalMode(bool flag) {
     mode = flag ? SymbolTableVisitorMode::Internal
                 : SymbolTableVisitorMode::Public;
+  }
+
+  void removePublicSymbols() {
+    // reset
+    arrowFunctionExpressionIndex = 0;
+    forScopeIndex = 0;
+    globalScope.removePublicSymbols();
   }
 
   void enterScope(std::string name) {
@@ -386,17 +438,31 @@ public:
       argument->accept(*this);
     }
 
-    if (auto symbol = currentScope->lookup(node.callee)) {
-      if (FunctionType *functionType =
-              std::get_if<FunctionType>(&*symbol->type)) {
-        setType(node, functionType->returnType);
-      }
-    } else if (node.callee == "sizeof") {
+    if (node.callee == "sizeof") {
       setType(node, std::make_shared<Type>(PrimitiveType::i64Type));
     } else if (node.callee == "print") {
       // TODO
     } else {
-      throw std::runtime_error("Couldn't find symbol for " + node.callee);
+      auto &symbol = currentScope->lookupRef(node.callee);
+      if (FunctionType *functionType =
+              std::get_if<FunctionType>(symbol.type.get())) {
+        if (symbol.isGeneric) {
+          std::vector<std::shared_ptr<Type>> argumentTypes(
+              node.arguments.size());
+
+          std::transform(node.arguments.cbegin(), node.arguments.cend(),
+                         argumentTypes.begin(), [&](auto &argument) {
+                           return getType(argument.get());
+                         });
+
+          auto typeArgument = argumentTypes.front();
+          symbol.genericTypeInstances.push_back(typeArgument);
+          setType(node, functionType->solve(typeArgument)->returnType);
+          return;
+        }
+
+        setType(node, functionType->returnType);
+      }
     }
   };
 
@@ -513,6 +579,7 @@ public:
     auto functionType = std::make_shared<Type>(FunctionType{
         typeNodeToType(node.returnType.get()), std::move(parameters)});
     Symbol symbol = createSymbol(node.name, std::move(functionType));
+    symbol.isGeneric = node.typeParameters.size() > 0;
     currentScope->symbolTable.addSymbol(symbol);
 
     createScopeAndEnter(node.name);

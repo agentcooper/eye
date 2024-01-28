@@ -31,6 +31,8 @@ struct LLVMTypeVisitor {
       return llvm::Type::getInt8PtrTy(context);
     case PrimitiveType::voidType:
       return llvm::Type::getVoidTy(context);
+    case PrimitiveType::genericType:
+      throw std::runtime_error("Can't codegen generic type");
     case PrimitiveType::unknownType:
       throw std::runtime_error("Can't get LLVM type for unknown type");
     }
@@ -158,9 +160,9 @@ private:
   }
 
   llvm::Type *buildEnvTypeForSymbols(const std::vector<Symbol> &symbols) const {
-    std::vector<llvm::Type *> types;
+    std::vector<llvm::Type *> types(symbols.size());
     std::transform(
-        symbols.cbegin(), symbols.cend(), std::back_inserter(types),
+        symbols.cbegin(), symbols.cend(), types.begin(),
         [&](const Symbol &symbol) { return buildLLVMType(*symbol.type); });
     return llvm::StructType::get(*llvmContext, types, false);
   }

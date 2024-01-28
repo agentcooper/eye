@@ -22,6 +22,7 @@ enum class PrimitiveType {
   charType,
   stringType,
   voidType,
+  genericType,
   unknownType
 };
 using Type = std::variant<PrimitiveType, TypeReference, FunctionType,
@@ -61,6 +62,10 @@ public:
   FunctionType(std::shared_ptr<Type> returnType,
                std::vector<std::shared_ptr<Type>> parameters)
       : returnType(std::move(returnType)), parameters(std::move(parameters)) {}
+
+  std::shared_ptr<FunctionType> solve(std::shared_ptr<Type> t) {
+    return std::make_shared<FunctionType>(t, parameters);
+  }
 };
 
 // TODO: figure out a way to use struct here instead

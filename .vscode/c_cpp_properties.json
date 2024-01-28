@@ -4,7 +4,7 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/homebrew/Cellar/llvm/17.0.6/include"
+                "/opt/homebrew/Cellar/llvm/17.0.6_1/include"
             ],
             "defines": [],
             "macFrameworkPath": [

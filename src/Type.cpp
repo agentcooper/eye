@@ -13,6 +13,8 @@ struct TypePrinterVisitor {
       return "char";
     case PrimitiveType::stringType:
       return "string";
+    case PrimitiveType::genericType:
+      return "T";
     case PrimitiveType::voidType:
       return "void";
     case PrimitiveType::unknownType:
@@ -97,6 +99,9 @@ std::shared_ptr<Type> typeNodeToType(Node *node) {
     }
     if (identifier->name == "string") {
       return std::make_shared<Type>(PrimitiveType::stringType);
+    }
+    if (identifier->name == "T") {
+      return std::make_shared<Type>(PrimitiveType::genericType);
     }
     if (identifier->name == "void") {
       return std::make_shared<Type>(PrimitiveType::voidType);

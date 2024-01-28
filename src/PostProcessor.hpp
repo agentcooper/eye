@@ -3,6 +3,7 @@
 #include <filesystem>
 
 #include "File.hpp"
+#include "GenericType.hpp"
 #include "Node.hpp"
 #include "SymbolTable.hpp"
 #include "Type.hpp"
@@ -10,6 +11,7 @@
 class PostProcessVisitor : public Visitor {
 public:
   std::unique_ptr<Node> value;
+  std::vector<std::unique_ptr<Node>> instantiatedFunctions;
 
   PostProcessVisitor(SymbolTableVisitor &symbolTableVisitor)
       : symbolTableVisitor(symbolTableVisitor){};
@@ -23,7 +25,10 @@ private:
   visit(std::vector<std::unique_ptr<Node>> &nodes) {
     std::vector<std::unique_ptr<Node>> result;
     for (auto &node : nodes) {
-      result.push_back(visit(node));
+      auto resultNode = visit(node);
+      if (resultNode) {
+        result.push_back(std::move(resultNode));
+      }
     }
     return result;
   }
@@ -189,7 +194,9 @@ private:
     //   return;
     // }
 
-    if (node.callee == "print") {
+    auto symbol = symbolTableVisitor.globalScope.lookup(node.callee);
+
+    if (node.callee == "print" || (symbol.has_value() && symbol->isGeneric)) {
       // @TODO: this make it impossible to pass `print` function as an argument
       std::string fullName = node.callee;
       for (const auto &argument : node.arguments) {
@@ -239,11 +246,27 @@ private:
   void visit(FunctionDeclarationNode &node) override {
     symbolTableVisitor.enterScope(node.name);
 
-    value = std::make_unique<FunctionDeclarationNode>(
-        node.name, std::move(node.parameters), std::move(node.returnType),
-        visit(node.body));
+    auto symbol = symbolTableVisitor.globalScope.lookup(node.name).value();
+    // symbol.print();
+
+    auto f = std::make_unique<FunctionDeclarationNode>(
+        node.name, node.typeParameters, std::move(node.parameters),
+        std::move(node.returnType), visit(node.body));
 
     symbolTableVisitor.exitScope();
+
+    if (symbol.isGeneric) {
+      value = nullptr;
+      for (const auto &type : symbol.genericTypeInstances) {
+        auto clone = f->clone();
+        auto instantiatedFunction =
+            instantiateGenericTypeParameter(*clone, type);
+        instantiatedFunction->accept(symbolTableVisitor);
+        instantiatedFunctions.push_back(visit(instantiatedFunction));
+      }
+    } else {
+      value = std::move(f);
+    }
   };
 
   void visit(StructTypeNode &node) override {
@@ -275,6 +298,13 @@ public:
     std::unique_ptr<SourceFileNode> sourceFileNode(
         static_cast<SourceFileNode *>(postProcessVisitor.value.release()));
 
+    for (auto &node : postProcessVisitor.instantiatedFunctions) {
+      sourceFileNode->functions.insert(sourceFileNode->functions.begin(),
+                                       std::move(node));
+    }
+
+    // TODO: make symbol table properly copyable
+    symbolTableVisitor.removePublicSymbols();
     symbolTableVisitor.createSymbolsFromSourceFile(*sourceFileNode);
 
     return sourceFileNode;

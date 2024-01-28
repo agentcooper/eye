@@ -25,35 +25,35 @@ void __cleanup() {
   __cleanStack(10);
 
   // clean registers
-  __asm__("mov x0, #0");
-  __asm__("mov x1, #0");
-  __asm__("mov x2, #0");
-  __asm__("mov x3, #0");
-  __asm__("mov x4, #0");
-  __asm__("mov x5, #0");
-  __asm__("mov x6, #0");
-  __asm__("mov x7, #0");
-  __asm__("mov x8, #0");
-  __asm__("mov x9, #0");
-  __asm__("mov x10, #0");
-  __asm__("mov x11, #0");
-  __asm__("mov x12, #0");
-  __asm__("mov x13, #0");
-  __asm__("mov x14, #0");
-  __asm__("mov x15, #0");
-  __asm__("mov x16, #0");
-  __asm__("mov x17, #0");
-  __asm__("mov x18, #0");
-  __asm__("mov x19, #0");
-  __asm__("mov x20, #0");
-  __asm__("mov x21, #0");
-  __asm__("mov x22, #0");
-  __asm__("mov x23, #0");
-  __asm__("mov x24, #0");
-  __asm__("mov x25, #0");
-  __asm__("mov x26, #0");
-  __asm__("mov x27, #0");
-  __asm__("mov x28, #0");
+  // __asm__("mov x0, #0");
+  // __asm__("mov x1, #0");
+  // __asm__("mov x2, #0");
+  // __asm__("mov x3, #0");
+  // __asm__("mov x4, #0");
+  // __asm__("mov x5, #0");
+  // __asm__("mov x6, #0");
+  // __asm__("mov x7, #0");
+  // __asm__("mov x8, #0");
+  // __asm__("mov x9, #0");
+  // __asm__("mov x10, #0");
+  // __asm__("mov x11, #0");
+  // __asm__("mov x12, #0");
+  // __asm__("mov x13, #0");
+  // __asm__("mov x14, #0");
+  // __asm__("mov x15, #0");
+  // __asm__("mov x16, #0");
+  // __asm__("mov x17, #0");
+  // __asm__("mov x18, #0");
+  // __asm__("mov x19, #0");
+  // __asm__("mov x20, #0");
+  // __asm__("mov x21, #0");
+  // __asm__("mov x22, #0");
+  // __asm__("mov x23, #0");
+  // __asm__("mov x24, #0");
+  // __asm__("mov x25, #0");
+  // __asm__("mov x26, #0");
+  // __asm__("mov x27, #0");
+  // __asm__("mov x28, #0");
 }
 
 void beforeExit() {

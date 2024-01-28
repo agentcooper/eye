@@ -221,7 +221,21 @@ private:
 
   void visit(FunctionDeclarationNode &node) override {
     printPrefix();
-    std::cout << "FunctionDeclaration(" << node.name << ")" << std::endl;
+
+    auto buildName = [&](FunctionDeclarationNode &node) {
+      std::string result = node.name;
+      if (!node.typeParameters.empty()) {
+        result += "<";
+        for (const auto &parameter : node.typeParameters) {
+          result += parameter;
+        }
+        result += ">";
+      }
+      return result;
+    };
+
+    std::cout << "FunctionDeclaration(" << buildName(node) << ")" << std::endl;
+
     for (const auto &parameter : node.parameters) {
       accept(*parameter, false);
     }

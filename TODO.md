@@ -16,6 +16,7 @@
 - [x] Library function for reading files
 - [ ] Command-line arguments
 - [x] Unary operators, e.g. unary minus and boolean negation
+- [ ] Parse counter.inc()
 
 ## Infrastructure
 

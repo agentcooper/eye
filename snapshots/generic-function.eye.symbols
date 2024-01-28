@@ -1,0 +1,10 @@
+Table 'global'
+main: () => i64
+sum: (T, T) => T
+
+  Table 'sum'
+  a: T
+  b: T
+
+  Table 'main'
+
